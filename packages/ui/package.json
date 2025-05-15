@@ -1,0 +1,31 @@
+{
+  "name": "@sushi-atrium/ui",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./nuxt.config.ts",
+  "scripts": {
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/ui": "catalog:",
+    "@nuxtjs/i18n": "catalog:",
+    "@vueuse/core": "catalog:",
+    "@vueuse/nuxt": "catalog:",
+    "arktype": "catalog:",
+    "nuxt-zod-i18n": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@iconify-json/circle-flags": "catalog:",
+    "@iconify-json/fluent-emoji-flat": "catalog:",
+    "@iconify-json/lucide": "catalog:",
+    "@iconify-json/simple-icons": "catalog:",
+    "@nuxt/devtools": "catalog:",
+    "@nuxt/image": "catalog:",
+    "@tailwindcss/typography": "catalog:",
+    "nuxt": "catalog:",
+    "tailwindcss-motion": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@sushi-atrium/web-app",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --port 3501",
+    "preview": "PORT=3501 nuxt preview",
+    "clean": "rm -rf dist",
+    "clean:modules": "rm -rf .nuxt node_modules",
+    "typecheck": "nuxt typecheck",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@dicebear/collection": "catalog:",
+    "@dicebear/core": "catalog:",
+    "@neoconfetti/vue": "catalog:",
+    "@pinia/nuxt": "catalog:",
+    "@sushi-atrium/ui": "workspace:*",
+    "arktype": "catalog:",
+    "ioredis": "catalog:",
+    "libphonenumber-js": "catalog:",
+    "nuxt-tiptap-editor": "catalog:",
+    "pinia": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "nuxt": "catalog:",
+    "nuxt-auth-utils": "catalog:"
+  }
+}

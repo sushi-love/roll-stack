@@ -1,0 +1,72 @@
+{
+  "name": "sushi-atrium",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.10.0",
+  "description": "Open space for our business in online.",
+  "author": "Nick Kosarev <hmbanan666@hotmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/hmbanan666/sushi-atrium",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmbanan666/sushi-atrium"
+  },
+  "bugs": {
+    "url": "https://github.com/hmbanan666/sushi-atrium/issues"
+  },
+  "keywords": [
+    "ecommerce",
+    "ecommerce-platform",
+    "shop",
+    "self-hosted",
+    "website"
+  ],
+  "engines": {
+    "node": ">=22.15.0",
+    "pnpm": ">=10.10.0"
+  },
+  "scripts": {
+    "release": "changelogen-monorepo --release --push",
+    "build": "pnpm -r run build",
+    "dev:web-app:compose": "docker compose -f ./docker/web-app/docker-compose.yaml up -d",
+    "dev:web-app": "pnpm -r --filter \"./apps/web-app\" dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "clean": "pnpm -r run clean",
+    "clean:modules": "pnpm -r run clean:modules && rm -rf node_modules",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "check:full": "pnpm run lint:fix && pnpm run typecheck && pnpm vitest run",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
+    "@vitest/browser": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "changelogen-monorepo": "catalog:",
+    "dotenv-cli": "catalog:",
+    "eslint": "catalog:",
+    "husky": "catalog:",
+    "lint-staged": "catalog:",
+    "playwright": "catalog:",
+    "vite": "catalog:",
+    "vite-tsconfig-paths": "catalog:",
+    "vitest": "catalog:",
+    "vitest-browser-vue": "catalog:"
+  },
+  "resolutions": {
+    "unimport": "4.1.1"
+  },
+  "lint-staged": {
+    "*.ts": "eslint ."
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}

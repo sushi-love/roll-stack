@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-motion";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: Nunito, sans-serif;
+  --font-serif: Nunito, serif;
+}
+
+:root {
+  /* --ui-primary: #54b948; */
+  --ui-primary: black;
+  --ui-secondary: #54b948;
+  --ui-radius: 0.5rem;
+}
+
+.dark {
+  --ui-primary: white;
+}
