@@ -19,6 +19,7 @@ export default defineAppConfig({
     },
     modal: {
       slots: {
+        content: 'divide-y-0',
         title: 'text-xl',
         close: 'top-5 scale-110',
       },

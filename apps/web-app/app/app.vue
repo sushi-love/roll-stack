@@ -31,5 +31,6 @@ const user = useUserStore()
 
 await Promise.all([
   user.update(),
+  user.updateUsers(),
 ])
 </script>

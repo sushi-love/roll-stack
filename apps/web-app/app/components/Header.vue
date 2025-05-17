@@ -9,7 +9,7 @@
         @click="isNavbarOpened = true"
       />
 
-      <h1 class="flex items-center gap-1.5 font-semibold text-lg text-highlighted truncate">
+      <h1 class="flex items-center gap-1.5 font-normal text-lg text-highlighted truncate">
         {{ title }}
       </h1>
     </div>

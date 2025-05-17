@@ -22,23 +22,28 @@ const { t } = useI18n()
 
 const menuItems = computed(() => [
   {
-    label: t('app.menu.dashboard'),
+    label: t('app.menu.my-space'),
     to: '/',
     icon: 'i-lucide-layout-dashboard',
     exact: true,
   },
   {
-    label: t('app.menu.roadmap'),
-    to: '/roadmap',
-    icon: 'i-lucide-map',
+    label: t('app.menu.our-partners'),
+    to: '/partner',
+    icon: 'i-lucide-handshake',
   },
 ])
 
 const linkItems = computed(() => [
   {
     label: t('app.menu.idea'),
-    icon: 'i-lucide-message-square-heart',
     to: '/idea',
+    icon: 'i-lucide-message-square-heart',
+  },
+  {
+    label: t('app.menu.roadmap'),
+    to: '/roadmap',
+    icon: 'i-lucide-map',
   },
 ])
 </script>

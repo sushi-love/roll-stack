@@ -50,7 +50,7 @@ export default defineNuxtConfig({
   },
   fonts: {
     defaults: {
-      weights: [400],
+      weights: [400, 500, 600, 700, 800, 900],
       styles: ['normal', 'italic'],
       subsets: [
         'cyrillic-ext',
@@ -61,9 +61,8 @@ export default defineNuxtConfig({
     },
     families: [
       {
-        name: 'Nunito',
-        provider: 'google',
-        weights: [400, 500, 600, 700, 800, 900],
+        name: 'CirceRoundedWeb',
+        provider: 'local',
       },
     ],
   },

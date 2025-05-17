@@ -1,26 +1,17 @@
-import type { User } from '~~/types'
+import { db } from '~~/server/services/db'
 
 export default defineEventHandler(async () => {
   try {
-    const users = generateUsers()
+    const users = await db.getUserList()
+    if (!users) {
+      throw createError({
+        statusCode: 404,
+        message: 'Users not found',
+      })
+    }
 
     return users
   } catch (error) {
     throw errorResolver(error)
   }
 })
-
-function generateUsers(): User[] {
-  const users = []
-  for (let i = 0; i < 50; i++) {
-    users.push({
-      id: i.toString(),
-      name: `Имя ${i}`,
-      surname: `Фамилия ${i}`,
-      email: `email${i}@email.ru`,
-      avatar: `http://localhost:3501/api/avatar/${i}.svg`,
-    })
-  }
-
-  return users
-}

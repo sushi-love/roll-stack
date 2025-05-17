@@ -7,23 +7,24 @@
     :ui="{ content: 'w-64' }"
   >
     <UButton
-      :avatar="{ src: userAvatar }"
+      :avatar="{ src: user.avatar ?? undefined }"
       :ui="{ trailingIcon: 'text-dimmed' }"
-      :label="user?.name ?? t('common.colleague')"
+      :label="user.fullName ?? t('common.colleague')"
       block
       color="neutral"
       variant="ghost"
       trailing-icon="i-lucide-ellipsis-vertical"
+      class="text-md"
     />
   </UDropdownMenu>
 </template>
 
 <script setup lang="ts">
-const { user, clear, fetch: refreshSession } = useUserSession()
+const { clear, fetch: refreshSession } = useUserSession()
 const { t } = useI18n()
 const colorMode = useColorMode()
 
-const userAvatar = '/img/admin-avatar.svg'
+const user = useUserStore()
 
 async function signOut() {
   await clear()
@@ -33,10 +34,10 @@ async function signOut() {
 
 const userMenuItems = computed(() => [
   {
-    label: user.value?.name ?? t('common.colleague'),
+    label: user.fullName ?? t('common.colleague'),
     type: 'label' as const,
     avatar: {
-      src: userAvatar,
+      src: user.avatar ?? undefined,
     },
   },
   {

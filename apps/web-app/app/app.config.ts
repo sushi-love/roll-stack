@@ -1,6 +1,9 @@
 export default defineAppConfig({
   ui: {
     button: {
+      slots: {
+        base: 'font-semibold',
+      },
       variants: {
         size: {
           xl: {
@@ -21,6 +24,17 @@ export default defineAppConfig({
             indicator: 'rounded-md shadow-xs',
           },
         },
+      },
+    },
+    modal: {
+      slots: {
+        content: 'divide-y-0',
+        header: 'pb-2',
+      },
+    },
+    navigationMenu: {
+      slots: {
+        link: 'text-md',
       },
     },
   },

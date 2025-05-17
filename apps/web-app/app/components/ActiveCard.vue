@@ -1,9 +1,27 @@
 <template>
-  <UCard
-    variant="subtle"
-    class="h-full min-h-40 rounded-lg bg-elevated/25 cursor-pointer hover:scale-95 active:scale-90 duration-200"
-    :ui="{ body: 'h-full flex flex-col gap-2 justify-center items-center' }"
+  <div
+    class="ring ring-default/50 h-full min-h-40 rounded-lg bg-elevated/25 cursor-pointer hover:scale-98 active:scale-95 duration-200"
+    :class="getPaddingClass(padding)"
   >
     <slot />
-  </UCard>
+  </div>
 </template>
+
+<script setup lang="ts">
+type Padding = 'xs' | 'sm' | 'md'
+
+const { padding = 'md' } = defineProps<{ padding?: Padding }>()
+
+function getPaddingClass(p: Padding) {
+  switch (p) {
+    case 'xs':
+      return 'p-2'
+    case 'sm':
+      return 'p-4'
+    case 'md':
+      return 'p-6'
+    default:
+      return ''
+  }
+}
+</script>

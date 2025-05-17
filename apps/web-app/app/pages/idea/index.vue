@@ -4,7 +4,8 @@
       size="lg"
       variant="solid"
       color="secondary"
-      class="w-full md:w-fit"
+      class="w-full md:w-fit text-md"
+      icon="i-lucide-lightbulb"
       @click="modalCreateIdea.open()"
     >
       {{ t('app.create.idea.button') }}
@@ -18,9 +19,9 @@
           <div class="px-4 flex flex-col gap-2 items-center">
             <div class="flex flex-row gap-2 items-center">
               <UIcon name="fluent-emoji-flat:magic-wand" class="size-12" />
-              <p class="text-4xl font-bold text-secondary">
-                56
-              </p>
+              <h2 class="text-4xl font-bold text-secondary">
+                46
+              </h2>
             </div>
             <div class="text-sm leading-4 text-muted">
               Идей в очереди
@@ -29,9 +30,9 @@
           <div class="px-4 flex flex-col gap-2 items-center text-center">
             <div class="flex flex-row gap-2 items-center">
               <UIcon name="fluent-emoji-flat:party-popper" class="size-12" />
-              <p class="text-4xl font-bold text-secondary">
-                15
-              </p>
+              <h2 class="text-4xl font-bold text-secondary">
+                8
+              </h2>
             </div>
             <div class="text-sm leading-4 text-muted">
               Идей реализовано в этом месяце
@@ -46,21 +47,19 @@
             </p>
 
             <div class="flex flex-row justify-between items-center">
-              <div class="flex flex-row gap-2 items-center">
-                <UAvatarGroup :max="4" size="sm">
-                  <UAvatar
-                    v-for="like in idea.likes"
-                    :key="like.id"
-                    :src="like.avatar"
-                    alt=""
-                  />
-                </UAvatarGroup>
-              </div>
+              <UAvatarGroup :max="4" size="sm">
+                <UAvatar
+                  v-for="like in idea.likes"
+                  :key="like.id"
+                  :src="like.avatar"
+                  alt=""
+                />
+              </UAvatarGroup>
 
               <UButton
-                variant="soft"
-                color="primary"
-                size="sm"
+                variant="outline"
+                color="neutral"
+                size="md"
                 trailing-icon="fluent-emoji-flat:red-heart"
               >
                 Поддержать идею
@@ -75,6 +74,10 @@
 
 <script setup lang="ts">
 import { ModalCreateIdea } from '#components'
+
+useHead({
+  title: 'Предложить идею',
+})
 
 const { t } = useI18n()
 
