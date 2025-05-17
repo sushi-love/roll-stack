@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const route = useRoute()
 
 const menuItems = computed(() => [
   {
@@ -31,6 +32,7 @@ const menuItems = computed(() => [
     label: t('app.menu.our-partners'),
     to: '/partner',
     icon: 'i-lucide-handshake',
+    active: route.path.startsWith('/partner'),
   },
 ])
 
@@ -39,11 +41,13 @@ const linkItems = computed(() => [
     label: t('app.menu.idea'),
     to: '/idea',
     icon: 'i-lucide-message-square-heart',
+    active: route.path.startsWith('/idea'),
   },
   {
     label: t('app.menu.roadmap'),
     to: '/roadmap',
     icon: 'i-lucide-map',
+    active: route.path.startsWith('/roadmap'),
   },
 ])
 </script>

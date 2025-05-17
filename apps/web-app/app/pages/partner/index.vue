@@ -3,11 +3,13 @@
 
   <Content>
     <div class="mb-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-4.5">
-      <PartnerCard
+      <NuxtLink
         v-for="partner in user.users"
         :key="partner.id"
-        :user="partner"
-      />
+        :to="`/partner/${partner.id}`"
+      >
+        <PartnerCard :user="partner" />
+      </NuxtLink>
     </div>
   </Content>
 </template>

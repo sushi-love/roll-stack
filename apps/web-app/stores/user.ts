@@ -14,7 +14,7 @@ export const useUserStore = defineStore('user', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/user', {
+      const data = await $fetch('/api/user/me', {
         lazy: true,
         server: true,
         cache: 'no-cache',

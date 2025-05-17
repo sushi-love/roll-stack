@@ -3,9 +3,9 @@
 
   <Content class="max-w-2xl space-y-6">
     <div class="flex flex-col gap-5">
-      <h1 class="text-xl md:text-3xl font-bold">
+      <h2 class="text-xl md:text-3xl font-bold">
         {{ data?.title }}
-      </h1>
+      </h2>
 
       <div class="w-full text-lg leading-6 whitespace-pre-wrap break-words">
         {{ data?.text }}
@@ -49,7 +49,7 @@
             :rows="3"
             :disabled="loading"
             class="w-full"
-            :ui="{ base: 'p-0 resize-none text-xl leading-6' }"
+            :ui="{ base: 'p-0 resize-none text-lg leading-6' }"
           />
 
           <div class="flex items-center justify-between gap-2">

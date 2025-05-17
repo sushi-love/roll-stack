@@ -1,25 +1,26 @@
 <template>
   <ActiveCard padding="xs" class="flex flex-col gap-2 group">
-    <div class="relative w-full h-full">
-      <img
-        :src="user.avatar ?? undefined"
-        alt=""
-        class="aspect-square w-full rounded-lg"
-      >
+    <img
+      :src="user.avatar ?? undefined"
+      alt=""
+      class="aspect-square w-full rounded-lg opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100 duration-200"
+    >
 
-      <div class="absolute top-1 right-1 group-hover:scale-110 duration-200">
-        <PartnerScoreBadge :score="user.score" size="md" />
-      </div>
-    </div>
+    <div class="flex flex-row items-center gap-1.5">
+      <PartnerScoreBadge
+        :score="user.score"
+        size="sm"
+        class="group-hover:scale-125 duration-200"
+      />
 
-    <div class="flex flex-col gap-0.5 text-center">
-      <p class="text-lg font-semibold leading-5">
+      <h3 class="text-lg font-semibold leading-5">
         {{ user.name }} {{ user.surname }}
-      </p>
-      <p class="text-sm text-muted">
-        Название ...
-      </p>
+      </h3>
     </div>
+
+    <p class="text-sm text-muted">
+      Название ...
+    </p>
   </ActiveCard>
 </template>
 

@@ -156,10 +156,6 @@ class FakeDB {
   }
 
   async getUser(id: string) {
-    if (users.length === 0) {
-      await generateUsers()
-    }
-
     return users.find((user) => user.id === id)
   }
 

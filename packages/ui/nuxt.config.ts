@@ -64,6 +64,10 @@ export default defineNuxtConfig({
         name: 'CirceRoundedWeb',
         provider: 'local',
       },
+      {
+        name: 'Nunito Sans',
+        provider: 'google',
+      },
     ],
   },
   colorMode: {

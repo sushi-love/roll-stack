@@ -26,7 +26,7 @@
                 {{ pin.title }}
               </h3>
 
-              <div class="w-full text-lg leading-6 whitespace-pre-wrap break-words">
+              <div class="w-full text-md leading-6 whitespace-pre-wrap break-words">
                 {{ pin.text }}
               </div>
 

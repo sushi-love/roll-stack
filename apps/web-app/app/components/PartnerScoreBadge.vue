@@ -3,9 +3,8 @@
     <UIcon
       :name="getIconByScore(score)"
       :class="getIconClass()"
-      class="shadow-2xl"
     />
-    <h4 class="absolute bottom-1 left-1 font-semibold text-white" :class="getScoreClass()">
+    <h4 class="absolute bottom-1 left-1 font-semibold text-white text-shadow-md" :class="getScoreClass()">
       {{ score }}
     </h4>
   </div>
@@ -69,13 +68,13 @@ function getColorByScore(score: number) {
   } else if (score < 30) {
     return 'text-yellow-400'
   } else if (score < 40) {
-    return 'text-green-400'
+    return 'text-lime-400'
   } else {
-    return 'text-purple-400'
+    return 'text-green-400'
   }
 }
 
 function getIconClass() {
-  return `${getSizeClass()} ${getColorByScore(score)} drop-shadow-2xl`
+  return `${getSizeClass()} ${getColorByScore(score)}`
 }
 </script>

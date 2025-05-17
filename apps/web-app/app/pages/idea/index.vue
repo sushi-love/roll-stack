@@ -4,12 +4,11 @@
       size="lg"
       variant="solid"
       color="secondary"
-      class="w-full md:w-fit text-md"
+      class="w-full md:w-fit"
       icon="i-lucide-lightbulb"
+      :label="t('app.create.idea.button')"
       @click="modalCreateIdea.open()"
-    >
-      {{ t('app.create.idea.button') }}
-    </UButton>
+    />
   </Header>
 
   <Content>
