@@ -34,6 +34,12 @@ const menuItems = computed(() => [
     icon: 'i-lucide-handshake',
     active: route.path.startsWith('/partner'),
   },
+  {
+    label: t('app.menu.our-staff'),
+    to: '/staff',
+    icon: 'i-lucide-contact-round',
+    active: route.path.startsWith('/staff'),
+  },
 ])
 
 const linkItems = computed(() => [

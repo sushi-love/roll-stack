@@ -13,6 +13,9 @@ export default defineAppConfig({
         variant: {
           gradient: 'text-neutral-950 bg-linear-to-br from-lime-300 to-lime-500 hover:opacity-90 disabled:bg-none disabled:bg-(--ui-bg-accented) disabled:text-neutral-400 aria-disabled:bg-(--ui-bg-accented) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary)',
         },
+        color: {
+          secondary: '!text-white',
+        },
       },
     },
     tabs: {
@@ -34,7 +37,13 @@ export default defineAppConfig({
     },
     navigationMenu: {
       slots: {
-        link: 'text-md',
+        link: 'text-sm',
+      },
+    },
+    toast: {
+      slots: {
+        title: 'text-lg',
+        description: 'leading-5',
       },
     },
   },
