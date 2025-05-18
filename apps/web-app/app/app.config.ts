@@ -14,7 +14,7 @@ export default defineAppConfig({
           gradient: 'text-neutral-950 bg-linear-to-br from-lime-300 to-lime-500 hover:opacity-90 disabled:bg-none disabled:bg-(--ui-bg-accented) disabled:text-neutral-400 aria-disabled:bg-(--ui-bg-accented) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary)',
         },
         color: {
-          secondary: '!text-white',
+          secondary: '!text-white disabled:!bg-inverted/50',
         },
       },
     },
@@ -32,7 +32,8 @@ export default defineAppConfig({
     modal: {
       slots: {
         content: 'divide-y-0',
-        header: 'pb-2',
+        header: 'pb-0 min-h-12',
+        title: 'text-xl font-normal',
       },
     },
     navigationMenu: {
@@ -44,6 +45,7 @@ export default defineAppConfig({
       slots: {
         title: 'text-lg',
         description: 'leading-5',
+        icon: 'shrink-0 size-7',
       },
     },
   },

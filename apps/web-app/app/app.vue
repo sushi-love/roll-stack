@@ -29,7 +29,7 @@ useHead({
 // Init Stores
 const user = useUserStore()
 
-await Promise.all([
+Promise.all([
   user.update(),
   user.updateUsers(),
 ])

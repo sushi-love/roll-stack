@@ -39,8 +39,12 @@
           </div>
         </div>
 
-        <ActiveCard v-for="idea in ideas" :key="idea.id">
-          <div class="flex flex-col gap-5">
+        <NuxtLink
+          v-for="idea in ideas"
+          :key="idea.id"
+          :to="`/idea/${idea.id}`"
+        >
+          <ActiveCard class="flex flex-col gap-5">
             <p class="text-lg leading-6">
               {{ idea.text }}
             </p>
@@ -64,8 +68,8 @@
                 Поддержать идею
               </UButton>
             </div>
-          </div>
-        </ActiveCard>
+          </ActiveCard>
+        </NuxtLink>
       </div>
     </UContainer>
   </Content>

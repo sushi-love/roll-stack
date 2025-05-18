@@ -1,11 +1,12 @@
 <template>
   <UForm
-    :schema="createIdeaSchema"
+    ref="form"
+    :validate="createValidator(createIdeaSchema)"
     :state="state"
     class="flex flex-col gap-3"
     @submit="onSubmit"
   >
-    <UFormField :label="$t('app.create.idea.label')" name="description">
+    <UFormField :label="$t('app.create.idea.label')" name="text">
       <UTextarea
         v-model="state.text"
         :placeholder="$t('app.create.idea.description')"
@@ -17,7 +18,8 @@
     <UButton
       type="submit"
       variant="solid"
-      color="primary"
+      color="secondary"
+      :disabled="!isFormValid"
       size="xl"
       block
       class="mt-3"
@@ -36,11 +38,22 @@ const emit = defineEmits(['success', 'submitted'])
 
 const { t } = useI18n()
 const actionToast = useActionToast()
-// const channel = useChannelStore()
 
 const state = ref<Partial<CreateIdea>>({
   text: undefined,
 })
+
+const form = useTemplateRef('form')
+const isFormValid = ref(false)
+
+watch(
+  () => form.value?.errors.length,
+  () => {
+    isFormValid.value
+      = !form.value?.errors.length
+        && !!state.value.text
+  },
+)
 
 async function onSubmit(event: FormSubmitEvent<CreateIdea>) {
   actionToast.start()
@@ -53,7 +66,7 @@ async function onSubmit(event: FormSubmitEvent<CreateIdea>) {
     })
 
     // await channel.update()
-    actionToast.success(t('toast.product-created'))
+    actionToast.success(t('toast.idea-created'))
     emit('success')
   } catch (error) {
     console.error(error)

@@ -23,6 +23,7 @@
 const { clear, fetch: refreshSession } = useUserSession()
 const { t } = useI18n()
 const colorMode = useColorMode()
+const app = useApp()
 
 const user = useUserStore()
 
@@ -44,6 +45,34 @@ const userMenuItems = computed(() => [
     type: 'separator' as const,
   },
   {
+    label: 'Изображения',
+    icon: 'lucide:images',
+    children: [
+      {
+        label: 'Цветные',
+        type: 'checkbox' as const,
+        icon: 'lucide:palette',
+        checked: app.imagesMode.value === 'color',
+        onUpdateChecked(checked: boolean) {
+          if (checked) {
+            app.imagesMode.value = 'color'
+          }
+        },
+      },
+      {
+        label: 'Черно-белые',
+        type: 'checkbox' as const,
+        icon: 'lucide:eclipse',
+        checked: app.imagesMode.value === 'grayscale',
+        onUpdateChecked(checked: boolean) {
+          if (checked) {
+            app.imagesMode.value = 'grayscale'
+          }
+        },
+      },
+    ],
+  },
+  {
     label: t('common.color-mode.title'),
     icon: 'lucide:sun-moon',
     children: [
@@ -51,6 +80,7 @@ const userMenuItems = computed(() => [
         label: t('common.color-mode.light'),
         type: 'checkbox' as const,
         icon: 'lucide:sun-dim',
+        checked: colorMode.preference === 'light',
         onUpdateChecked(checked: boolean) {
           if (checked) {
             colorMode.preference = 'light'
@@ -61,6 +91,7 @@ const userMenuItems = computed(() => [
         label: t('common.color-mode.dark'),
         type: 'checkbox' as const,
         icon: 'lucide:moon',
+        checked: colorMode.preference === 'dark',
         onUpdateChecked(checked: boolean) {
           if (checked) {
             colorMode.preference = 'dark'

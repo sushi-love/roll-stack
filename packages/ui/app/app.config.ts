@@ -36,6 +36,15 @@ export default defineAppConfig({
         },
       },
     },
+    textarea: {
+      variants: {
+        size: {
+          xl: {
+            base: 'px-4 py-3',
+          },
+        },
+      },
+    },
     input: {
       variants: {
         size: {

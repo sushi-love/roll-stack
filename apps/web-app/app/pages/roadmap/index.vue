@@ -20,29 +20,27 @@
           :key="pin.id"
           :to="`/roadmap/pin/${pin.id}`"
         >
-          <ActiveCard>
-            <div class="w-full flex flex-col gap-5">
-              <h3 class="text-xl font-semibold leading-6">
-                {{ pin.title }}
-              </h3>
+          <ActiveCard class="w-full flex flex-col gap-5">
+            <h3 class="text-xl font-semibold leading-6">
+              {{ pin.title }}
+            </h3>
 
-              <div class="w-full text-md leading-6 whitespace-pre-wrap break-words">
-                {{ pin.text }}
-              </div>
+            <div class="w-full text-md leading-6 whitespace-pre-wrap break-words">
+              {{ pin.text }}
+            </div>
 
-              <div class="flex flex-row justify-between items-center">
-                <UBadge
-                  :icon="getCategoryInfo(pin.category)?.icon"
-                  size="lg"
-                  color="neutral"
-                  variant="outline"
-                >
-                  {{ getCategoryInfo(pin.category)?.title }}
-                </UBadge>
+            <div class="flex flex-row justify-between items-center">
+              <UBadge
+                :icon="getCategoryInfo(pin.category)?.icon"
+                size="lg"
+                color="neutral"
+                variant="outline"
+              >
+                {{ getCategoryInfo(pin.category)?.title }}
+              </UBadge>
 
-                <div class="text-sm text-muted">
-                  {{ pin.date }}
-                </div>
+              <div class="text-sm text-muted">
+                {{ pin.date }}
               </div>
             </div>
           </ActiveCard>

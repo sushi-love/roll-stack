@@ -3,7 +3,8 @@
     <img
       :src="user.avatar ?? undefined"
       alt=""
-      class="aspect-square w-full rounded-lg opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100 duration-200"
+      class="aspect-square w-full rounded-lg duration-200"
+      :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
     >
 
     <div class="flex flex-row items-center gap-1.5">
@@ -30,4 +31,6 @@ import type { User } from '~~/types'
 defineProps<{
   user: User
 }>()
+
+const { imagesMode } = useApp()
 </script>

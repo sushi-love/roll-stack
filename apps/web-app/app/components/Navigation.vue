@@ -44,7 +44,7 @@ const menuItems = computed(() => [
 
 const linkItems = computed(() => [
   {
-    label: t('app.menu.idea'),
+    label: t('app.menu.suggest-idea'),
     to: '/idea',
     icon: 'i-lucide-message-square-heart',
     active: route.path.startsWith('/idea'),

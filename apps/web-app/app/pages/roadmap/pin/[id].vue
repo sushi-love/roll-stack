@@ -33,81 +33,17 @@
     </div>
 
     <div>
-      <UCard
-        variant="subtle"
-        class="mt-auto bg-elevated/25"
-        :ui="{ body: '!p-4' }"
-      >
-        <form class="flex flex-col gap-4" @submit.prevent="onCommentSubmit">
-          <UTextarea
-            v-model="reply"
-            color="neutral"
-            variant="none"
-            required
-            autoresize
-            placeholder="Напишите свою мысль..."
-            :rows="3"
-            :disabled="loading"
-            class="w-full"
-            :ui="{ base: 'p-0 resize-none text-lg leading-6' }"
-          />
-
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <UAvatar
-                :src="user.avatar ?? undefined"
-                alt=""
-                class="size-8"
-              />
-              <p class="text-sm font-semibold">
-                {{ user.fullName }}
-              </p>
-            </div>
-
-            <UButton
-              type="submit"
-              color="secondary"
-              size="lg"
-              :loading="loading"
-              label="Добавить комментарий"
-              icon="i-lucide-send"
-            />
-          </div>
-        </form>
-      </UCard>
+      <FormCreateComment />
     </div>
   </Content>
 </template>
 
 <script setup lang="ts">
 const { t } = useI18n()
-const toast = useToast()
 const { params } = useRoute('roadmap-pin-id')
-
-const user = useUserStore()
 
 const { data, error } = await useFetch(`/api/roadmap/pin/${params.id}`)
 if (error.value) {
   await navigateTo('/')
-}
-
-const reply = ref('')
-const loading = ref(false)
-
-function onCommentSubmit() {
-  loading.value = true
-
-  setTimeout(() => {
-    reply.value = ''
-
-    toast.add({
-      title: 'Комментарий добавлен!',
-      description: 'Сейчас он появится на странице.',
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    })
-
-    loading.value = false
-  }, 1000)
 }
 </script>

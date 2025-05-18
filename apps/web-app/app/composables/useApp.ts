@@ -2,6 +2,7 @@ function _useApp() {
   const route = useRoute()
 
   const isNavbarOpened = ref(false)
+  const imagesMode = ref<'color' | 'grayscale'>('color')
 
   watch(
     () => route.fullPath,
@@ -12,6 +13,7 @@ function _useApp() {
 
   return {
     isNavbarOpened,
+    imagesMode,
   }
 }
 
