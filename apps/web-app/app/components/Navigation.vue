@@ -29,6 +29,13 @@ const menuItems = computed(() => [
     exact: true,
   },
   {
+    label: t('app.menu.chats'),
+    to: '/chat',
+    icon: 'i-lucide-messages-square',
+    active: route.path.startsWith('/chat'),
+    badge: 12,
+  },
+  {
     label: t('app.menu.our-partners'),
     to: '/partner',
     icon: 'i-lucide-handshake',

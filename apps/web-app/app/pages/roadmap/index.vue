@@ -46,6 +46,10 @@
           </ActiveCard>
         </NuxtLink>
       </div>
+
+      <div class="mt-16 flex flex-row justify-center">
+        <UIcon name="i-lucide-route" class="size-8 text-dimmed/25" />
+      </div>
     </UContainer>
   </Content>
 </template>

@@ -29,7 +29,7 @@
 
       <template v-else>
         <NuxtLink
-          v-for="partner in partnersSortedByRating"
+          v-for="partner in partnersSortedByPrestige"
           :key="partner.id"
           :to="`/partner/${partner.id}`"
         >
@@ -62,5 +62,5 @@ const activeSorting = ref<'name' | 'rating'>('name')
 const user = useUserStore()
 
 const partnersSortedByName = computed(() => user.users.toSorted((a, b) => a.name.localeCompare(b.name)))
-const partnersSortedByRating = computed(() => user.users.toSorted((a, b) => b.score - a.score))
+const partnersSortedByPrestige = computed(() => user.users.toSorted((a, b) => b.prestige - a.prestige))
 </script>

@@ -19,6 +19,7 @@
     "@pinia/nuxt": "catalog:",
     "@sushi-atrium/ui": "workspace:*",
     "arktype": "catalog:",
+    "date-fns": "catalog:",
     "ioredis": "catalog:",
     "libphonenumber-js": "catalog:",
     "nuxt-tiptap-editor": "catalog:",

@@ -21,6 +21,9 @@ export default defineAppConfig({
     tabs: {
       variants: {
         variant: {
+          pill: {
+            trigger: 'data-[state=active]:!text-white',
+          },
           gradient: {
             list: 'bg-elevated rounded-lg',
             trigger: 'data-[state=active]:bg-linear-to-br from-lime-300 to-lime-500 data-[state=active]:text-neutral-950 flex-1 w-full',

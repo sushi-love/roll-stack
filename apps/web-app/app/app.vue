@@ -2,7 +2,7 @@
   <UApp
     :locale="locales[locale]"
     :tooltip="{ delayDuration: 0 }"
-    class="min-h-dvh"
+    class="min-h-svh"
   >
     <NuxtLoadingIndicator :color="false" class="bg-primary h-[2px]" />
     <NuxtLayout>
@@ -29,7 +29,7 @@ useHead({
 // Init Stores
 const user = useUserStore()
 
-Promise.all([
+await Promise.all([
   user.update(),
   user.updateUsers(),
 ])

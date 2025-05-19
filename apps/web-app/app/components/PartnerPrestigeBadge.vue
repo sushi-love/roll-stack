@@ -1,18 +1,18 @@
 <template>
   <div class="relative cursor-default" :class="getSizeClass()">
     <UIcon
-      :name="getIconByScore(score)"
+      :name="getIconByPrestige(prestige)"
       :class="getIconClass()"
     />
-    <h4 class="absolute bottom-1 left-1 font-semibold text-white text-shadow-md" :class="getScoreClass()">
-      {{ score }}
+    <h4 class="absolute bottom-1 left-1 font-semibold text-white text-shadow-md" :class="getPrestigeClass()">
+      {{ prestige }}
     </h4>
   </div>
 </template>
 
 <script setup lang="ts">
-const { size = 'md', score } = defineProps<{
-  score: number
+const { size = 'md', prestige } = defineProps<{
+  prestige: number
   size?: 'sm' | 'md' | 'lg' | 'xl'
 }>()
 
@@ -31,7 +31,7 @@ function getSizeClass() {
   }
 }
 
-function getScoreClass() {
+function getPrestigeClass() {
   switch (size) {
     case 'sm':
       return 'pl-[0.1rem] text-[0.9rem]'
@@ -46,21 +46,21 @@ function getScoreClass() {
   }
 }
 
-function getIconByScore(score: number) {
-  if (score < 10) {
-    return 'fluent:circle-48-filled'
-  } else if (score < 20) {
-    return 'fluent:triangle-48-filled'
-  } else if (score < 30) {
-    return 'fluent:square-48-filled'
-  } else if (score < 40) {
-    return 'fluent:pentagon-48-filled'
+function getIconByPrestige(prestige: number) {
+  if (prestige < 10) {
+    return 'fluent:circle-32-filled'
+  } else if (prestige < 20) {
+    return 'fluent:triangle-32-filled'
+  } else if (prestige < 30) {
+    return 'fluent:square-32-filled'
+  } else if (prestige < 40) {
+    return 'fluent:pentagon-32-filled'
   } else {
-    return 'fluent:hexagon-48-filled'
+    return 'fluent:hexagon-32-filled'
   }
 }
 
-function getColorByScore(score: number) {
+function getColorByPrestige(score: number) {
   if (score < 10) {
     return 'text-rose-400'
   } else if (score < 20) {
@@ -75,6 +75,6 @@ function getColorByScore(score: number) {
 }
 
 function getIconClass() {
-  return `${getSizeClass()} ${getColorByScore(score)}`
+  return `${getSizeClass()} ${getColorByPrestige(prestige)}`
 }
 </script>

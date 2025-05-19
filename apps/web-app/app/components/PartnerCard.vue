@@ -8,8 +8,8 @@
     >
 
     <div class="flex flex-row items-center gap-1.5">
-      <PartnerScoreBadge
-        :score="user.score"
+      <PartnerPrestigeBadge
+        :prestige="user.prestige"
         size="sm"
         class="group-hover:scale-125 duration-200"
       />

@@ -2,12 +2,18 @@
   <Header :title="t('app.menu.my-space')" />
 
   <Content>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-6" />
+    <div class="flex flex-col gap-5">
+      <h2 class="text-xl md:text-3xl font-bold">
+        {{ user.name }}, привет!
+      </h2>
+      <p>Чем займемся сегодня?</p>
+    </div>
   </Content>
 </template>
 
 <script setup lang="ts">
 const { t } = useI18n()
+const user = useUserStore()
 
 useHead({
   title: 'Суши Атриум',
