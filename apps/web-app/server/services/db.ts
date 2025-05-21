@@ -1,5 +1,3 @@
-import type { Chat, Message, User } from '~~/types'
-
 const pins = [
   {
     id: '12345435',
@@ -153,10 +151,10 @@ const pins = [
   },
 ]
 
-const users: User[] = []
-const chats: Chat[] = []
+const users: any[] = []
+const chats: any[] = []
 
-async function generateUsers(amount: number = 50): Promise<User[]> {
+async function generateUsers(amount: number = 50): Promise<any[]> {
   const fakeUsers = await (await fetch(`https://fakerapi.it/api/v2/users?_quantity=${amount}&_locale=ru_RU`)).json()
 
   for (let i = 0; i < amount; i++) {
@@ -175,7 +173,7 @@ async function generateUsers(amount: number = 50): Promise<User[]> {
   return users
 }
 
-function generateChats(users: User[]) {
+function generateChats(users: any[]) {
   for (let i = 0; i < users.length; i++) {
     const user = users[i]
     if (!user) {
@@ -184,7 +182,7 @@ function generateChats(users: User[]) {
 
     const chatId = i.toString()
 
-    const randMessage: Message = {
+    const randMessage: any = {
       id: i.toString(),
       createdAt: new Date().toISOString(),
       text: 'Привет!',

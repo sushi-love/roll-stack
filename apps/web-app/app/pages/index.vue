@@ -1,5 +1,5 @@
 <template>
-  <Header :title="t('app.menu.my-space')" />
+  <Header :title="$t('app.menu.my-space')" />
 
   <Content>
     <div class="flex flex-col gap-5">
@@ -12,7 +12,10 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
+definePageMeta({
+  middleware: ['01-auth-only'],
+})
+
 const user = useUserStore()
 
 useHead({

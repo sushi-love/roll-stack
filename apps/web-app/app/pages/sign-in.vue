@@ -76,6 +76,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'empty',
+  middleware: ['02-guest-only'],
 })
 
 const { t } = useI18n()
@@ -85,6 +86,7 @@ useHead({
 })
 
 const { fetch: refreshSession } = useUserSession()
+const user = useUserStore()
 
 const toast = useToast()
 
@@ -138,13 +140,16 @@ const { status, execute: signIn } = await useFetch('/api/auth/sign-in', {
   onResponse: async ({ response }) => {
     if (response.ok) {
       await refreshSession()
+      await user.update()
       await navigateTo('/')
     }
   },
-  onResponseError: async ({ response }) => {
+  onResponseError: async () => {
+    state.value.code = []
+
     toast.add({
       title: 'Ошибка',
-      description: response.statusText,
+      description: 'Проверьте актуальность введенных данных.',
     })
   },
 })

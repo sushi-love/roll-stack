@@ -1,20 +1,26 @@
-import type { User } from '~~/types'
+import type { User } from '@sushi-atrium/database'
 
 export const useUserStore = defineStore('user', () => {
   const id = ref<string | undefined>(undefined)
+  const type = ref<User['type'] | undefined>(undefined)
   const name = ref<string | undefined>(undefined)
   const surname = ref<string | undefined>(undefined)
-  const email = ref<string | undefined>(undefined)
-  const avatar = ref<string | null>(null)
-  const users = ref<User[]>([])
+  const caption = ref<string | undefined>(undefined)
+  const email = ref<string | null>(null)
+  const phone = ref<string | null>(null)
+  const avatarUrl = ref<string | null>(null)
+  const prestige = ref<number | null>(null)
 
   const fullName = computed(() => {
     return `${name.value} ${surname.value}`
   })
 
+  const staff = ref<User[]>([])
+  const partners = ref<User[]>([])
+
   async function update() {
     try {
-      const data = await $fetch('/api/user/me', {
+      const data = await $fetch('/api/auth/me', {
         lazy: true,
         server: true,
         cache: 'no-cache',
@@ -25,12 +31,19 @@ export const useUserStore = defineStore('user', () => {
       }
 
       id.value = data.id
+      type.value = data.type
       name.value = data.name
       surname.value = data.surname
+      caption.value = data.caption
       email.value = data.email
-      avatar.value = data.avatar
+      phone.value = data.phone
+      avatarUrl.value = data.avatarUrl
+      prestige.value = data.prestige
     } catch (error) {
       if (error instanceof Error) {
+        if (error.message.includes('401')) {
+          // No session
+        }
         if (error.message.includes('404')) {
           // Not found
         }
@@ -40,7 +53,7 @@ export const useUserStore = defineStore('user', () => {
 
   async function updateUsers() {
     try {
-      const data = await $fetch('/api/user/list', {
+      const data = await $fetch('/api/user/list/staff', {
         lazy: true,
         server: true,
         cache: 'no-cache',
@@ -50,7 +63,27 @@ export const useUserStore = defineStore('user', () => {
         return
       }
 
-      users.value = data
+      staff.value = data
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('404')) {
+          // Not found
+        }
+      }
+    }
+
+    try {
+      const data = await $fetch('/api/user/list/partner', {
+        lazy: true,
+        server: true,
+        cache: 'no-cache',
+        getCachedData: undefined,
+      })
+      if (!data) {
+        return
+      }
+
+      partners.value = data
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('404')) {
@@ -65,10 +98,12 @@ export const useUserStore = defineStore('user', () => {
     name,
     surname,
     email,
-    avatar,
-    users,
+    avatarUrl,
 
     fullName,
+
+    staff,
+    partners,
 
     update,
     updateUsers,

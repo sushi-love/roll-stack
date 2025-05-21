@@ -2,23 +2,23 @@ import { repository } from '@sushi-atrium/database'
 
 export default defineEventHandler(async (event) => {
   try {
-    const userId = getRouterParam(event, 'userId')
-    if (!userId) {
+    const session = await getUserSession(event)
+    if (!session?.user) {
       throw createError({
-        statusCode: 400,
-        message: 'Id is required',
+        statusCode: 401,
+        message: 'Not logged in',
       })
     }
 
-    const user = await repository.user.find(userId)
-    if (!user) {
+    const userInDB = await repository.user.find(session.user.id)
+    if (!userInDB) {
       throw createError({
         statusCode: 404,
         message: 'User not found',
       })
     }
 
-    return user
+    return userInDB
   } catch (error) {
     throw errorResolver(error)
   }

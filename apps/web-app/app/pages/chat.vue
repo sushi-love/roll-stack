@@ -8,53 +8,13 @@
       </div>
 
       <div class="overflow-y-auto divide-y divide-default">
-        <div v-for="chat in data" :key="chat.id">
-          <NuxtLink :to="`/chat/${chat.id}`">
-            <div
-              class="p-4 sm:px-6 text-sm cursor-pointer border-l-3 transition-colors group"
-              :class="[
-                //chat?.unread ? 'text-highlighted' : 'text-toned',
-                selectedChatId === chat.id ? 'border-secondary bg-elevated' : 'border-transparent hover:border-secondary hover:bg-elevated',
-              ]"
-            >
-              <div class="flex flex-row items-center gap-3">
-                <UAvatar
-                  :src="chat.members[0]?.avatar ?? undefined"
-                  alt=""
-                  class="size-10"
-                  :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
-                />
-
-                <div class="w-full">
-                  <div
-                    class="flex items-center justify-between"
-                    :class="[
-                      //chat?.unread && 'font-semibold'
-                    ]"
-                  >
-                    <div class="flex items-center gap-3">
-                      <p class="text-md font-semibold">
-                        {{ chat?.members[0]?.name }} {{ chat?.members[0]?.surname }}
-                      </p>
-
-                      <!-- <UChip v-if="chat?.unread" /> -->
-                    </div>
-
-                    <span class="text-sm text-dimmed">{{ isToday(new Date(chat?.createdAt)) ? format(new Date(chat?.createdAt), 'HH:mm') : format(new Date(chat?.createdAt), 'dd MMM') }}</span>
-                  </div>
-                  <p
-                    class="text-dimmed line-clamp-1"
-                    :class="[
-                    // chat?.unread && 'font-semibold'
-                    ]"
-                  >
-                    Сообщение
-                  </p>
-                </div>
-              </div>
-            </div>
-          </NuxtLink>
-        </div>
+        <ChatListItem
+          v-for="chat in data"
+          :key="chat.id"
+          :chat="chat"
+          :members="chat.members.map((m) => m.user)"
+          :last-message="chat.lastMessage"
+        />
       </div>
     </div>
 
@@ -77,15 +37,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Chat } from '~~/types'
+import type { Chat } from '@sushi-atrium/database'
 import { breakpointsTailwind } from '@vueuse/core'
-import { format, isToday } from 'date-fns'
 import { computed, ref } from 'vue'
+import ChatListItem from '~/components/ChatListItem.vue'
 
-const { data } = await useFetch('/api/chat', { default: () => [] })
-
-const { imagesMode } = useApp()
-const { selectedChatId } = useChat()
+const { data } = await useFetch('/api/chat/my', { default: () => [] })
 
 const selectedMail = ref<Chat | null>()
 

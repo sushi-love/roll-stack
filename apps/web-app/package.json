@@ -17,6 +17,7 @@
     "@dicebear/core": "catalog:",
     "@neoconfetti/vue": "catalog:",
     "@pinia/nuxt": "catalog:",
+    "@sushi-atrium/database": "workspace:*",
     "@sushi-atrium/ui": "workspace:*",
     "arktype": "catalog:",
     "date-fns": "catalog:",

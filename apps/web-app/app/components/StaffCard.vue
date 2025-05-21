@@ -1,7 +1,7 @@
 <template>
   <ActiveCard padding="xs" class="flex flex-col gap-2 group">
     <img
-      :src="user.avatar ?? undefined"
+      :src="user.avatarUrl ?? undefined"
       alt=""
       class="aspect-square w-full rounded-lg duration-200"
       :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
@@ -13,14 +13,14 @@
       </h3>
     </div>
 
-    <p class="text-sm text-muted">
-      Название ...
+    <p class="text-sm text-muted leading-4 line-clamp-3">
+      {{ user.caption }}
     </p>
   </ActiveCard>
 </template>
 
 <script setup lang="ts">
-import type { User } from '~~/types'
+import type { User } from '@sushi-atrium/database'
 
 defineProps<{
   user: User

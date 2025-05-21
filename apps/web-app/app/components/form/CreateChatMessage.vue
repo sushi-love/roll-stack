@@ -7,30 +7,33 @@
     <div v-if="!user.id" class="text-center text-muted">
       <ULink to="/sign-in">
         Необходимо авторизоваться
-      </ULink> чтобы оставить комментарий
+      </ULink>
     </div>
-    <form
+    <UForm
       v-else
-      class="flex flex-col gap-4"
-      @submit.prevent="onCommentSubmit"
+      :state="state"
+      class="flex flex-col gap-3"
+      @submit="onSubmit"
     >
-      <UTextarea
-        v-model="text"
-        color="neutral"
-        variant="none"
-        required
-        autoresize
-        placeholder="Напишите свое сообщение..."
-        :rows="3"
-        :disabled="loading"
-        class="w-full"
-        :ui="{ base: 'p-0 resize-none text-lg leading-6' }"
-      />
+      <UFormField name="text">
+        <UTextarea
+          v-model="state.text"
+          color="neutral"
+          variant="none"
+          required
+          autoresize
+          placeholder="Напишите свое сообщение..."
+          :rows="3"
+          :disabled="loading"
+          class="w-full"
+          :ui="{ base: 'p-0 resize-none text-lg leading-6' }"
+        />
+      </UFormField>
 
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <UAvatar
-            :src="user.avatar ?? undefined"
+            :src="user.avatarUrl ?? undefined"
             alt=""
             class="size-8"
           />
@@ -44,36 +47,56 @@
           color="secondary"
           size="lg"
           :loading="loading"
-          :disabled="!text"
+          :disabled="!state.text"
           label="Отправить"
           icon="i-lucide-send"
         />
       </div>
-    </form>
+    </UForm>
   </UCard>
 </template>
 
 <script setup lang="ts">
-const toast = useToast()
+import type { FormSubmitEvent } from '@nuxt/ui'
+import type { CreateChatMessage } from '~~/shared/services/chat'
+
+const { chatId } = defineProps<{
+  chatId: string
+}>()
+
+// const toast = useToast()
 const user = useUserStore()
 
-const text = ref('')
 const loading = ref(false)
 
-function onCommentSubmit() {
+const state = ref<Partial<CreateChatMessage>>({
+  text: undefined,
+})
+
+function resetState() {
+  state.value = {
+    text: undefined,
+  }
+}
+
+async function onSubmit(event: FormSubmitEvent<CreateChatMessage>) {
   loading.value = true
 
-  setTimeout(() => {
-    text.value = ''
-
-    toast.add({
-      title: 'Комментарий добавлен!',
-      description: 'Сейчас он появится на странице.',
-      icon: 'i-lucide-check-circle',
-      color: 'success',
+  try {
+    await $fetch(`/api/chat/id/${chatId}/message`, {
+      method: 'POST',
+      body: event.data,
     })
 
+    // await channel.update()
+    // actionToast.success(t('toast.idea-created'))
+
+    resetState()
+  } catch (error) {
+    console.error(error)
+    // actionToast.error()
+  } finally {
     loading.value = false
-  }, 1000)
+  }
 }
 </script>

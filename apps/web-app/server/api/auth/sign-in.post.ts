@@ -1,3 +1,5 @@
+import { repository } from '@sushi-atrium/database'
+
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
@@ -5,14 +7,24 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, message: 'Missing phone' })
     }
 
-    // await setUserSession(event, {
-    //   user: {
-    //     id: user.id,
-    //     isStaff: user.isStaff,
-    //     name: user.name,
-    //     permissions: user.permissions,
-    //   },
-    // })
+    const preparedPhone = body.phone.replace(/\D/g, '')
+    if (preparedPhone.length !== 11) {
+      throw createError({ statusCode: 400, message: 'Invalid phone' })
+    }
+
+    const userInDB = await repository.user.findByPhone(preparedPhone)
+    if (!userInDB) {
+      throw createError({ statusCode: 404, message: 'User not found' })
+    }
+
+    await setUserSession(event, {
+      user: {
+        id: userInDB.id,
+        name: userInDB.name,
+        surname: userInDB.surname,
+        avatarUrl: userInDB.avatarUrl,
+      },
+    })
 
     return { ok: true }
   } catch (error) {

@@ -5,7 +5,7 @@
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <div class="flex flex-col gap-2.5">
         <img
-          :src="data?.avatar ?? undefined"
+          :src="data?.avatarUrl ?? undefined"
           alt=""
           class="w-full rounded-lg"
         >
@@ -37,10 +37,14 @@
       </div>
     </div>
 
-    <div class="flex flex-row items-center gap-2.5">
+    <div class="flex flex-col items-start gap-2">
       <h2 class="text-xl md:text-3xl font-bold">
         {{ data?.name }} {{ data?.surname }}
       </h2>
+
+      <p class="text-md">
+        {{ data?.caption }}
+      </p>
     </div>
 
     <p class="text-sm text-muted">
@@ -50,12 +54,10 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '~~/types'
-
 const { t } = useI18n()
 const { params } = useRoute('partner-id')
 
-const { data, error } = await useFetch<User>(`/api/user/${params.id}`)
+const { data, error } = await useFetch(`/api/user/${params.id}`)
 if (error.value) {
   await navigateTo('/')
 }

@@ -7,7 +7,7 @@
     :ui="{ content: 'w-64' }"
   >
     <UButton
-      :avatar="{ src: user.avatar ?? undefined }"
+      :avatar="{ src: user.avatarUrl ?? undefined }"
       :ui="{ trailingIcon: 'text-dimmed' }"
       :label="user.fullName ?? t('common.colleague')"
       block
@@ -38,7 +38,7 @@ const userMenuItems = computed(() => [
     label: user.fullName ?? t('common.colleague'),
     type: 'label' as const,
     avatar: {
-      src: user.avatar ?? undefined,
+      src: user.avatarUrl ?? undefined,
     },
   },
   {

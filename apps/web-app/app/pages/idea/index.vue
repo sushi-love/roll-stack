@@ -146,14 +146,14 @@ function generateLikes(amount: number) {
   const likes = []
 
   for (let i = 0; i < amount; i++) {
-    const randUser = user.users[getRandInteger(0, user.users.length - 1)]
+    const randUser = user.staff[getRandInteger(0, user.staff.length - 1)]
     if (!randUser) {
       continue
     }
 
     likes.push({
       id: randUser.id,
-      avatar: randUser.avatar ?? undefined,
+      avatar: randUser.avatarUrl ?? undefined,
     })
   }
 

@@ -61,6 +61,6 @@ const activeSorting = ref<'name' | 'rating'>('name')
 
 const user = useUserStore()
 
-const partnersSortedByName = computed(() => user.users.toSorted((a, b) => a.name.localeCompare(b.name)))
-const partnersSortedByPrestige = computed(() => user.users.toSorted((a, b) => b.prestige - a.prestige))
+const partnersSortedByName = computed(() => user.partners.toSorted((a, b) => a.name.localeCompare(b.name)))
+const partnersSortedByPrestige = computed(() => user.partners.toSorted((a, b) => b.prestige - a.prestige))
 </script>

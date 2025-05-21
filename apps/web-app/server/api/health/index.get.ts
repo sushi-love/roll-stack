@@ -1,8 +1,10 @@
-import { db } from '~~/server/services/db'
+import { repository } from '@sushi-atrium/database'
 
 export default defineEventHandler(async () => {
   try {
-    return db.getChatList()
+    await repository.checkHealth()
+
+    return { ok: true }
   } catch (error) {
     throw errorResolver(error)
   }

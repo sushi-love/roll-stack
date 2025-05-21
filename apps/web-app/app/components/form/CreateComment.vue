@@ -30,7 +30,7 @@
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <UAvatar
-            :src="user.avatar ?? undefined"
+            :src="user.avatarUrl ?? undefined"
             alt=""
             class="size-8"
           />
