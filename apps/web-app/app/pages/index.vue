@@ -8,6 +8,10 @@
       </h2>
       <p>Чем займемся сегодня?</p>
     </div>
+
+    <UContainer class="max-w-sm bg-elevated mx-0 min-h-120 p-4 text-muted rounded-lg">
+      Тут список задач
+    </UContainer>
   </Content>
 </template>
 

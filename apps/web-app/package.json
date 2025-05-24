@@ -20,11 +20,13 @@
     "@sushi-atrium/database": "workspace:*",
     "@sushi-atrium/ui": "workspace:*",
     "arktype": "catalog:",
+    "aws4fetch": "catalog:",
     "date-fns": "catalog:",
     "ioredis": "catalog:",
     "libphonenumber-js": "catalog:",
     "nuxt-tiptap-editor": "catalog:",
-    "pinia": "catalog:"
+    "pinia": "catalog:",
+    "sharp": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

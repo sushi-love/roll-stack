@@ -30,10 +30,6 @@
                 {{ chat.name }}
               </p>
 
-              <!-- <p class="text-md font-semibold">
-                {{ otherUsers[0]?.name }} {{ otherUsers[0]?.surname }}
-              </p> -->
-
               <!-- <UChip v-if="chat?.unread" /> -->
             </div>
 

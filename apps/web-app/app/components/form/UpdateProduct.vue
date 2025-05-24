@@ -1,0 +1,122 @@
+<template>
+  <UForm
+    :validate="createValidator(updateProductSchema)"
+    :state="state"
+    class="flex flex-col gap-3"
+    @submit="onSubmit"
+  >
+    <UFormField :label="$t('common.title')" name="name">
+      <UInput
+        v-model="state.name"
+        size="xl"
+        class="w-full items-center justify-center"
+      />
+    </UFormField>
+
+    <UFormField :label="$t('common.description')" name="description">
+      <UTextarea
+        v-model="state.description"
+        :rows="8"
+        size="xl"
+        class="w-full items-center justify-center"
+      />
+    </UFormField>
+
+    <UFormField :label="$t('common.slug')" name="slug">
+      <UInput
+        v-model="state.slug"
+        size="xl"
+        class="w-full items-center justify-center"
+      />
+    </UFormField>
+
+    <div class="mt-3 flex flex-row gap-3">
+      <UButton
+        type="submit"
+        variant="solid"
+        color="secondary"
+        size="xl"
+        block
+        :label="$t('common.update')"
+      />
+
+      <UTooltip :text="$t('app.delete.product.button')">
+        <UButton
+          variant="soft"
+          color="error"
+          size="xl"
+          icon="i-lucide-trash-2"
+          class="aspect-square justify-center"
+          @click="onDelete"
+        />
+      </UTooltip>
+    </div>
+  </UForm>
+</template>
+
+<script setup lang="ts">
+import type { FormSubmitEvent } from '@nuxt/ui'
+import type { UpdateProduct } from '~~/shared/services/product'
+import { updateProductSchema } from '~~/shared/services/product'
+
+const { productId, redirectTo } = defineProps<{
+  productId: string
+  redirectTo: string
+}>()
+
+const emit = defineEmits(['success', 'submitted'])
+
+const { t } = useI18n()
+const router = useRouter()
+const actionToast = useActionToast()
+
+const productStore = useProductStore()
+const product = computed(() => productStore.products.find((product) => product.id === productId))
+
+const state = ref<Partial<UpdateProduct>>({
+  name: product.value?.name,
+  description: product.value?.description,
+  slug: product.value?.slug,
+})
+
+async function onSubmit(event: FormSubmitEvent<UpdateProduct>) {
+  const toastId = actionToast.start()
+  emit('submitted')
+
+  try {
+    await $fetch(`/api/product/id/${productId}`, {
+      method: 'PATCH',
+      body: event.data,
+    })
+
+    await productStore.update()
+
+    actionToast.success(toastId, t('toast.product-updated'))
+    emit('success')
+  } catch (error) {
+    console.error(error)
+    actionToast.error(toastId)
+  }
+}
+
+async function onDelete() {
+  const toastId = actionToast.start()
+  emit('submitted')
+
+  try {
+    await $fetch(`/api/product/id/${productId}`, {
+      method: 'DELETE',
+    })
+
+    await productStore.update()
+
+    actionToast.success(toastId, t('toast.product-deleted'))
+    emit('success')
+
+    router.push(redirectTo)
+  } catch (error) {
+    console.error(error)
+    actionToast.error(toastId)
+  }
+}
+</script>

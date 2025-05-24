@@ -23,9 +23,8 @@
       size="xl"
       block
       class="mt-3"
-    >
-      {{ $t('common.add') }}
-    </UButton>
+      :label="$t('common.add')"
+    />
   </UForm>
 </template>
 
@@ -56,7 +55,7 @@ watch(
 )
 
 async function onSubmit(event: FormSubmitEvent<CreateIdea>) {
-  actionToast.start()
+  const toastId = actionToast.start()
   emit('submitted')
 
   try {
@@ -66,11 +65,11 @@ async function onSubmit(event: FormSubmitEvent<CreateIdea>) {
     })
 
     // await channel.update()
-    actionToast.success(t('toast.idea-created'))
+    actionToast.success(toastId, t('toast.idea-created'))
     emit('success')
   } catch (error) {
     console.error(error)
-    actionToast.error()
+    actionToast.error(toastId)
   }
 }
 </script>

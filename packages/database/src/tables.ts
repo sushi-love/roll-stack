@@ -1,8 +1,12 @@
 import { cuid2 } from 'drizzle-cuid2/postgres'
 import { relations } from 'drizzle-orm'
-import { integer, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { boolean, integer, numeric, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 type UserType = 'staff' | 'head' | 'partner' | 'guest'
+
+type WeightUnit = 'G' | 'KG' | 'ML' | 'L' | 'OZ' | 'LB'
+
+type MediaFormat = 'jpg' | 'webp'
 
 export const users = pgTable('users', {
   id: cuid2('id').defaultRandom().primaryKey(),
@@ -23,24 +27,122 @@ export const chats = pgTable('chats', {
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   name: varchar('name').notNull(),
-  lastMessageId: varchar('last_message_id'),
+  lastMessageId: cuid2('last_message_id'),
 })
 
 export const chatMessages = pgTable('chat_messages', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-  chatId: varchar('chat_id').notNull(),
-  userId: varchar('user_id').notNull(),
   text: varchar('text'),
+  chatId: cuid2('chat_id').notNull().references(() => chats.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  userId: cuid2('user_id').notNull().references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
 })
 
 export const chatMembers = pgTable('chat_members', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-  chatId: varchar('chat_id').notNull(),
-  userId: varchar('user_id').notNull(),
+  chatId: cuid2('chat_id').notNull().references(() => chats.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  userId: cuid2('user_id').notNull().references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
+export const menus = pgTable('menus', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  slug: varchar('slug').notNull(),
+  name: varchar('name').notNull(),
+  isActive: boolean('is_active').notNull().default(false),
+})
+
+export const menuCategories = pgTable('menu_categories', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  slug: varchar('slug').notNull(),
+  name: varchar('name').notNull(),
+  icon: varchar('icon'),
+  menuId: cuid2('menu_id').notNull().references(() => menus.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
+export const products = pgTable('products', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  slug: varchar('slug').notNull(),
+  isAvailableForPurchase: boolean('is_available_for_purchase').notNull().default(true),
+  name: varchar('name').notNull(),
+  description: varchar('description').notNull(),
+  mediaId: cuid2('media_id').references(() => media.id),
+})
+
+export const productVariants = pgTable('product_variants', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  weightValue: numeric('weight_value', { mode: 'number' }).notNull(),
+  weightUnit: varchar('weight_unit').notNull().$type<WeightUnit>(),
+  gross: numeric('gross', { mode: 'number' }).notNull(),
+  net: numeric('net', { mode: 'number' }),
+  calories: numeric('calories', { mode: 'number' }),
+  protein: numeric('protein', { mode: 'number' }),
+  fat: numeric('fat', { mode: 'number' }),
+  carbohydrate: numeric('carbohydrate', { mode: 'number' }),
+  sku: varchar('sku'),
+  productId: cuid2('product_id').notNull().references(() => products.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
+export const productsInMenuCategories = pgTable('products_in_menu_categories', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  menuCategoryId: cuid2('menu_category_id').notNull().references(() => menuCategories.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  productId: cuid2('product_id').notNull().references(() => products.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
+export const media = pgTable('media', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+})
+
+export const mediaItems = pgTable('media_items', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  url: varchar('url').notNull(),
+  size: integer('size').notNull(),
+  format: varchar('format').notNull().$type<MediaFormat>(),
+  mediaId: cuid2('media_id').notNull().references(() => media.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
 })
 
 export const userRelations = relations(users, ({ many }) => ({
@@ -76,5 +178,55 @@ export const chatMemberRelations = relations(chatMembers, ({ one }) => ({
   user: one(users, {
     fields: [chatMembers.userId],
     references: [users.id],
+  }),
+}))
+
+export const menuRelations = relations(menus, ({ many }) => ({
+  categories: many(menuCategories),
+}))
+
+export const menuCategoryRelations = relations(menuCategories, ({ many, one }) => ({
+  menu: one(menus, {
+    fields: [menuCategories.menuId],
+    references: [menus.id],
+  }),
+  products: many(productsInMenuCategories),
+}))
+
+export const productRelations = relations(products, ({ many, one }) => ({
+  variants: many(productVariants),
+  categories: many(productsInMenuCategories),
+  media: one(media, {
+    fields: [products.mediaId],
+    references: [media.id],
+  }),
+}))
+
+export const productVariantRelations = relations(productVariants, ({ one }) => ({
+  product: one(products, {
+    fields: [productVariants.productId],
+    references: [products.id],
+  }),
+}))
+
+export const productsInMenuCategoriesRelations = relations(productsInMenuCategories, ({ one }) => ({
+  category: one(menuCategories, {
+    fields: [productsInMenuCategories.menuCategoryId],
+    references: [menuCategories.id],
+  }),
+  product: one(products, {
+    fields: [productsInMenuCategories.productId],
+    references: [products.id],
+  }),
+}))
+
+export const mediaRelations = relations(media, ({ many }) => ({
+  items: many(mediaItems),
+}))
+
+export const mediaItemRelations = relations(mediaItems, ({ one }) => ({
+  media: one(media, {
+    fields: [mediaItems.mediaId],
+    references: [media.id],
   }),
 }))

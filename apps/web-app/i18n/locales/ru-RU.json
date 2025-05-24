@@ -42,7 +42,51 @@
     "more-information": "Больше информации",
     "home": "Главная",
     "to-home": "На главную",
-    "language": "Язык"
+    "language": "Язык",
+    "title": "Название",
+    "name": "Имя",
+    "create": "Создать",
+    "update": "Обновить",
+    "edit": "Редактировать",
+    "send": "Отправить",
+    "upload": "Загрузить",
+    "detach": "Открепить",
+    "description": "Описание",
+    "slug": "Идентификатор для URL",
+    "photo": "Фото",
+    "icon": "Иконка",
+    "price": "Цена",
+    "sku": "Артикул",
+    "weight-or-volume": "Вес / Объем",
+    "measurement-unit": "Ед. измерения",
+    "abbreviation": {
+      "min": "мин",
+      "kg": "кг",
+      "g": "г",
+      "kcal": "ккал",
+      "ml": "мл",
+      "l": "л",
+      "pcs": "шт",
+      "oz": "ун",
+      "lb": "фунт"
+    },
+    "weight-unit": {
+      "g": "Грамм",
+      "kg": "Килограмм",
+      "ml": "Миллилитр",
+      "l": "Литр",
+      "pcs": "Штука",
+      "oz": "Унция",
+      "lb": "Фунт"
+    },
+    "nutrition": {
+      "value-title": "Пищевая ценность на 100г",
+      "calories": "Калории",
+      "kcal": "Ккал",
+      "protein": "Белки",
+      "fat": "Жиры",
+      "carbohydrate": "Углеводы"
+    }
   },
   "app": {
     "title": "Суши Атриум",
@@ -55,7 +99,19 @@
       "our-staff": "Сотрудники",
       "idea": "Идея",
       "suggest-idea": "Предложить идею",
-      "chats": "Чаты"
+      "chats": "Чаты",
+      "menu": "Меню",
+      "menu-category": "Категория меню",
+      "products": "Продукты",
+      "product": "Продукт"
+    },
+    "product": {
+      "available-for-purchase": "Доступен для покупки",
+      "not-available-for-purchase": "Недоступен для покупки",
+      "variants": "Вариации продукта",
+      "usage": "Где используется",
+      "no-description": "Описание отсутствует",
+      "variant-name-placeholder": "25 см, 6 шт, на традиционном тесте, и т.п."
     },
     "welcome-message": "Мы вас заждались!",
     "create": {
@@ -64,6 +120,46 @@
         "title": "Добавление идеи",
         "label": "Ваша мысль",
         "description": "Что бы вы хотели добавить или изменить? Любая идея приветствуется!"
+      },
+      "product": {
+        "button": "Создать продукт",
+        "title": "Создание продукта"
+      },
+      "product-variant": {
+        "button": "Создать вариацию",
+        "title": "Создание вариации продукта"
+      }
+    },
+    "attach": {
+      "product": {
+        "button": "Добавить продукт",
+        "title": "Добавление продукта в категорию"
+      }
+    },
+    "update": {
+      "menu-category": {
+        "button": "Обновить категорию",
+        "title": "Обновление категории"
+      },
+      "product": {
+        "button": "Обновить продукт",
+        "title": "Обновление продукта"
+      },
+      "product-variant": {
+        "button": "Обновить вариацию",
+        "title": "Обновление вариации продукта"
+      },
+      "product-photo": {
+        "button": "Обновить фото",
+        "title": "Обновление фото продукта"
+      }
+    },
+    "delete": {
+      "product": {
+        "button": "Удалить продукт"
+      },
+      "product-variant": {
+        "button": "Удалить вариацию"
       }
     }
   },
@@ -72,6 +168,20 @@
     "not-selected": "Не выбрано",
     "length": {
       "invalid": "Недопустимое количество символов"
-    }
+    },
+    "file-size-or-type": "Недопустимый размер или тип файла"
+  },
+  "toast": {
+    "idea-created": "Идея добавлена",
+    "menu-category-created": "Категория создана",
+    "product-created": "Продукт создан",
+    "product-updated": "Продукт обновлен",
+    "product-deleted": "Продукт удален",
+    "variant-created": "Вариация продукта создана",
+    "variant-updated": "Вариация продукта обновлена",
+    "variant-deleted": "Вариация продукта удалена",
+    "photo-loaded": "Фото загружено",
+    "category-updated": "Категория обновлена",
+    "category-deleted": "Категория удалена"
   }
 }

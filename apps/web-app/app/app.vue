@@ -28,9 +28,13 @@ useHead({
 
 // Init Stores
 const user = useUserStore()
+const menu = useMenuStore()
+const product = useProductStore()
 
 await Promise.all([
   user.update(),
   user.updateUsers(),
+  menu.update(),
+  product.update(),
 ])
 </script>

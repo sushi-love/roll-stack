@@ -21,6 +21,13 @@
 const { t } = useI18n()
 const route = useRoute()
 
+const menu = useMenuStore()
+
+const menus = computed(() => menu.menus.map((menu) => ({
+  label: menu.name,
+  to: `/menu/${menu.id}`,
+})))
+
 const menuItems = computed(() => [
   {
     label: t('app.menu.my-space'),
@@ -33,7 +40,29 @@ const menuItems = computed(() => [
     to: '/chat',
     icon: 'i-lucide-messages-square',
     active: route.path.startsWith('/chat'),
-    badge: 12,
+    // badge: 12,
+  },
+  {
+    label: t('app.menu.products'),
+    to: '/product',
+    icon: 'i-lucide-cooking-pot',
+    active: route.path.startsWith('/product'),
+  },
+  {
+    label: t('app.menu.menu'),
+    to: '/menu',
+    icon: 'i-lucide-book-copy',
+    defaultOpen: route.path.startsWith('/menu'),
+    children: [
+      ...menus.value,
+      // {
+      //   label: t('center.create.menu'),
+      //   icon: 'food:plus',
+      //   onSelect: () => {
+      //     modalCreateMenu.open()
+      //   },
+      // },
+    ],
   },
   {
     label: t('app.menu.our-partners'),

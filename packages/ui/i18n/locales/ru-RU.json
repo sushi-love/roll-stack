@@ -15,7 +15,8 @@
   },
   "toast": {
     "in-process": "В процессе",
-    "updating-data": "Данные сейчас обновятся"
+    "updating-data": "Данные сейчас обновятся",
+    "success": "Успех!"
   },
   "error": {
     "title": "Ошибка",

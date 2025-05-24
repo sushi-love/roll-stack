@@ -46,10 +46,10 @@
           type="submit"
           color="secondary"
           size="lg"
+          icon="i-lucide-send"
           :loading="loading"
           :disabled="!state.text"
-          label="Отправить"
-          icon="i-lucide-send"
+          :label="$t('common.send')"
         />
       </div>
     </UForm>

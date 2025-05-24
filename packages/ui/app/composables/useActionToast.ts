@@ -2,25 +2,27 @@ function _useActionToast() {
   const toast = useToast()
   const { t } = useI18n()
 
-  const id = ref(useId())
-
   function start() {
+    const id = Math.random().toString(36).slice(2)
+
     toast.add({
-      id: id.value,
+      id,
       title: t('toast.in-process'),
       description: t('toast.updating-data'),
       icon: 'i-lucide-loader-circle',
-      duration: 120000,
+      duration: 80000,
       ui: {
         icon: 'animate-spin',
       },
     })
+
+    return id
   }
 
-  function success(title: string) {
-    toast.update(id.value, {
+  function success(id: string, title: string) {
+    toast.update(id, {
       title,
-      description: undefined,
+      description: t('toast.success'),
       icon: 'i-lucide-check',
       color: 'success',
       duration: 3000,
@@ -30,8 +32,8 @@ function _useActionToast() {
     })
   }
 
-  function error(description: string = t('error.default')) {
-    toast.update(id.value, {
+  function error(id: string, description: string = t('error.default')) {
+    toast.update(id, {
       title: t('error.title'),
       icon: 'i-lucide-x',
       color: 'error',
@@ -44,7 +46,6 @@ function _useActionToast() {
   }
 
   return {
-    id: id.value,
     start,
     success,
     error,

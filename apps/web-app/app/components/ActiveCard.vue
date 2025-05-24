@@ -8,12 +8,14 @@
 </template>
 
 <script setup lang="ts">
-type Padding = 'xs' | 'sm' | 'md'
+type Padding = 'none' | 'xs' | 'sm' | 'md'
 
 const { padding = 'md' } = defineProps<{ padding?: Padding }>()
 
 function getPaddingClass(p: Padding) {
   switch (p) {
+    case 'none':
+      return ''
     case 'xs':
       return 'p-2'
     case 'sm':

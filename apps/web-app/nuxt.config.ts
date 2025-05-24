@@ -7,6 +7,18 @@ export default defineNuxtConfig({
   devtools: {
     componentInspector: false,
   },
+  runtimeConfig: {
+    s3: {
+      bucket: '',
+      region: '',
+      endpoint: '',
+      accessKeyId: '',
+      secretAccessKey: '',
+    },
+    public: {
+      mediaUrl: '',
+    },
+  },
   css: ['~/assets/css/styles.css'],
   i18n: {
     locales: [

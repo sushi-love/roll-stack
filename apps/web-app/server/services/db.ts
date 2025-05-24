@@ -151,56 +151,6 @@ const pins = [
   },
 ]
 
-const users: any[] = []
-const chats: any[] = []
-
-async function generateUsers(amount: number = 50): Promise<any[]> {
-  const fakeUsers = await (await fetch(`https://fakerapi.it/api/v2/users?_quantity=${amount}&_locale=ru_RU`)).json()
-
-  for (let i = 0; i < amount; i++) {
-    users.push({
-      id: i.toString(),
-      name: fakeUsers.data[i].firstname,
-      surname: fakeUsers.data[i].lastname,
-      email: fakeUsers.data[i].email,
-      avatar: `http://localhost:3501/api/avatar/${i}.svg`,
-      prestige: getRandInteger(1, 50),
-    })
-  }
-
-  generateChats(users)
-
-  return users
-}
-
-function generateChats(users: any[]) {
-  for (let i = 0; i < users.length; i++) {
-    const user = users[i]
-    if (!user) {
-      continue
-    }
-
-    const chatId = i.toString()
-
-    const randMessage: any = {
-      id: i.toString(),
-      createdAt: new Date().toISOString(),
-      text: 'Привет!',
-      chatId,
-      userId: user.id,
-    }
-
-    chats.push({
-      id: chatId,
-      createdAt: new Date().toISOString(),
-      name: user.name,
-      members: [user],
-      messages: [randMessage],
-      lastMessage: randMessage,
-    })
-  }
-}
-
 class FakeDB {
   getPin(id: string) {
     return pins.find((pin) => pin.id === id)
@@ -208,26 +158,6 @@ class FakeDB {
 
   getPinList() {
     return pins
-  }
-
-  async getUser(id: string) {
-    return users.find((user) => user.id === id)
-  }
-
-  async getUserList() {
-    if (users.length === 0) {
-      await generateUsers()
-    }
-
-    return users
-  }
-
-  async getChatList() {
-    return chats
-  }
-
-  async getChat(id: string) {
-    return chats.find((chat) => chat.id === id)
   }
 }
 

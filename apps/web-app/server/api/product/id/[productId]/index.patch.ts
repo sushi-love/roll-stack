@@ -1,0 +1,30 @@
+import { repository } from '@sushi-atrium/database'
+import { type } from 'arktype'
+import { updateProductSchema } from '~~/shared/services/product'
+
+export default defineEventHandler(async (event) => {
+  try {
+    const productId = getRouterParam(event, 'productId')
+    if (!productId) {
+      throw createError({
+        statusCode: 400,
+        message: 'Id is required',
+      })
+    }
+
+    const body = await readBody(event)
+    const data = updateProductSchema(body)
+    if (data instanceof type.errors) {
+      throw data
+    }
+
+    const product = await repository.product.update(productId, data)
+
+    return {
+      ok: true,
+      result: product,
+    }
+  } catch (error) {
+    throw errorResolver(error)
+  }
+})

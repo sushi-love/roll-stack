@@ -1,0 +1,31 @@
+import { createId } from '@paralleldrive/cuid2'
+import { repository } from '@sushi-atrium/database'
+import { type } from 'arktype'
+import { createMenuCategorySchema } from '~~/shared/services/menu'
+
+export default defineEventHandler(async (event) => {
+  try {
+    const body = await readBody(event)
+    const data = createMenuCategorySchema(body)
+    if (data instanceof type.errors) {
+      throw data
+    }
+
+    const id = createId()
+
+    const category = await repository.menu.createCategory({
+      id,
+      slug: id,
+      name: data.name,
+      menuId: data.menuId,
+      icon: null,
+    })
+
+    return {
+      ok: true,
+      result: category,
+    }
+  } catch (error) {
+    throw errorResolver(error)
+  }
+})
