@@ -2,7 +2,7 @@
   "name": "sushi-atrium",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "description": "Open space for our business in online.",
   "author": "Nick Kosarev <hmbanan666@hotmail.com>",
   "license": "MIT",
@@ -23,7 +23,7 @@
   ],
   "engines": {
     "node": ">=22.15.0",
-    "pnpm": ">=10.10.0"
+    "pnpm": ">=10.11.0"
   },
   "scripts": {
     "release": "changelogen-monorepo --release --push",
