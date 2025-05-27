@@ -9,7 +9,9 @@
   <article class="group/message relative w-full scroll-mt-4 sm:scroll-mt-6">
     <div class="relative flex items-start gap-2 pb-2" :class="{ 'ms-auto max-w-[75%] ltr:justify-end': side === 'right', 'rtl:justify-end': side === 'left' }">
       <div class="inline-flex items-center justify-center min-h-6 mt-1.5">
-        <UAvatar :src="avatarUrl" />
+        <UserPopover :user="user">
+          <UAvatar :src="avatarUrl" class="hover:scale-110 duration-200" />
+        </UserPopover>
       </div>
 
       <div class="min-h-12 min-w-18 relative bg-elevated/50 px-3.5 py-2 rounded-lg" :class="{ 'text-neutral-900 bg-orange-100 border-b-2 border-l-2 border-orange-200': side === 'left' }">
@@ -29,7 +31,7 @@
 import { format, isToday } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 
-const { isFirstMessageOfDay = false } = defineProps<{
+const { userId, isFirstMessageOfDay = false } = defineProps<{
   createdAt: string
   text: string | null
   avatarUrl?: string
@@ -37,4 +39,7 @@ const { isFirstMessageOfDay = false } = defineProps<{
   side: 'left' | 'right'
   isFirstMessageOfDay?: boolean
 }>()
+
+const userStore = useUserStore()
+const user = computed(() => userStore.find(userId))
 </script>

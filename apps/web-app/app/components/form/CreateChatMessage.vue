@@ -64,7 +64,6 @@ const { chatId } = defineProps<{
   chatId: string
 }>()
 
-// const toast = useToast()
 const user = useUserStore()
 
 const loading = ref(false)

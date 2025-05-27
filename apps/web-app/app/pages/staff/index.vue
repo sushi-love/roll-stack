@@ -8,7 +8,7 @@
         :key="staff.id"
         :to="`/staff/${staff.id}`"
       >
-        <StaffCard :user="staff" />
+        <StaffCard :staff="staff" />
       </NuxtLink>
     </div>
   </Content>

@@ -1,4 +1,8 @@
-import type { User } from '@sushi-atrium/database'
+import type { Task, User } from '@sushi-atrium/database'
+
+type StaffWithData = User & {
+  focusedTask: Task | null
+}
 
 export const useUserStore = defineStore('user', () => {
   const id = ref<string | undefined>(undefined)
@@ -10,12 +14,13 @@ export const useUserStore = defineStore('user', () => {
   const phone = ref<string | null>(null)
   const avatarUrl = ref<string | null>(null)
   const prestige = ref<number | null>(null)
+  const focusedTaskId = ref<string | null>(null)
 
   const fullName = computed(() => {
     return `${name.value} ${surname.value}`
   })
 
-  const staff = ref<User[]>([])
+  const staff = ref<StaffWithData[]>([])
   const partners = ref<User[]>([])
 
   async function update() {
@@ -39,6 +44,7 @@ export const useUserStore = defineStore('user', () => {
       phone.value = data.phone
       avatarUrl.value = data.avatarUrl
       prestige.value = data.prestige
+      focusedTaskId.value = data.focusedTaskId
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('401')) {
@@ -93,12 +99,22 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  function find(userId: string): User | undefined {
+    const user = staff.value.find((user) => user.id === userId)
+    if (user) {
+      return user
+    }
+
+    return partners.value.find((user) => user.id === userId)
+  }
+
   return {
     id,
     name,
     surname,
     email,
     avatarUrl,
+    focusedTaskId,
 
     fullName,
 
@@ -107,5 +123,6 @@ export const useUserStore = defineStore('user', () => {
 
     update,
     updateUsers,
+    find,
   }
 })

@@ -11,9 +11,11 @@
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
     "@vueuse/core": "catalog:",
+    "@vueuse/integrations": "catalog:",
     "@vueuse/nuxt": "catalog:",
     "arktype": "catalog:",
     "nuxt-zod-i18n": "catalog:",
+    "sortablejs": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

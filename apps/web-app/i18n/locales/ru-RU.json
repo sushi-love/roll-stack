@@ -113,6 +113,9 @@
       "no-description": "Описание отсутствует",
       "variant-name-placeholder": "25 см, 6 шт, на традиционном тесте, и т.п."
     },
+    "task": {
+      "description": "Дополнительная информация"
+    },
     "welcome-message": "Мы вас заждались!",
     "create": {
       "idea": {
@@ -128,6 +131,10 @@
       "product-variant": {
         "button": "Создать вариацию",
         "title": "Создание вариации продукта"
+      },
+      "task": {
+        "button": "Создать задачу",
+        "title": "Создание задачи"
       }
     },
     "attach": {
@@ -152,6 +159,10 @@
       "product-photo": {
         "button": "Обновить фото",
         "title": "Обновление фото продукта"
+      },
+      "task": {
+        "button": "Обновить задачу",
+        "title": "Обновление задачи"
       }
     },
     "delete": {
@@ -160,6 +171,9 @@
       },
       "product-variant": {
         "button": "Удалить вариацию"
+      },
+      "task": {
+        "button": "Удалить задачу"
       }
     }
   },
@@ -182,6 +196,11 @@
     "variant-deleted": "Вариация продукта удалена",
     "photo-loaded": "Фото загружено",
     "category-updated": "Категория обновлена",
-    "category-deleted": "Категория удалена"
+    "category-deleted": "Категория удалена",
+    "task-created": "Задача создана",
+    "task-updated": "Задача обновлена",
+    "task-deleted": "Задача удалена",
+    "task-focused": "Задача в фокусе",
+    "task-unfocused": "Задача не в фокусе"
   }
 }

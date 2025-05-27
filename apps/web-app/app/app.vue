@@ -30,11 +30,15 @@ useHead({
 const user = useUserStore()
 const menu = useMenuStore()
 const product = useProductStore()
+const chat = useChatStore()
+const task = useTaskStore()
 
 await Promise.all([
   user.update(),
   user.updateUsers(),
   menu.update(),
   product.update(),
+  chat.update(),
+  task.update(),
 ])
 </script>

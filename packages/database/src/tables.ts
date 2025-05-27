@@ -20,6 +20,7 @@ export const users = pgTable('users', {
   phone: varchar('phone').unique(),
   avatarUrl: varchar('avatar_url'),
   prestige: integer('prestige').notNull().default(0),
+  focusedTaskId: cuid2('focused_task_id'),
 })
 
 export const chats = pgTable('chats', {
@@ -145,9 +146,25 @@ export const mediaItems = pgTable('media_items', {
   }),
 })
 
-export const userRelations = relations(users, ({ many }) => ({
+export const tasks = pgTable('tasks', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  completedAt: timestamp('completed_at', { precision: 3, withTimezone: true, mode: 'string' }),
+  name: varchar('name').notNull(),
+  description: varchar('description'),
+  performerId: cuid2('performer_id').references(() => users.id),
+  chatId: cuid2('chat_id').references(() => chats.id),
+})
+
+export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
+  tasks: many(tasks),
+  focusedTask: one(tasks, {
+    fields: [users.focusedTaskId],
+    references: [tasks.id],
+  }),
 }))
 
 export const chatRelations = relations(chats, ({ many, one }) => ({
@@ -157,6 +174,7 @@ export const chatRelations = relations(chats, ({ many, one }) => ({
     fields: [chats.lastMessageId],
     references: [chatMessages.id],
   }),
+  tasks: many(tasks),
 }))
 
 export const chatMessageRelations = relations(chatMessages, ({ one }) => ({
@@ -228,5 +246,16 @@ export const mediaItemRelations = relations(mediaItems, ({ one }) => ({
   media: one(media, {
     fields: [mediaItems.mediaId],
     references: [media.id],
+  }),
+}))
+
+export const taskRelations = relations(tasks, ({ one }) => ({
+  chat: one(chats, {
+    fields: [tasks.chatId],
+    references: [chats.id],
+  }),
+  performer: one(users, {
+    fields: [tasks.performerId],
+    references: [users.id],
   }),
 }))

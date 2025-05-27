@@ -25,6 +25,9 @@ export class User {
   static async findStaff() {
     return useDatabase().query.users.findMany({
       where: (users, { eq }) => eq(users.type, 'staff'),
+      with: {
+        focusedTask: true,
+      },
     })
   }
 

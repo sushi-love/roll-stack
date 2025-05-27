@@ -35,3 +35,6 @@ export type MediaDraft = InferInsertModel<typeof tables.media>
 
 export type MediaItem = InferSelectModel<typeof tables.mediaItems>
 export type MediaItemDraft = InferInsertModel<typeof tables.mediaItems>
+
+export type Task = InferSelectModel<typeof tables.tasks>
+export type TaskDraft = InferInsertModel<typeof tables.tasks>

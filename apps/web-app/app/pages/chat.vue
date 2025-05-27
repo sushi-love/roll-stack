@@ -9,11 +9,9 @@
 
       <div class="overflow-y-auto divide-y divide-default">
         <ChatListItem
-          v-for="chat in data"
+          v-for="chat in chatStore.chats"
           :key="chat.id"
-          :chat="chat"
-          :members="chat.members.map((m) => m.user)"
-          :last-message="chat.lastMessage"
+          :chat-id="chat.id"
         />
       </div>
     </div>
@@ -40,9 +38,8 @@
 import type { Chat } from '@sushi-atrium/database'
 import { breakpointsTailwind } from '@vueuse/core'
 import { computed, ref } from 'vue'
-import ChatListItem from '~/components/ChatListItem.vue'
 
-const { data } = await useFetch('/api/chat/my', { default: () => [] })
+const chatStore = useChatStore()
 
 const selectedMail = ref<Chat | null>()
 

@@ -35,6 +35,22 @@
     <p class="text-sm text-muted">
       Описание, контакты, какие вопросы может решать, какие задачи может выполнять...
     </p>
+
+    <div class="mx-0 max-w-sm min-h-92 py-4 px-4 rounded-lg border border-default">
+      <div class="mb-4 flex flex-row gap-2 items-center justify-between">
+        <h3 class="text-xl font-semibold">
+          Список активных задач
+        </h3>
+      </div>
+
+      <div class="w-full flex flex-col gap-3">
+        <TaskCard
+          v-for="task in tasks"
+          :key="task.id"
+          :task="task"
+        />
+      </div>
+    </div>
   </Content>
 </template>
 
@@ -47,9 +63,12 @@ if (error.value) {
   await navigateTo('/')
 }
 
-const user = useUserStore()
+const userStore = useUserStore()
+const taskStore = useTaskStore()
+
+const tasks = computed(() => taskStore.tasks.filter((task) => task.performerId === data.value?.id))
 
 const canSendMessage = computed(() => {
-  return user.id !== data.value?.id
+  return userStore.id !== data.value?.id
 })
 </script>
