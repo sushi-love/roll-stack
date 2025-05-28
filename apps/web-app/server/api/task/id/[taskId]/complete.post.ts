@@ -1,6 +1,6 @@
 import { repository } from '@sushi-atrium/database'
 import { type } from 'arktype'
-import { updateTaskSchema } from '~~/shared/services/task'
+import { completeTaskSchema } from '~~/shared/services/task'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody(event)
-    const data = updateTaskSchema(body)
+    const data = completeTaskSchema(body)
     if (data instanceof type.errors) {
       throw data
     }
@@ -26,6 +26,17 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const user = await repository.user.find(session.user.id)
+    if (!user) {
+      throw createError({
+        statusCode: 404,
+        message: 'User not found',
+      })
+    }
+
+    // Guards:
+    // If task not exist
+    // If performer is not user
     const task = await repository.task.find(taskId)
     if (!task) {
       throw createError({
@@ -33,23 +44,26 @@ export default defineEventHandler(async (event) => {
         message: 'Task not found',
       })
     }
-
-    const isPrivate = task.performerId === session.user.id && !task.chatId
-
-    // Guard: If task is private - cannot change performer
-    if (isPrivate && task.performerId !== data.performerId) {
+    if (task.performerId !== user.id) {
       throw createError({
         statusCode: 403,
-        message: 'Task is private',
+        message: 'You are not the performer of this task',
       })
     }
 
-    const updatedTask = await repository.task.update(taskId, data)
+    await repository.task.complete(taskId, {
+      resolution: data.resolution,
+      report: data.report,
+    })
 
-    return {
-      ok: true,
-      result: updatedTask,
+    // Clear focus if needed
+    if (user.focusedTaskId === taskId) {
+      await repository.user.update(user.id, {
+        focusedTaskId: null,
+      })
     }
+
+    return { ok: true }
   } catch (error) {
     throw errorResolver(error)
   }

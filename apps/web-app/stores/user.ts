@@ -1,6 +1,6 @@
 import type { Task, User } from '@sushi-atrium/database'
 
-type StaffWithData = User & {
+type UserWithData = User & {
   focusedTask: Task | null
 }
 
@@ -20,8 +20,8 @@ export const useUserStore = defineStore('user', () => {
     return `${name.value} ${surname.value}`
   })
 
-  const staff = ref<StaffWithData[]>([])
-  const partners = ref<User[]>([])
+  const staff = ref<UserWithData[]>([])
+  const partners = ref<UserWithData[]>([])
 
   async function update() {
     try {
@@ -99,7 +99,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  function find(userId: string): User | undefined {
+  function find(userId: string): UserWithData | undefined {
     const user = staff.value.find((user) => user.id === userId)
     if (user) {
       return user

@@ -15,7 +15,7 @@
           {{ data?.name }}
         </p>
         <p class="text-muted text-xs">
-          Описание чата, что здесь происходит
+          {{ data?.description ?? 'Общий чат' }}
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useDatabase } from '../database'
 import { Chat } from './chat'
 import { Media } from './media'
 import { Menu } from './menu'
+import { Notification } from './notification'
 import { Product } from './product'
 import { Task } from './task'
 import { User } from './user'
@@ -10,6 +11,7 @@ class Repository {
   readonly chat = Chat
   readonly media = Media
   readonly menu = Menu
+  readonly notification = Notification
   readonly product = Product
   readonly task = Task
   readonly user = User

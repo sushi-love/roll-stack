@@ -1,0 +1,100 @@
+<template>
+  <UForm
+    :validate="createValidator(completeTaskSchema)"
+    :state="state"
+    class="flex flex-col gap-3"
+    @submit="onSubmit"
+  >
+    <div class="mb-4">
+      <h2 class="text-lg md:text-xl font-medium">
+        «{{ task?.name }}»
+      </h2>
+      <p class="text-sm text-muted leading-4">
+        {{ task?.description }}
+      </p>
+    </div>
+
+    <UFormField :label="$t('common.resolution')" name="resolution">
+      <USelectMenu
+        v-model="selectedResolution"
+        :items="getResolutionForSelect()"
+        :placeholder="$t('common.select')"
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
+    <UFormField :label="$t('common.report')" name="report">
+      <UTextarea
+        v-model="state.report"
+        :rows="4"
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
+    <UButton
+      type="submit"
+      variant="solid"
+      color="secondary"
+      size="xl"
+      trailing-icon="i-lucide-flag"
+      class="justify-around items-center"
+      block
+      :label="$t('app.update.task.close')"
+    />
+  </UForm>
+</template>
+
+<script setup lang="ts">
+import type { FormSubmitEvent } from '@nuxt/ui'
+import type { CompleteTask, Resolution } from '~~/shared/services/task'
+import { completeTaskSchema } from '~~/shared/services/task'
+
+const { taskId } = defineProps<{
+  taskId: string
+}>()
+
+const emit = defineEmits(['success', 'submitted'])
+
+const { t } = useI18n()
+const actionToast = useActionToast()
+const userStore = useUserStore()
+const taskStore = useTaskStore()
+
+const task = computed(() => taskStore.tasks.find((task) => task.id === taskId))
+
+const state = ref<Partial<CompleteTask>>({
+  resolution: 'success',
+  report: undefined,
+})
+
+const selectedResolution = ref<{ label: string, value: Resolution, icon: string } | undefined>(
+  getResolutionForSelect().find((resolution) => resolution.value === 'success'),
+)
+
+watch(selectedResolution, () => {
+  state.value.resolution = selectedResolution.value?.value
+})
+
+async function onSubmit(event: FormSubmitEvent<CompleteTask>) {
+  const toastId = actionToast.start()
+  emit('submitted')
+
+  try {
+    await $fetch(`/api/task/id/${taskId}/complete`, {
+      method: 'POST',
+      body: event.data,
+    })
+
+    await taskStore.update()
+    await userStore.update()
+
+    actionToast.success(toastId, t('toast.task-completed'))
+    emit('success')
+  } catch (error) {
+    console.error(error)
+    actionToast.error(toastId)
+  }
+}
+</script>

@@ -1,7 +1,7 @@
-import type { ChatDraft } from '../types'
-import { eq } from 'drizzle-orm'
+import type { ChatDraft, ChatMemberDraft } from '../types'
+import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { chatMessages, chats } from '../tables'
+import { chatMembers, chatMessages, chats } from '../tables'
 
 export class Chat {
   static async find(id: string) {
@@ -26,6 +26,7 @@ export class Chat {
   static async listByUser(userId: string) {
     const userAsMembers = await useDatabase().query.chatMembers.findMany({
       where: (chatMembers, { eq }) => eq(chatMembers.userId, userId),
+      orderBy: (chatMembers, { desc }) => desc(chatMembers.updatedAt),
       with: {
         chat: {
           with: {
@@ -65,10 +66,18 @@ export class Chat {
     return message
   }
 
+  static async createMember(data: ChatMemberDraft) {
+    const [member] = await useDatabase().insert(chatMembers).values(data).returning()
+    return member
+  }
+
   static async update(id: string, data: Partial<ChatDraft>) {
     const [chat] = await useDatabase()
       .update(chats)
-      .set(data)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
       .where(eq(chats.id, id))
       .returning()
     return chat

@@ -63,7 +63,7 @@ const otherUsers = computed(() => chat.value?.members.filter((member) => member.
 
 const lastMessageDate = computed<string>(() => {
   if (!chat.value?.lastMessage?.createdAt) {
-    return ''
+    return 'Пока пусто'
   }
 
   return isToday(new Date(chat.value.lastMessage.createdAt)) ? format(new Date(chat.value.lastMessage.createdAt), 'HH:mm', { locale: ru }) : format(new Date(chat.value.lastMessage.createdAt), 'dd MMM', { locale: ru })

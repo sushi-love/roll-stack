@@ -8,6 +8,10 @@ type WeightUnit = 'G' | 'KG' | 'ML' | 'L' | 'OZ' | 'LB'
 
 type MediaFormat = 'jpg' | 'webp'
 
+type NotificationType = 'task_completed'
+
+type ResolutionType = 'success' | 'failure' | 'unknown'
+
 export const users = pgTable('users', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -28,6 +32,7 @@ export const chats = pgTable('chats', {
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   name: varchar('name').notNull(),
+  description: varchar('description'),
   lastMessageId: cuid2('last_message_id'),
 })
 
@@ -153,13 +158,30 @@ export const tasks = pgTable('tasks', {
   completedAt: timestamp('completed_at', { precision: 3, withTimezone: true, mode: 'string' }),
   name: varchar('name').notNull(),
   description: varchar('description'),
+  resolution: varchar('resolution').$type<ResolutionType>(),
+  report: varchar('report'),
   performerId: cuid2('performer_id').references(() => users.id),
   chatId: cuid2('chat_id').references(() => chats.id),
+})
+
+export const notifications = pgTable('notifications', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  type: varchar('type').notNull().$type<NotificationType>(),
+  title: varchar('title').notNull(),
+  description: varchar('description').notNull(),
+  userId: cuid2('user_id').notNull().references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  taskId: cuid2('task_id').references(() => tasks.id),
 })
 
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
+  notifications: many(notifications),
   tasks: many(tasks),
   focusedTask: one(tasks, {
     fields: [users.focusedTaskId],
@@ -257,5 +279,16 @@ export const taskRelations = relations(tasks, ({ one }) => ({
   performer: one(users, {
     fields: [tasks.performerId],
     references: [users.id],
+  }),
+}))
+
+export const notificationRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+  task: one(tasks, {
+    fields: [notifications.taskId],
+    references: [tasks.id],
   }),
 }))

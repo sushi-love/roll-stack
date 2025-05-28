@@ -176,6 +176,7 @@
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { UpdateProductVariant } from '~~/shared/services/product'
 import { updateProductVariantSchema } from '~~/shared/services/product'
+import { getLocalizedWeightUnitsForSelect } from '~/utils/helpers'
 
 const { productVariantId } = defineProps<{
   productVariantId: string

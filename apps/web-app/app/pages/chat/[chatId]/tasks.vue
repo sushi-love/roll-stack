@@ -39,10 +39,6 @@ const { params } = useRoute('chat-chatId-tasks')
 const taskStore = useTaskStore()
 const tasks = computed(() => taskStore.tasks.filter((task) => task.chatId === params.chatId))
 
-// const filterValue = ref('')
-
-// const { data: tasks } = await useFetch(`/api/chat/id/${params.chatId}/task/list`)
-
 const overlay = useOverlay()
 const modalCreateTask = overlay.create(ModalCreateTask)
 </script>

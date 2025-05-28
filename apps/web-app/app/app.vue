@@ -32,6 +32,7 @@ const menu = useMenuStore()
 const product = useProductStore()
 const chat = useChatStore()
 const task = useTaskStore()
+const notification = useNotificationStore()
 
 await Promise.all([
   user.update(),
@@ -40,5 +41,6 @@ await Promise.all([
   product.update(),
   chat.update(),
   task.update(),
+  notification.update(),
 ])
 </script>

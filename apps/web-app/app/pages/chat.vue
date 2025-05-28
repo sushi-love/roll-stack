@@ -5,6 +5,16 @@
         <h1 class="flex items-center gap-1.5 font-normal text-lg text-highlighted truncate">
           {{ $t('app.menu.chats') }}
         </h1>
+
+        <UTooltip :text="$t('app.create.chat.button')">
+          <UButton
+            variant="solid"
+            color="secondary"
+            size="md"
+            icon="i-lucide-plus"
+            @click="modalCreateChat.open()"
+          />
+        </UTooltip>
       </div>
 
       <div class="overflow-y-auto divide-y divide-default">
@@ -36,10 +46,14 @@
 
 <script setup lang="ts">
 import type { Chat } from '@sushi-atrium/database'
+import { ModalCreateChat } from '#components'
 import { breakpointsTailwind } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 const chatStore = useChatStore()
+
+const overlay = useOverlay()
+const modalCreateChat = overlay.create(ModalCreateChat)
 
 const selectedMail = ref<Chat | null>()
 

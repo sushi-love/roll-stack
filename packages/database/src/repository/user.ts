@@ -34,6 +34,9 @@ export class User {
   static async findPartners() {
     return useDatabase().query.users.findMany({
       where: (users, { eq }) => eq(users.type, 'partner'),
+      with: {
+        focusedTask: true,
+      },
     })
   }
 

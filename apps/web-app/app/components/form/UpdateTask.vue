@@ -22,16 +22,18 @@
       />
     </UFormField>
 
-    <UFormField label="Исполнитель" name="performerId">
-      <USelectMenu
-        v-model="selectedPerformer"
-        :items="availablePerformers"
-        :avatar="selectedPerformer?.avatar"
-        :placeholder="$t('common.select')"
-        size="xl"
-        class="w-full"
-      />
-    </UFormField>
+    <template v-if="!isPrivate">
+      <UFormField label="Исполнитель" name="performerId">
+        <USelectMenu
+          v-model="selectedPerformer"
+          :items="availablePerformers"
+          :avatar="selectedPerformer?.avatar"
+          :placeholder="$t('common.select')"
+          size="xl"
+          class="w-full"
+        />
+      </UFormField>
+    </template>
 
     <div class="mt-3 flex flex-row gap-3">
       <UButton
@@ -90,6 +92,8 @@ const availablePerformers = computed(() => [{
 
 const taskStore = useTaskStore()
 const task = computed(() => taskStore.tasks.find((task) => task.id === taskId))
+
+const isPrivate = computed(() => task.value?.performerId === userStore.id && !task.value?.chatId)
 
 const state = ref<Partial<UpdateTask>>({
   name: task.value?.name,

@@ -1,5 +1,5 @@
 import type { TaskDraft } from '../types'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
 import { tasks } from '../tables'
 
@@ -29,6 +29,18 @@ export class Task {
     const [task] = await useDatabase()
       .update(tasks)
       .set(data)
+      .where(eq(tasks.id, id))
+      .returning()
+    return task
+  }
+
+  static async complete(id: string, data: Pick<TaskDraft, 'resolution' | 'report'>) {
+    const [task] = await useDatabase()
+      .update(tasks)
+      .set({
+        completedAt: sql`now()`,
+        ...data,
+      })
       .where(eq(tasks.id, id))
       .returning()
     return task

@@ -50,7 +50,7 @@ const menuItems = computed(() => [
   },
   {
     label: t('app.menu.menu'),
-    to: '/menu',
+    // to: '/menu',
     icon: 'i-lucide-book-copy',
     defaultOpen: route.path.startsWith('/menu'),
     children: [

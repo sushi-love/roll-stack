@@ -1,15 +1,17 @@
 <template>
   <div class="w-full flex flex-row items-start gap-2">
-    <UTooltip text="Задача выполнена?">
+    <template v-if="isCompleted">
+      <UIcon name="i-lucide-check" class="mt-1.5 size-6 text-secondary" />
+    </template>
+    <UTooltip v-else text="Задача выполнена?">
       <UCheckbox
+        v-model="checkbox"
         color="secondary"
         variant="list"
         size="xl"
-        class="mt-1.5 hover:scale-115 duration-200"
-        :class="{
-          'motion-preset-bounce': checkboxClicked,
-        }"
-        @change="checkboxClicked = !checkboxClicked"
+        icon="i-lucide-check"
+        class="mt-1.5 hover:scale-115 duration-200 motion-preset-bounce"
+        @change="onStartCompleting"
       />
     </UTooltip>
 
@@ -31,7 +33,7 @@
           ],
         }"
         :class="{
-          'text-neutral-900 bg-info-100 border-b-2 border-l-2 border-info-200 hover:bg-info-200': isFocused,
+          'group text-neutral-900 bg-info-100 border-b-2 border-l-2 border-info-200 hover:bg-info-200 duration-200': isFocused,
         }"
       >
         <div class="flex flex-col gap-2 items-start">
@@ -39,7 +41,7 @@
             <h4 class="text-lg font-medium leading-5 line-clamp-3">
               {{ task.name }}
             </h4>
-            <p v-if="task.description" class="text-sm text-muted leading-4 line-clamp-2">
+            <p v-if="task.description" class="text-sm text-muted leading-4 line-clamp-2 group-hover:line-clamp-5">
               {{ task.description }}
             </p>
           </div>
@@ -80,7 +82,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { Task } from '@sushi-atrium/database'
-import { ModalUpdateTask } from '#components'
+import { ModalCompleteTask, ModalUpdateTask } from '#components'
 
 const { task } = defineProps<{
   task: Task
@@ -88,6 +90,7 @@ const { task } = defineProps<{
 }>()
 
 const { t } = useI18n()
+const toast = useToast()
 const actionToast = useActionToast()
 const taskStore = useTaskStore()
 const userStore = useUserStore()
@@ -95,11 +98,15 @@ const chatStore = useChatStore()
 
 const overlay = useOverlay()
 const modalUpdateTask = overlay.create(ModalUpdateTask)
+const modalCompleteTask = overlay.create(ModalCompleteTask)
 
-const canFocus = computed(() => task.performerId === userStore.id)
+const isCompleted = computed(() => !!task.completedAt)
+
+const canFocus = computed(() => task.performerId === userStore.id && !isCompleted.value)
 const isFocused = computed(() => task.id === userStore.staff.find((staff) => staff.id === task.performerId)?.focusedTaskId)
 
-const checkboxClicked = ref(false)
+const checkbox = ref(false)
+const toastId = ref(`task-close-${task.id}`)
 
 const items = computed<DropdownMenuItem[]>(() => {
   const arr = [
@@ -107,12 +114,14 @@ const items = computed<DropdownMenuItem[]>(() => {
       {
         label: 'Редактировать',
         icon: 'i-lucide-edit',
+        disabled: isCompleted.value,
         onClick: () => modalUpdateTask.open({ taskId: task.id }),
       },
       {
         label: 'Удалить',
         icon: 'i-lucide-trash-2',
         color: 'error',
+        disabled: isCompleted.value,
         onClick: onDelete,
       },
     ]]
@@ -122,6 +131,7 @@ const items = computed<DropdownMenuItem[]>(() => {
     label: isFocused.value ? 'Убрать фокус' : 'Сфокусироваться',
     icon: 'i-lucide-goal',
     color: 'neutral',
+    disabled: false,
     onClick: isFocused.value ? onUnfocus : onFocus,
   }])
 
@@ -129,6 +139,7 @@ const items = computed<DropdownMenuItem[]>(() => {
     label: 'Перейти в чат',
     icon: 'i-lucide-messages-square',
     color: 'neutral',
+    disabled: false,
     onClick: goToChat,
   }])
 
@@ -186,5 +197,24 @@ async function onDelete() {
     console.error(error)
     actionToast.error(toastId)
   }
+}
+
+function onStartCompleting() {
+  if (!checkbox.value) {
+    return
+  }
+
+  modalCompleteTask.open({ taskId: task.id })
+
+  checkbox.value = false
+
+  toast.add({
+    id: toastId.value,
+    title: 'Закрываем задачу?',
+    description: 'Сразу как успешную или есть что добавить? Заполните форму.',
+    color: 'secondary',
+    type: 'foreground',
+    duration: 5000,
+  })
 }
 </script>

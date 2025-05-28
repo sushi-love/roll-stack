@@ -47,7 +47,7 @@ export default defineAppConfig({
     toast: {
       slots: {
         title: 'text-lg',
-        description: 'leading-5',
+        description: 'leading-4',
         icon: 'shrink-0 size-7',
       },
     },
