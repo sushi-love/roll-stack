@@ -2,7 +2,8 @@ import { cuid2 } from 'drizzle-cuid2/postgres'
 import { relations } from 'drizzle-orm'
 import { boolean, integer, numeric, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
 
-type UserType = 'staff' | 'head' | 'partner' | 'guest'
+type UserType = 'staff' | 'head' | 'partner' | 'guest' | 'bot'
+type UserGender = 'male' | 'female' | 'unknown'
 
 type WeightUnit = 'G' | 'KG' | 'ML' | 'L' | 'OZ' | 'LB'
 
@@ -17,6 +18,7 @@ export const users = pgTable('users', {
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   type: varchar('type').notNull().$type<UserType>(),
+  gender: varchar('gender').notNull().default('unknown').$type<UserGender>(),
   name: varchar('name').notNull(),
   surname: varchar('surname').notNull().default(''),
   caption: varchar('caption').notNull().default(''),

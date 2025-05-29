@@ -1,6 +1,8 @@
+import type { Task, User } from '@sushi-atrium/database'
 import { repository } from '@sushi-atrium/database'
 import { type } from 'arktype'
 import { completeTaskSchema } from '~~/shared/services/task'
+import { getLocalizedResolution } from '~~/shared/utils/helpers'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -44,17 +46,23 @@ export default defineEventHandler(async (event) => {
         message: 'Task not found',
       })
     }
-    if (task.performerId !== user.id) {
+    if (!!task.performerId && task.performerId !== user.id) {
       throw createError({
         statusCode: 403,
         message: 'You are not the performer of this task',
       })
     }
 
-    await repository.task.complete(taskId, {
+    const updatedTask = await repository.task.complete(taskId, {
       resolution: data.resolution,
       report: data.report,
     })
+    if (!updatedTask) {
+      throw createError({
+        statusCode: 404,
+        message: 'Task not found',
+      })
+    }
 
     // Clear focus if needed
     if (user.focusedTaskId === taskId) {
@@ -63,8 +71,36 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Bot notification in chat
+    if (task.chatId) {
+      const bot = await repository.chat.findNotificationBot(task.chatId)
+      if (bot) {
+        const text = prepareBotMessage(user, updatedTask)
+
+        // Send message as bot
+        await repository.chat.createMessage({
+          chatId: task.chatId,
+          userId: bot.user.id,
+          text,
+        })
+      }
+    }
+
     return { ok: true }
   } catch (error) {
     throw errorResolver(error)
   }
 })
+
+function prepareBotMessage(author: User, task: Task) {
+  let text = `${author.name} ${author.surname} ${suffixByGender(['закрыл', 'закрыла'], author.gender)} задачу «${task.name}»`
+
+  if (task.resolution) {
+    text += `\n🙏 ${getLocalizedResolution(task.resolution)}`
+  }
+  if (task.report) {
+    text += `\n💬 ${task.report}`
+  }
+
+  return text
+}

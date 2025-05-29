@@ -45,6 +45,9 @@ export const useUserStore = defineStore('user', () => {
       avatarUrl.value = data.avatarUrl
       prestige.value = data.prestige
       focusedTaskId.value = data.focusedTaskId
+
+      // Updating all data
+      await updateUsers()
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('401')) {
@@ -122,7 +125,6 @@ export const useUserStore = defineStore('user', () => {
     partners,
 
     update,
-    updateUsers,
     find,
   }
 })

@@ -1,5 +1,5 @@
 import type { UserDraft } from '../types'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
 import { users } from '../tables'
 
@@ -40,6 +40,12 @@ export class User {
     })
   }
 
+  static async findBots() {
+    return useDatabase().query.users.findMany({
+      where: (users, { eq }) => eq(users.type, 'bot'),
+    })
+  }
+
   static async create(data: UserDraft) {
     const [user] = await useDatabase().insert(users).values(data).returning()
     return user
@@ -48,7 +54,10 @@ export class User {
   static async update(id: string, data: Partial<UserDraft>) {
     const [user] = await useDatabase()
       .update(users)
-      .set(data)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
       .where(eq(users.id, id))
       .returning()
     return user

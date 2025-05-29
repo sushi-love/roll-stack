@@ -14,12 +14,21 @@
         </UserPopover>
       </div>
 
-      <div class="min-h-12 min-w-18 relative bg-elevated/50 px-3.5 py-2 rounded-lg" :class="{ 'text-neutral-900 bg-orange-100 border-b-2 border-l-2 border-orange-200': side === 'left' }">
-        <div class="text-pretty leading-6 font-medium" :class="{ 'font-semibold': side === 'left' }">
+      <div
+        class="min-h-12 min-w-18 relative bg-elevated/50 px-3.5 py-2 rounded-lg"
+        :class="[
+          side === 'left' && 'text-neutral-900 bg-orange-100 dark:bg-orange-200 border-b-2 border-l-2 border-orange-200 dark:border-orange-300',
+          isBot && 'text-neutral-900 !bg-error-50 !dark:bg-error-100 !border-error-100 !dark:border-error-300',
+        ]"
+      >
+        <div class="text-pretty leading-6 font-medium whitespace-break-spaces" :class="{ 'font-semibold': side === 'left' }">
           {{ text }}
         </div>
 
-        <div class="pt-0.5 flex justify-end text-xs text-dimmed" :class="{ 'text-muted': side === 'left' }">
+        <div
+          class="pt-0.5 flex justify-end text-xs text-dimmed"
+          :class="{ 'text-neutral-600': side === 'left' }"
+        >
           {{ format(new Date(createdAt), 'HH:mm') }}
         </div>
       </div>
@@ -42,4 +51,6 @@ const { userId, isFirstMessageOfDay = false } = defineProps<{
 
 const userStore = useUserStore()
 const user = computed(() => userStore.find(userId))
+
+const isBot = computed(() => !user.value?.type)
 </script>

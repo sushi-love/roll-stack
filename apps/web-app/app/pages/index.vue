@@ -15,29 +15,47 @@
       </div>
     </div>
 
-    <div class="mx-0 max-w-sm min-h-92 py-4 px-4 rounded-lg border border-default">
-      <div class="mb-4 flex flex-row gap-2 items-center justify-between">
-        <h3 class="text-xl font-semibold">
-          Список активных задач
-        </h3>
+    <div class="flex flex-row gap-4">
+      <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
+        <div class="mb-4 flex flex-row gap-2 items-center justify-between">
+          <h3 class="text-xl font-semibold">
+            Список активных задач
+          </h3>
 
-        <UTooltip :text="$t('app.create.task.button')">
-          <UButton
-            variant="solid"
-            color="secondary"
-            size="md"
-            icon="i-lucide-plus"
-            @click="modalCreateTask.open({ performerId: user.id, chatId: undefined })"
+          <UTooltip :text="$t('app.create.task.button')">
+            <UButton
+              variant="solid"
+              color="secondary"
+              size="md"
+              icon="i-lucide-plus"
+              @click="modalCreateTask.open({ performerId: user.id, chatId: undefined })"
+            />
+          </UTooltip>
+        </div>
+
+        <div ref="tasks" class="w-full flex flex-col gap-3">
+          <TaskCard
+            v-for="task in openedTasks"
+            :key="task.id"
+            :task="task"
           />
-        </UTooltip>
+        </div>
       </div>
 
-      <div ref="tasks" class="w-full flex flex-col gap-3">
-        <TaskCard
-          v-for="task in myTasks"
-          :key="task.id"
-          :task="task"
-        />
+      <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
+        <div class="mb-4 flex flex-row gap-2 items-center justify-between">
+          <h3 class="text-xl font-semibold">
+            Выполненные задачи
+          </h3>
+        </div>
+
+        <div ref="tasks" class="w-full flex flex-col gap-3">
+          <TaskCard
+            v-for="task in closedTasks"
+            :key="task.id"
+            :task="task"
+          />
+        </div>
       </div>
     </div>
   </Content>
@@ -54,11 +72,12 @@ definePageMeta({
 const user = useUserStore()
 const taskStore = useTaskStore()
 
-const myTasks = computed(() => taskStore.tasks.filter((task) => task.performerId === user.id))
+const openedTasks = computed(() => taskStore.tasks.filter((task) => task.performerId === user.id && !task.completedAt))
+const closedTasks = computed(() => taskStore.tasks.filter((task) => task.performerId === user.id && task.completedAt))
 
 const tasks = useTemplateRef<HTMLElement>('tasks')
 
-useSortable(tasks, myTasks, {
+useSortable(tasks, openedTasks, {
   animation: 150,
 })
 

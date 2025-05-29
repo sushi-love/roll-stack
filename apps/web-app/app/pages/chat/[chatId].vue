@@ -1,9 +1,15 @@
 <template>
   <div class="h-16 shrink-0 flex items-center justify-between border-b border-default px-4 sm:px-6 gap-1.5">
     <div class="flex items-center gap-4 sm:my-1.5">
-      <UAvatarGroup :max="3" size="lg">
+      <UAvatarGroup
+        :max="3"
+        size="lg"
+        :ui="{
+          base: '-me-2.5',
+        }"
+      >
         <UAvatar
-          v-for="member in data?.members"
+          v-for="member in members"
           :key="member.id"
           :src="member.user.avatarUrl ?? undefined"
           alt=""
@@ -35,6 +41,8 @@
 const { params } = useRoute('chat-chatId')
 
 const { data } = await useFetch(`/api/chat/id/${params.chatId}`)
+
+const members = computed(() => data.value?.members.filter((member) => member.user.type !== 'bot'))
 
 const items = ref([
   {

@@ -35,6 +35,20 @@
       </UFormField>
     </template>
 
+    <UPopover>
+      <UButton
+        color="neutral"
+        variant="subtle"
+        icon="i-lucide-calendar"
+      >
+        {{ modelValue ? df.format(modelValue.toDate(getLocalTimeZone())) : 'Выберите дату' }}
+      </UButton>
+
+      <template #content>
+        <UCalendar v-model="modelValue" class="p-2" />
+      </template>
+    </UPopover>
+
     <div class="mt-3 flex flex-row gap-3">
       <UButton
         type="submit"
@@ -62,6 +76,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { UpdateTask } from '~~/shared/services/task'
+import { DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import { updateTaskSchema } from '~~/shared/services/task'
 
 const { taskId } = defineProps<{
@@ -111,6 +126,12 @@ watch(selectedPerformer, () => {
 
   state.value.performerId = selectedPerformer.value?.value
 })
+
+const df = new DateFormatter('ru-RU', {
+  dateStyle: 'long',
+})
+
+const modelValue = shallowRef()
 
 async function onSubmit(event: FormSubmitEvent<UpdateTask>) {
   const toastId = actionToast.start()

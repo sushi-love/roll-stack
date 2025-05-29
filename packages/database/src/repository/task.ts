@@ -11,7 +11,10 @@ export class Task {
   }
 
   static async list() {
-    return useDatabase().query.tasks.findMany()
+    return useDatabase().query.tasks.findMany({
+      where: (tasks) => sql`${tasks.completedAt} >= now() - interval '12 hour' OR ${tasks.completedAt} IS NULL`,
+      orderBy: (tasks, { asc }) => asc(tasks.updatedAt),
+    })
   }
 
   static async listByUser(userId: string) {
@@ -28,7 +31,10 @@ export class Task {
   static async update(id: string, data: Partial<TaskDraft>) {
     const [task] = await useDatabase()
       .update(tasks)
-      .set(data)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
       .where(eq(tasks.id, id))
       .returning()
     return task

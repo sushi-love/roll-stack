@@ -39,9 +39,11 @@
       color="secondary"
       size="xl"
       trailing-icon="i-lucide-flag"
-      class="justify-around items-center"
       block
       :label="$t('app.update.task.close')"
+      :ui="{
+        trailingIcon: 'ms-0',
+      }"
     />
   </UForm>
 </template>

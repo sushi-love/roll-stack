@@ -54,6 +54,9 @@ export default defineEventHandler(async (event) => {
       focusedTaskId: taskId,
     })
 
+    // Updating time
+    await repository.task.update(task.id, {})
+
     return { ok: true }
   } catch (error) {
     throw errorResolver(error)

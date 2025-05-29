@@ -8,7 +8,13 @@
       ]"
     >
       <div class="flex flex-row items-center gap-3">
-        <UAvatarGroup :max="3" size="lg">
+        <UAvatarGroup
+          :max="3"
+          size="md"
+          :ui="{
+            base: '-me-3',
+          }"
+        >
           <UAvatar
             v-for="otherUser in otherUsers"
             :key="otherUser.id"
@@ -36,7 +42,7 @@
             </p>
           </div>
 
-          <span class="text-sm text-dimmed">
+          <span class="text-sm text-dimmed shrink-0">
             {{ lastMessageDate }}
           </span>
         </div>
@@ -59,7 +65,7 @@ const user = useUserStore()
 const chatStore = useChatStore()
 const chat = computed(() => chatStore.find(chatId))
 
-const otherUsers = computed(() => chat.value?.members.filter((member) => member.userId !== user.id))
+const otherUsers = computed(() => chat.value?.members.filter((member) => member.userId !== user.id && member.user.type !== 'bot'))
 
 const lastMessageDate = computed<string>(() => {
   if (!chat.value?.lastMessage?.createdAt) {

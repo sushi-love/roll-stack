@@ -23,6 +23,15 @@ export class Chat {
     })
   }
 
+  static async findNotificationBot(chatId: string) {
+    return useDatabase().query.chatMembers.findFirst({
+      where: (member, { eq, and }) => and(eq(member.chatId, chatId), eq(member.userId, 'fsti10ba0cb7uxkal4uoja9r')),
+      with: {
+        user: true,
+      },
+    })
+  }
+
   static async listByUser(userId: string) {
     const userAsMembers = await useDatabase().query.chatMembers.findMany({
       where: (chatMembers, { eq }) => eq(chatMembers.userId, userId),

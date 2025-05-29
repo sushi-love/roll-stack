@@ -32,8 +32,9 @@
             isFocused ? 'text-info' : undefined,
           ],
         }"
+        class="group/task duration-200 motion-preset-bounce"
         :class="{
-          'group text-neutral-900 bg-info-100 border-b-2 border-l-2 border-info-200 hover:bg-info-200 duration-200': isFocused,
+          'text-neutral-900 bg-info-100 dark:bg-info-200 border-b-2 border-l-2 border-info-200 hover:bg-info-200 dark:hover:bg-info-300': isFocused,
         }"
       >
         <div class="flex flex-col gap-2 items-start">
@@ -41,7 +42,7 @@
             <h4 class="text-lg font-medium leading-5 line-clamp-3">
               {{ task.name }}
             </h4>
-            <p v-if="task.description" class="text-sm text-muted leading-4 line-clamp-2 group-hover:line-clamp-5">
+            <p v-if="task.description" class="text-sm text-neutral-500 leading-4 line-clamp-2 group-hover/task:line-clamp-5">
               {{ task.description }}
             </p>
           </div>
@@ -157,7 +158,6 @@ async function onFocus() {
     await taskStore.setAsFocused(task.id)
     await taskStore.update()
     await userStore.update()
-    await userStore.updateUsers()
 
     actionToast.success(toastId, t('toast.task-focused'))
   } catch (error) {
@@ -173,7 +173,6 @@ async function onUnfocus() {
     await taskStore.setAsUnfocused(task.id)
     await taskStore.update()
     await userStore.update()
-    await userStore.updateUsers()
 
     actionToast.success(toastId, t('toast.task-unfocused'))
   } catch (error) {

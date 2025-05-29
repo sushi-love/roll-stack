@@ -36,7 +36,6 @@ const notification = useNotificationStore()
 
 await Promise.all([
   user.update(),
-  user.updateUsers(),
   menu.update(),
   product.update(),
   chat.update(),

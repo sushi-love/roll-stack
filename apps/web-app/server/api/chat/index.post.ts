@@ -34,6 +34,11 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Add all bots as members too
+    const bots = await repository.user.findBots()
+    const botIds = bots.map((bot) => bot.id)
+    data.usersId.push(...botIds)
+
     // Create members
     for (const userId of data.usersId) {
       await repository.chat.createMember({
