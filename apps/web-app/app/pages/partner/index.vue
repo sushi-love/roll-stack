@@ -16,27 +16,33 @@
   </Header>
 
   <Content>
-    <div class="mb-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-4.5">
-      <template v-if="activeSorting === 'name'">
-        <NuxtLink
-          v-for="partner in partnersSortedByName"
-          :key="partner.id"
-          :to="`/partner/${partner.id}`"
-        >
-          <PartnerCard :user="partner" />
-        </NuxtLink>
-      </template>
+    <template v-if="user.id">
+      <div class="mb-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-4.5">
+        <template v-if="activeSorting === 'name'">
+          <NuxtLink
+            v-for="partner in partnersSortedByName"
+            :key="partner.id"
+            :to="`/partner/${partner.id}`"
+          >
+            <PartnerCard :user="partner" />
+          </NuxtLink>
+        </template>
 
-      <template v-else>
-        <NuxtLink
-          v-for="partner in partnersSortedByPrestige"
-          :key="partner.id"
-          :to="`/partner/${partner.id}`"
-        >
-          <PartnerCard :user="partner" />
-        </NuxtLink>
-      </template>
-    </div>
+        <template v-else>
+          <NuxtLink
+            v-for="partner in partnersSortedByPrestige"
+            :key="partner.id"
+            :to="`/partner/${partner.id}`"
+          >
+            <PartnerCard :user="partner" />
+          </NuxtLink>
+        </template>
+      </div>
+    </template>
+
+    <template v-else>
+      <Loader />
+    </template>
   </Content>
 </template>
 

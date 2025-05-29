@@ -2,62 +2,68 @@
   <Header :title="$t('app.menu.my-space')" />
 
   <Content>
-    <div class="flex flex-row gap-3.5">
-      <UAvatar :src="user?.avatarUrl ?? undefined" class="size-16" />
+    <template v-if="user.id">
+      <div class="flex flex-row gap-3.5">
+        <UAvatar :src="user?.avatarUrl ?? undefined" class="size-16" />
 
-      <div class="flex flex-col gap-0">
-        <h2 class="text-xl md:text-2xl lg:text-3xl font-bold">
-          {{ user.name }}, привет!
-        </h2>
-        <p class="text-lg">
-          Чем займемся сегодня?
-        </p>
+        <div class="flex flex-col gap-0">
+          <h2 class="text-xl md:text-2xl lg:text-3xl font-bold">
+            {{ user.name }}, привет!
+          </h2>
+          <p class="text-lg">
+            Чем займемся сегодня?
+          </p>
+        </div>
       </div>
-    </div>
 
-    <div class="flex flex-row gap-4">
-      <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
-        <div class="mb-4 flex flex-row gap-2 items-center justify-between">
-          <h3 class="text-xl font-semibold">
-            Список активных задач
-          </h3>
+      <div class="flex flex-row gap-4">
+        <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
+          <div class="mb-4 flex flex-row gap-2 items-center justify-between">
+            <h3 class="text-xl font-semibold">
+              Список активных задач
+            </h3>
 
-          <UTooltip :text="$t('app.create.task.button')">
-            <UButton
-              variant="solid"
-              color="secondary"
-              size="md"
-              icon="i-lucide-plus"
-              @click="modalCreateTask.open({ performerId: user.id, chatId: undefined })"
+            <UTooltip :text="$t('app.create.task.button')">
+              <UButton
+                variant="solid"
+                color="secondary"
+                size="md"
+                icon="i-lucide-plus"
+                @click="modalCreateTask.open({ performerId: user.id, chatId: undefined })"
+              />
+            </UTooltip>
+          </div>
+
+          <div ref="tasks" class="w-full flex flex-col gap-3">
+            <TaskCard
+              v-for="task in openedTasks"
+              :key="task.id"
+              :task="task"
             />
-          </UTooltip>
+          </div>
         </div>
 
-        <div ref="tasks" class="w-full flex flex-col gap-3">
-          <TaskCard
-            v-for="task in openedTasks"
-            :key="task.id"
-            :task="task"
-          />
+        <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
+          <div class="mb-4 flex flex-row gap-2 items-center justify-between">
+            <h3 class="text-xl font-semibold">
+              Выполненные задачи
+            </h3>
+          </div>
+
+          <div ref="tasks" class="w-full flex flex-col gap-3">
+            <TaskCard
+              v-for="task in closedTasks"
+              :key="task.id"
+              :task="task"
+            />
+          </div>
         </div>
       </div>
+    </template>
 
-      <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
-        <div class="mb-4 flex flex-row gap-2 items-center justify-between">
-          <h3 class="text-xl font-semibold">
-            Выполненные задачи
-          </h3>
-        </div>
-
-        <div ref="tasks" class="w-full flex flex-col gap-3">
-          <TaskCard
-            v-for="task in closedTasks"
-            :key="task.id"
-            :task="task"
-          />
-        </div>
-      </div>
-    </div>
+    <template v-else>
+      <Loader />
+    </template>
   </Content>
 </template>
 
