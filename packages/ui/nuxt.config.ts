@@ -61,8 +61,8 @@ export default defineNuxtConfig({
     },
     families: [
       {
-        name: 'CirceRoundedWeb',
-        provider: 'local',
+        name: 'Nunito',
+        provider: 'google',
       },
       {
         name: 'Nunito Sans',

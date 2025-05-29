@@ -7,7 +7,7 @@
         <UAvatar :src="user?.avatarUrl ?? undefined" class="size-16" />
 
         <div class="flex flex-col gap-0">
-          <h2 class="text-xl md:text-2xl lg:text-3xl font-bold">
+          <h2 class="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight">
             {{ user.name }}, привет!
           </h2>
           <p class="text-lg">
@@ -19,7 +19,7 @@
       <div class="flex flex-row gap-4">
         <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
           <div class="mb-4 flex flex-row gap-2 items-center justify-between">
-            <h3 class="text-xl font-semibold">
+            <h3 class="text-xl font-bold">
               Список активных задач
             </h3>
 
@@ -45,7 +45,7 @@
 
         <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
           <div class="mb-4 flex flex-row gap-2 items-center justify-between">
-            <h3 class="text-xl font-semibold">
+            <h3 class="text-xl font-bold">
               Выполненные задачи
             </h3>
           </div>

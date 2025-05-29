@@ -36,7 +36,7 @@ export default defineAppConfig({
       slots: {
         content: 'divide-y-0',
         header: 'pb-0 min-h-12',
-        title: 'text-xl font-normal',
+        title: 'text-lg/5 font-semibold',
       },
     },
     navigationMenu: {

@@ -1,6 +1,6 @@
 import { cuid2 } from 'drizzle-cuid2/postgres'
 import { relations } from 'drizzle-orm'
-import { boolean, integer, numeric, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { boolean, date, integer, numeric, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 type UserType = 'staff' | 'head' | 'partner' | 'guest' | 'bot'
 type UserGender = 'male' | 'female' | 'unknown'
@@ -160,6 +160,7 @@ export const tasks = pgTable('tasks', {
   completedAt: timestamp('completed_at', { precision: 3, withTimezone: true, mode: 'string' }),
   name: varchar('name').notNull(),
   description: varchar('description'),
+  date: date('date', { mode: 'string' }),
   resolution: varchar('resolution').$type<ResolutionType>(),
   report: varchar('report'),
   performerId: cuid2('performer_id').references(() => users.id),

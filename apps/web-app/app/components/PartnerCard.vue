@@ -14,7 +14,7 @@
         class="group-hover:scale-125 duration-200"
       />
 
-      <h3 class="text-lg font-semibold leading-5">
+      <h3 class="text-base/5 font-bold">
         {{ user.name }} {{ user.surname }}
       </h3>
     </div>

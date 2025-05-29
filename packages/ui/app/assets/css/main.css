@@ -5,7 +5,7 @@
 
 @theme static {
   --font-sans: Nunito Sans, sans-serif;
-  --font-headers: CirceRoundedWeb, sans-serif;
+  --font-headers: Nunito, sans-serif;
 }
 
 :root {

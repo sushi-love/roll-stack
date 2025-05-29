@@ -199,4 +199,8 @@ function getDropdownActions(product: Product): DropdownMenuItem[][] {
 }
 
 const table = useTemplateRef('table')
+
+useHead({
+  title: t('app.menu.products'),
+})
 </script>

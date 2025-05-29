@@ -8,11 +8,11 @@
     >
 
     <div class="flex flex-col gap-1">
-      <h3 class="text-lg font-semibold leading-5">
+      <h3 class="text-base/5 font-bold">
         {{ staff.name }} {{ staff.surname }}
       </h3>
 
-      <p class="text-sm text-muted leading-4 line-clamp-3">
+      <p class="text-sm/4 text-muted line-clamp-3">
         {{ staff.caption }}
       </p>
     </div>
@@ -21,7 +21,7 @@
       <TaskPopover :task="staff.focusedTask">
         <div class="flex flex-row items-start gap-2">
           <UIcon name="i-lucide-goal" class="size-5 text-info shrink-0 motion-preset-pulse motion-duration-2000" />
-          <p class="text-sm text-info leading-4 line-clamp-3">
+          <p class="text-sm/4 text-info line-clamp-3">
             {{ staff.focusedTask.name }}
           </p>
         </div>

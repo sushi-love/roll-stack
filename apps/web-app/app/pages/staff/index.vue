@@ -24,4 +24,8 @@
 const { t } = useI18n()
 
 const user = useUserStore()
+
+useHead({
+  title: t('app.menu.our-staff'),
+})
 </script>

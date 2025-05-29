@@ -39,10 +39,10 @@
       >
         <div class="flex flex-col gap-2 items-start">
           <div class="flex flex-col gap-1 items-start text-left">
-            <h4 class="text-lg font-medium leading-5 line-clamp-3">
+            <h4 class="text-base/5 font-semibold line-clamp-3">
               {{ task.name }}
             </h4>
-            <p v-if="task.description" class="text-sm text-neutral-500 leading-4 line-clamp-2 group-hover/task:line-clamp-5">
+            <p v-if="task.description" class="text-sm/4 text-neutral-500 line-clamp-2 group-hover/task:line-clamp-5">
               {{ task.description }}
             </p>
           </div>
@@ -74,6 +74,18 @@
               {{ userStore.staff.find((staff) => staff.id === task.performerId)?.surname }}
             </UBadge>
           </template>
+
+          <UBadge
+            v-if="task?.date"
+            color="neutral"
+            variant="outline"
+            icon="i-lucide-calendar"
+            :ui="{
+              leadingIcon: 'text-dimmed',
+            }"
+          >
+            {{ df.format(parseDate(task.date).toDate(getLocalTimeZone())) }}
+          </UBadge>
         </div>
       </UButton>
     </UDropdownMenu>
@@ -84,6 +96,7 @@
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { Task } from '@sushi-atrium/database'
 import { ModalCompleteTask, ModalUpdateTask } from '#components'
+import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 
 const { task } = defineProps<{
   task: Task
@@ -100,6 +113,10 @@ const chatStore = useChatStore()
 const overlay = useOverlay()
 const modalUpdateTask = overlay.create(ModalUpdateTask)
 const modalCompleteTask = overlay.create(ModalCompleteTask)
+
+const df = new DateFormatter('ru-RU', {
+  dateStyle: 'long',
+})
 
 const isCompleted = computed(() => !!task.completedAt)
 

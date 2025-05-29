@@ -5,7 +5,7 @@
       alt=""
       class="w-8 grayscale-0 group-hover/logo:grayscale-0 duration-200 motion-preset-pulse motion-duration-4000"
     >
-    <h2 class="font-bold text-2xl text-highlighted">
+    <h2 class="font-bold tracking-tight text-2xl text-highlighted">
       {{ $t('app.title') }}
     </h2>
   </div>

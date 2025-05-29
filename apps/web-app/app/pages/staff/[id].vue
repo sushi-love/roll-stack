@@ -71,4 +71,8 @@ const tasks = computed(() => taskStore.tasks.filter((task) => task.performerId =
 const canSendMessage = computed(() => {
   return userStore.id !== data.value?.id
 })
+
+useHead({
+  title: t('common.staff'),
+})
 </script>

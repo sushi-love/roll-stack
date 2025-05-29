@@ -35,19 +35,22 @@
       </UFormField>
     </template>
 
-    <UPopover>
-      <UButton
-        color="neutral"
-        variant="subtle"
-        icon="i-lucide-calendar"
-      >
-        {{ modelValue ? df.format(modelValue.toDate(getLocalTimeZone())) : 'Выберите дату' }}
-      </UButton>
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <UPopover>
+        <UFormField :label="$t('common.date')" name="date">
+          <UInput
+            :value="selectedDate ? df.format(selectedDate.toDate(getLocalTimeZone())) : ''"
+            placeholder="Выберите дату"
+            size="xl"
+            class="w-full items-center justify-center cursor-pointer"
+          />
+        </UFormField>
 
-      <template #content>
-        <UCalendar v-model="modelValue" class="p-2" />
-      </template>
-    </UPopover>
+        <template #content>
+          <UCalendar v-model="selectedDate" class="p-2" />
+        </template>
+      </UPopover>
+    </div>
 
     <div class="mt-3 flex flex-row gap-3">
       <UButton
@@ -74,9 +77,10 @@
 </template>
 
 <script setup lang="ts">
+import type { CalendarDate } from '@internationalized/date'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { UpdateTask } from '~~/shared/services/task'
-import { DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { updateTaskSchema } from '~~/shared/services/task'
 
 const { taskId } = defineProps<{
@@ -114,6 +118,7 @@ const state = ref<Partial<UpdateTask>>({
   name: task.value?.name,
   description: task.value?.description ?? undefined,
   performerId: task.value?.performerId,
+  date: task.value?.date,
 })
 
 const selectedPerformer = ref<{ label: string, value: string, avatar: { src: string | undefined, alt: string } } | undefined>(state.value.performerId ? availablePerformers.value.find((performer) => performer?.value === state.value.performerId) : undefined)
@@ -131,7 +136,15 @@ const df = new DateFormatter('ru-RU', {
   dateStyle: 'long',
 })
 
-const modelValue = shallowRef()
+const selectedDate = shallowRef<CalendarDate | undefined>(task.value?.date ? parseDate(task.value?.date) : undefined)
+
+watch(selectedDate, () => {
+  if (!selectedDate.value) {
+    return
+  }
+
+  state.value.date = selectedDate.value.toString()
+})
 
 async function onSubmit(event: FormSubmitEvent<UpdateTask>) {
   const toastId = actionToast.start()

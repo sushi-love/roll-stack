@@ -4,7 +4,7 @@
       :name="getIconByPrestige(prestige)"
       :class="getIconClass()"
     />
-    <h4 class="absolute bottom-1 left-1 font-semibold text-white text-shadow-md" :class="getPrestigeClass()">
+    <h4 class="absolute bottom-1 left-0.5 font-bold tracking-tight text-white text-shadow-md" :class="getPrestigeClass()">
       {{ prestige }}
     </h4>
   </div>

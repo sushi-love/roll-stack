@@ -17,13 +17,6 @@ export default defineAppConfig({
     icons: {
       loading: 'i-lucide-loader-circle',
     },
-    modal: {
-      slots: {
-        content: 'divide-y-0',
-        title: 'text-xl',
-        close: 'top-5 scale-110',
-      },
-    },
     button: {
       variants: {
         size: {

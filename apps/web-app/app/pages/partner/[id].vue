@@ -61,4 +61,8 @@ const { data, error } = await useFetch(`/api/user/${params.id}`)
 if (error.value) {
   await navigateTo('/')
 }
+
+useHead({
+  title: t('common.partner'),
+})
 </script>
