@@ -104,6 +104,9 @@ function prepareBotMessage(author: User, oldTask: Task, updatedTask: Task, updat
       text += `\n💪 ${updatedPerformer?.name} ${updatedPerformer?.surname}`
     }
   }
+  if (oldTask.date !== updatedTask.date) {
+    text += `\n📅 ${updatedTask.date}`
+  }
 
   return text
 }

@@ -127,41 +127,33 @@ const checkbox = ref(false)
 const toastId = ref(`task-close-${task.id}`)
 
 const items = computed<DropdownMenuItem[]>(() => {
-  const arr = [
-    [
-      {
-        label: 'Редактировать',
-        icon: 'i-lucide-edit',
-        disabled: isCompleted.value,
-        onClick: () => modalUpdateTask.open({ taskId: task.id }),
-      },
-      {
-        label: 'Удалить',
-        icon: 'i-lucide-trash-2',
-        color: 'error',
-        disabled: isCompleted.value,
-        onClick: onDelete,
-      },
-    ]]
+  const menuItems: DropdownMenuItem[] = [
+    {
+      label: 'Перейти в чат',
+      icon: 'i-lucide-messages-square',
+      color: 'neutral',
+      disabled: false,
+      onSelect: goToChat,
+      condition: !!task.chatId,
+    },
+    {
+      label: isFocused.value ? 'Убрать фокус' : 'Сфокусироваться',
+      icon: 'i-lucide-goal',
+      color: 'neutral',
+      disabled: false,
+      onSelect: isFocused.value ? onUnfocus : onFocus,
+      condition: canFocus.value,
+    },
+    {
+      label: 'Редактировать',
+      icon: 'i-lucide-edit',
+      disabled: isCompleted.value,
+      onSelect: () => modalUpdateTask.open({ taskId: task.id }),
+      condition: true,
+    },
+  ]
 
-  // Push to the start of arr
-  canFocus.value && arr.unshift([{
-    label: isFocused.value ? 'Убрать фокус' : 'Сфокусироваться',
-    icon: 'i-lucide-goal',
-    color: 'neutral',
-    disabled: false,
-    onClick: isFocused.value ? onUnfocus : onFocus,
-  }])
-
-  task.chatId && arr.unshift([{
-    label: 'Перейти в чат',
-    icon: 'i-lucide-messages-square',
-    color: 'neutral',
-    disabled: false,
-    onClick: goToChat,
-  }])
-
-  return arr
+  return menuItems.filter((item) => item.condition)
 })
 
 async function goToChat() {
@@ -192,23 +184,6 @@ async function onUnfocus() {
     await userStore.update()
 
     actionToast.success(toastId, t('toast.task-unfocused'))
-  } catch (error) {
-    console.error(error)
-    actionToast.error(toastId)
-  }
-}
-
-async function onDelete() {
-  const toastId = actionToast.start()
-
-  try {
-    await $fetch(`/api/task/id/${task.id}`, {
-      method: 'DELETE',
-    })
-
-    await taskStore.update()
-
-    actionToast.success(toastId, t('toast.task-deleted'))
   } catch (error) {
     console.error(error)
     actionToast.error(toastId)

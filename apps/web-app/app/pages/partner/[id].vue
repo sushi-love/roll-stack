@@ -42,7 +42,7 @@
         {{ data?.name }} {{ data?.surname }}
       </h2>
 
-      <p class="text-md">
+      <p class="text-base">
         {{ data?.caption }}
       </p>
     </div>

@@ -43,7 +43,18 @@
             placeholder="Выберите дату"
             size="xl"
             class="w-full items-center justify-center cursor-pointer"
-          />
+            :ui="{ trailing: 'pe-1.5' }"
+          >
+            <template v-if="selectedDate" #trailing>
+              <UButton
+                color="neutral"
+                variant="ghost"
+                size="md"
+                icon="i-lucide-x"
+                @click="selectedDate = undefined"
+              />
+            </template>
+          </UInput>
         </UFormField>
 
         <template #content>
@@ -140,6 +151,7 @@ const selectedDate = shallowRef<CalendarDate | undefined>(task.value?.date ? par
 
 watch(selectedDate, () => {
   if (!selectedDate.value) {
+    state.value.date = null
     return
   }
 

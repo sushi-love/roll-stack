@@ -86,8 +86,12 @@ useHead({
 })
 
 const { fetch: refreshSession } = useUserSession()
-const userStore = useUserStore()
-const taskStore = useTaskStore()
+const user = useUserStore()
+const menu = useMenuStore()
+const product = useProductStore()
+const chat = useChatStore()
+const task = useTaskStore()
+const notification = useNotificationStore()
 
 const toast = useToast()
 
@@ -141,8 +145,17 @@ const { status, execute: signIn } = await useFetch('/api/auth/sign-in', {
   onResponse: async ({ response }) => {
     if (response.ok) {
       await refreshSession()
-      await userStore.update()
-      await taskStore.update()
+
+      // Init Stores
+      await Promise.all([
+        user.update(),
+        menu.update(),
+        product.update(),
+        chat.update(),
+        task.update(),
+        notification.update(),
+      ])
+
       await navigateTo('/')
     }
   },

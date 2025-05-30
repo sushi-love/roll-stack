@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-1 flex-1 px-2.5 [&>article]:last-of-type:min-h-(--last-message-height) last-of-type:mb-20" style="--last-message-height: 0px;">
+  <div class="w-full flex flex-col gap-2 flex-1 px-2.5 [&>article]:last-of-type:min-h-(--last-message-height) last-of-type:mb-20" style="--last-message-height: 0px;">
     <ChatMessage
       v-for="message in messages"
       :key="message.id"

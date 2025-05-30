@@ -34,13 +34,22 @@
             </UTooltip>
           </div>
 
-          <div ref="tasks" class="w-full flex flex-col gap-3">
+          <div
+            v-if="openedTasks.length"
+            ref="tasks"
+            class="w-full flex flex-col gap-3"
+          >
             <TaskCard
               v-for="task in openedTasks"
               :key="task.id"
               :task="task"
             />
           </div>
+          <template v-else>
+            <p class="text-base text-dimmed">
+              Тут пока пусто
+            </p>
+          </template>
         </div>
 
         <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
@@ -50,13 +59,18 @@
             </h3>
           </div>
 
-          <div ref="tasks" class="w-full flex flex-col gap-3">
+          <div v-if="closedTasks.length" class="w-full flex flex-col gap-3">
             <TaskCard
               v-for="task in closedTasks"
               :key="task.id"
               :task="task"
             />
           </div>
+          <template v-else>
+            <p class="text-base text-dimmed">
+              Тут пока пусто
+            </p>
+          </template>
         </div>
       </div>
     </template>

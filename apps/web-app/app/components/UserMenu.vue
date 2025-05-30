@@ -1,5 +1,6 @@
 <template>
   <UDropdownMenu
+    v-if="user.id"
     size="lg"
     :items="userMenuItems"
     :search-input="false"
@@ -14,7 +15,7 @@
       color="neutral"
       variant="ghost"
       trailing-icon="i-lucide-ellipsis-vertical"
-      class="text-md"
+      class="text-base"
     />
   </UDropdownMenu>
 </template>
