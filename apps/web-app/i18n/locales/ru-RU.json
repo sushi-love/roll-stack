@@ -141,6 +141,10 @@
         "button": "Создать задачу",
         "title": "Создание задачи"
       },
+      "task-list": {
+        "button": "Создать список задач",
+        "title": "Создание списка задач"
+      },
       "chat": {
         "button": "Создать чат",
         "title": "Создание чата"
@@ -218,6 +222,9 @@
     "task-focused": "Задача в фокусе",
     "task-completed": "Задача закрыта",
     "task-unfocused": "Задача не в фокусе",
+    "task-list-created": "Список задач создан",
+    "task-list-updated": "Список задач обновлен",
+    "task-list-deleted": "Список задач удален",
     "chat-created": "Чат создан",
     "chat-updated": "Чат обновлен",
     "chat-deleted": "Чат удален"

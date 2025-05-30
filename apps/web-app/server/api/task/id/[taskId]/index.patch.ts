@@ -44,7 +44,15 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const isPrivate = task.performerId === session.user.id && !task.chatId
+    const list = await repository.task.findList(task.listId)
+    if (!list) {
+      throw createError({
+        statusCode: 500,
+        message: 'Task list not found',
+      })
+    }
+
+    const isPrivate = task.performerId === session.user.id && !list.chatId
 
     // Guard: If task is private - cannot change performer
     if (isPrivate && task.performerId !== data.performerId) {
@@ -68,14 +76,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Bot notification in chat
-    if (task.chatId) {
-      const bot = await repository.chat.findNotificationBot(task.chatId)
+    if (list.chatId) {
+      const bot = await repository.chat.findNotificationBot(list.chatId)
       if (bot) {
         const text = prepareBotMessage(user, task, updatedTask, updatedPerformer)
 
         // Send message as bot
         await repository.chat.createMessage({
-          chatId: task.chatId,
+          chatId: list.chatId,
           userId: bot.user.id,
           text,
         })

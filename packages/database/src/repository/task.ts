@@ -1,7 +1,7 @@
-import type { TaskDraft } from '../types'
+import type { TaskDraft, TaskListDraft } from '../types'
 import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { tasks } from '../tables'
+import { taskLists, tasks } from '../tables'
 
 export class Task {
   static async find(id: string) {
@@ -10,22 +10,35 @@ export class Task {
     })
   }
 
-  static async list() {
-    return useDatabase().query.tasks.findMany({
-      where: (tasks) => sql`${tasks.completedAt} >= now() - interval '12 hour' OR ${tasks.completedAt} IS NULL`,
-      orderBy: (tasks, { desc }) => desc(tasks.updatedAt),
+  static async findList(id: string) {
+    return useDatabase().query.taskLists.findFirst({
+      where: (taskLists, { eq }) => eq(taskLists.id, id),
     })
   }
 
-  static async listByUser(userId: string) {
-    return useDatabase().query.tasks.findMany({
-      where: (tasks, { eq }) => eq(tasks.performerId, userId),
+  static async lists() {
+    return useDatabase().query.taskLists.findMany({
+      with: {
+        tasks: {
+          where: (tasks, { or, isNull, gte }) =>
+            or(
+              isNull(tasks.completedAt),
+              gte(tasks.completedAt, sql`now() - interval '12 hour'`),
+            ),
+          orderBy: (tasks, { desc }) => desc(tasks.updatedAt),
+        },
+      },
     })
   }
 
   static async create(data: TaskDraft) {
     const [task] = await useDatabase().insert(tasks).values(data).returning()
     return task
+  }
+
+  static async createList(data: TaskListDraft) {
+    const [list] = await useDatabase().insert(taskLists).values(data).returning()
+    return list
   }
 
   static async update(id: string, data: Partial<TaskDraft>) {
@@ -53,7 +66,23 @@ export class Task {
     return task
   }
 
+  static async updateList(id: string, data: Partial<TaskListDraft>) {
+    const [list] = await useDatabase()
+      .update(taskLists)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
+      .where(eq(taskLists.id, id))
+      .returning()
+    return list
+  }
+
   static async delete(id: string) {
     return useDatabase().delete(tasks).where(eq(tasks.id, id))
+  }
+
+  static async deleteList(id: string) {
+    return useDatabase().delete(taskLists).where(eq(taskLists.id, id))
   }
 }

@@ -1,9 +1,9 @@
 <template>
-  <UModal :title="$t('app.create.task.title')">
+  <UModal :title="$t('app.create.task-list.title')">
     <template #body>
-      <FormCreateTask
-        :performer-id="performerId"
-        :list-id="listId"
+      <FormCreateTaskList
+        :user-id="userId"
+        :chat-id="chatId"
         @submitted="overlay.closeAll"
         @success="overlay.closeAll"
       />
@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 defineProps<{
-  performerId?: string
-  listId: string
+  userId?: string
+  chatId?: string
 }>()
 
 const overlay = useOverlay()

@@ -47,45 +47,50 @@
             </p>
           </div>
 
-          <template v-if="!fullInfo && task.chatId">
+          <div class="flex flex-col gap-y-1 gap-x-2 items-start">
+            <template v-if="!fullInfo && chat?.id">
+              <UBadge
+                color="neutral"
+                variant="outline"
+                icon="i-lucide-messages-square"
+                :ui="{
+                  leadingIcon: 'text-dimmed',
+                }"
+                class="shrink-0"
+              >
+                {{ chat?.name }}
+              </UBadge>
+            </template>
+
+            <template v-if="fullInfo">
+              <UBadge
+                v-if="task.performerId"
+                color="neutral"
+                variant="outline"
+                icon="i-lucide-user"
+                :ui="{
+                  leadingIcon: 'text-dimmed',
+                }"
+                class="shrink-0"
+              >
+                {{ userStore.staff.find((staff) => staff.id === task.performerId)?.name }}
+                {{ userStore.staff.find((staff) => staff.id === task.performerId)?.surname }}
+              </UBadge>
+            </template>
+
             <UBadge
+              v-if="task?.date"
               color="neutral"
               variant="outline"
-              icon="i-lucide-messages-square"
+              icon="i-lucide-calendar"
               :ui="{
                 leadingIcon: 'text-dimmed',
               }"
+              class="shrink-0"
             >
-              {{ chatStore.find(task.chatId)?.name }}
+              {{ df.format(parseDate(task.date).toDate(getLocalTimeZone())) }}
             </UBadge>
-          </template>
-
-          <template v-if="fullInfo">
-            <UBadge
-              v-if="task.performerId"
-              color="neutral"
-              variant="outline"
-              icon="i-lucide-user"
-              :ui="{
-                leadingIcon: 'text-dimmed',
-              }"
-            >
-              {{ userStore.staff.find((staff) => staff.id === task.performerId)?.name }}
-              {{ userStore.staff.find((staff) => staff.id === task.performerId)?.surname }}
-            </UBadge>
-          </template>
-
-          <UBadge
-            v-if="task?.date"
-            color="neutral"
-            variant="outline"
-            icon="i-lucide-calendar"
-            :ui="{
-              leadingIcon: 'text-dimmed',
-            }"
-          >
-            {{ df.format(parseDate(task.date).toDate(getLocalTimeZone())) }}
-          </UBadge>
+          </div>
         </div>
       </UButton>
     </UDropdownMenu>
@@ -109,6 +114,9 @@ const actionToast = useActionToast()
 const taskStore = useTaskStore()
 const userStore = useUserStore()
 const chatStore = useChatStore()
+
+const list = computed(() => taskStore.lists.find((list) => list.id === task.listId))
+const chat = computed(() => chatStore.find(list.value?.chatId ?? ''))
 
 const overlay = useOverlay()
 const modalUpdateTask = overlay.create(ModalUpdateTask)
@@ -134,7 +142,7 @@ const items = computed<DropdownMenuItem[]>(() => {
       color: 'neutral',
       disabled: false,
       onSelect: goToChat,
-      condition: !!task.chatId,
+      condition: !!chat.value?.id,
     },
     {
       label: isFocused.value ? 'Убрать фокус' : 'Сфокусироваться',
@@ -157,7 +165,7 @@ const items = computed<DropdownMenuItem[]>(() => {
 })
 
 async function goToChat() {
-  await navigateTo(`/chat/${task.chatId}`)
+  await navigateTo(`/chat/${chat.value?.id}`)
 }
 
 async function onFocus() {

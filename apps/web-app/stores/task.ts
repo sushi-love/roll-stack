@@ -1,7 +1,11 @@
-import type { Task } from '@sushi-atrium/database'
+import type { Task, TaskList } from '@sushi-atrium/database'
+
+type TaskListWithTasks = TaskList & {
+  tasks: Task[]
+}
 
 export const useTaskStore = defineStore('task', () => {
-  const tasks = ref<Task[]>([])
+  const lists = ref<TaskListWithTasks[]>([])
 
   async function update() {
     try {
@@ -15,7 +19,7 @@ export const useTaskStore = defineStore('task', () => {
         return
       }
 
-      tasks.value = data
+      lists.value = data
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('401')) {
@@ -49,7 +53,7 @@ export const useTaskStore = defineStore('task', () => {
   }
 
   return {
-    tasks,
+    lists,
 
     update,
     setAsFocused,

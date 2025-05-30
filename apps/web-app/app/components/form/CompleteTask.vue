@@ -64,7 +64,7 @@ const actionToast = useActionToast()
 const userStore = useUserStore()
 const taskStore = useTaskStore()
 
-const task = computed(() => taskStore.tasks.find((task) => task.id === taskId))
+const task = computed(() => taskStore.lists.flatMap((list) => list.tasks).find((task) => task.id === taskId))
 
 const state = ref<Partial<CompleteTask>>({
   resolution: 'success',

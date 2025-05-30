@@ -16,62 +16,23 @@
         </div>
       </div>
 
-      <div class="flex flex-row gap-4">
-        <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
-          <div class="mb-4 flex flex-row gap-2 items-center justify-between">
-            <h3 class="text-xl font-bold">
-              Список активных задач
-            </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <TaskList
+          v-for="taskList in myLists"
+          :key="taskList.id"
+          :list-id="taskList.id"
+          :is-private="true"
+        />
+        <TaskPerformerList
+          :tasks="otherTasks"
+          :is-private="true"
+        />
 
-            <UTooltip :text="$t('app.create.task.button')">
-              <UButton
-                variant="solid"
-                color="secondary"
-                size="md"
-                icon="i-lucide-plus"
-                @click="modalCreateTask.open({ performerId: user.id, chatId: undefined })"
-              />
-            </UTooltip>
-          </div>
-
-          <div
-            v-if="openedTasks.length"
-            ref="tasks"
-            class="w-full flex flex-col gap-3"
-          >
-            <TaskCard
-              v-for="task in openedTasks"
-              :key="task.id"
-              :task="task"
-            />
-          </div>
-          <template v-else>
-            <p class="text-base text-dimmed">
-              Тут пока пусто
-            </p>
-          </template>
-        </div>
-
-        <div class="mx-0 min-w-sm max-w-sm py-4 px-4 rounded-lg border border-default">
-          <div class="mb-4 flex flex-row gap-2 items-center justify-between">
-            <h3 class="text-xl font-bold">
-              Выполненные задачи
-            </h3>
-          </div>
-
-          <div v-if="closedTasks.length" class="w-full flex flex-col gap-3">
-            <TaskCard
-              v-for="task in closedTasks"
-              :key="task.id"
-              :task="task"
-            />
-          </div>
-          <template v-else>
-            <p class="text-base text-dimmed">
-              Тут пока пусто
-            </p>
-          </template>
-        </div>
+        <CreateCard
+          :label="$t('app.create.task-list.button')"
+          icon="i-lucide-list-todo"
+          @click="modalCreateTaskList.open({ userId: user.id })"
+        />
       </div>
     </template>
 
@@ -82,27 +43,21 @@
 </template>
 
 <script setup lang="ts">
-import { ModalCreateTask } from '#components'
-import { useSortable } from '@vueuse/integrations/useSortable'
+import { ModalCreateTaskList } from '#components'
 
 definePageMeta({
   middleware: ['01-auth-only'],
 })
 
+const overlay = useOverlay()
+const modalCreateTaskList = overlay.create(ModalCreateTaskList)
+
 const user = useUserStore()
 const taskStore = useTaskStore()
 
-const openedTasks = computed(() => taskStore.tasks.filter((task) => task.performerId === user.id && !task.completedAt))
-const closedTasks = computed(() => taskStore.tasks.filter((task) => task.performerId === user.id && task.completedAt))
-
-const tasks = useTemplateRef<HTMLElement>('tasks')
-
-useSortable(tasks, openedTasks, {
-  animation: 150,
-})
-
-const overlay = useOverlay()
-const modalCreateTask = overlay.create(ModalCreateTask)
+const myLists = computed(() => taskStore.lists.filter((taskList) => taskList.userId === user.id))
+const otherLists = computed(() => taskStore.lists.filter((taskList) => taskList.userId !== user.id))
+const otherTasks = computed(() => otherLists.value.flatMap((list) => list.tasks).filter((task) => task.performerId === user.id))
 
 useHead({
   title: 'Суши Атриум',

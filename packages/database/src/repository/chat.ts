@@ -59,12 +59,6 @@ export class Chat {
     })
   }
 
-  static async listTasks(chatId: string) {
-    return useDatabase().query.tasks.findMany({
-      where: (tasks, { eq }) => eq(tasks.chatId, chatId),
-    })
-  }
-
   static async create(data: ChatDraft) {
     const [chat] = await useDatabase().insert(chats).values(data).returning()
     return chat

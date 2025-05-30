@@ -1,6 +1,6 @@
 <template>
   <UForm
-    :validate="createValidator(createTaskSchema)"
+    :validate="createValidator(createTaskListSchema)"
     :state="state"
     class="flex flex-col gap-3"
     @submit="onSubmit"
@@ -10,15 +10,6 @@
         v-model="state.name"
         size="xl"
         class="w-full items-center justify-center"
-      />
-    </UFormField>
-
-    <UFormField :label="$t('app.task.description')" name="description">
-      <UTextarea
-        v-model="state.description"
-        :rows="4"
-        size="xl"
-        class="w-full"
       />
     </UFormField>
 
@@ -36,12 +27,12 @@
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { CreateTask } from '~~/shared/services/task'
-import { createTaskSchema } from '~~/shared/services/task'
+import type { CreateTaskList } from '~~/shared/services/task'
+import { createTaskListSchema } from '~~/shared/services/task'
 
-const { performerId, listId } = defineProps<{
-  performerId?: string
-  listId: string
+const { userId, chatId } = defineProps<{
+  userId?: string
+  chatId?: string
 }>()
 
 const emit = defineEmits(['success', 'submitted'])
@@ -51,26 +42,25 @@ const actionToast = useActionToast()
 
 const taskStore = useTaskStore()
 
-const state = ref<Partial<CreateTask>>({
+const state = ref<Partial<CreateTaskList>>({
   name: undefined,
-  description: undefined,
-  performerId,
-  listId,
+  userId,
+  chatId,
 })
 
-async function onSubmit(event: FormSubmitEvent<CreateTask>) {
+async function onSubmit(event: FormSubmitEvent<CreateTaskList>) {
   const toastId = actionToast.start()
   emit('submitted')
 
   try {
-    await $fetch(`/api/task`, {
+    await $fetch(`/api/task/list`, {
       method: 'POST',
       body: event.data,
     })
 
     await taskStore.update()
 
-    actionToast.success(toastId, t('toast.task-created'))
+    actionToast.success(toastId, t('toast.task-list-created'))
     emit('success')
   } catch (error) {
     console.error(error)

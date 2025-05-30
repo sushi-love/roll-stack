@@ -71,15 +71,23 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const list = await repository.task.findList(task.listId)
+    if (!list) {
+      throw createError({
+        statusCode: 500,
+        message: 'Task list not found',
+      })
+    }
+
     // Bot notification in chat
-    if (task.chatId) {
-      const bot = await repository.chat.findNotificationBot(task.chatId)
+    if (list.chatId) {
+      const bot = await repository.chat.findNotificationBot(list.chatId)
       if (bot) {
         const text = prepareBotMessage(user, updatedTask)
 
         // Send message as bot
         await repository.chat.createMessage({
-          chatId: task.chatId,
+          chatId: list.chatId,
           userId: bot.user.id,
           text,
         })

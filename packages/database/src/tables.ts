@@ -164,6 +164,15 @@ export const tasks = pgTable('tasks', {
   resolution: varchar('resolution').$type<ResolutionType>(),
   report: varchar('report'),
   performerId: cuid2('performer_id').references(() => users.id),
+  listId: cuid2('list_id').notNull().references(() => taskLists.id),
+})
+
+export const taskLists = pgTable('task_lists', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  userId: cuid2('user_id').references(() => users.id),
   chatId: cuid2('chat_id').references(() => chats.id),
 })
 
@@ -186,6 +195,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
   chatMembers: many(chatMembers),
   notifications: many(notifications),
   tasks: many(tasks),
+  taskLists: many(taskLists),
   focusedTask: one(tasks, {
     fields: [users.focusedTaskId],
     references: [tasks.id],
@@ -199,7 +209,7 @@ export const chatRelations = relations(chats, ({ many, one }) => ({
     fields: [chats.lastMessageId],
     references: [chatMessages.id],
   }),
-  tasks: many(tasks),
+  taskLists: many(taskLists),
 }))
 
 export const chatMessageRelations = relations(chatMessages, ({ one }) => ({
@@ -275,13 +285,25 @@ export const mediaItemRelations = relations(mediaItems, ({ one }) => ({
 }))
 
 export const taskRelations = relations(tasks, ({ one }) => ({
-  chat: one(chats, {
-    fields: [tasks.chatId],
-    references: [chats.id],
-  }),
   performer: one(users, {
     fields: [tasks.performerId],
     references: [users.id],
+  }),
+  list: one(taskLists, {
+    fields: [tasks.listId],
+    references: [taskLists.id],
+  }),
+}))
+
+export const taskListRelations = relations(taskLists, ({ many, one }) => ({
+  tasks: many(tasks),
+  user: one(users, {
+    fields: [taskLists.userId],
+    references: [users.id],
+  }),
+  chat: one(chats, {
+    fields: [taskLists.chatId],
+    references: [chats.id],
   }),
 }))
 

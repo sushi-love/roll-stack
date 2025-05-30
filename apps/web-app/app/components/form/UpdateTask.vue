@@ -121,9 +121,10 @@ const availablePerformers = computed(() => [{
 }))])
 
 const taskStore = useTaskStore()
-const task = computed(() => taskStore.tasks.find((task) => task.id === taskId))
+const list = computed(() => taskStore.lists.find((list) => list.tasks.find((task) => task.id === taskId)))
+const task = computed(() => list.value?.tasks.find((task) => task.id === taskId))
 
-const isPrivate = computed(() => task.value?.performerId === userStore.id && !task.value?.chatId)
+const isPrivate = computed(() => task.value?.performerId === userStore.id && !list.value?.chatId)
 
 const state = ref<Partial<UpdateTask>>({
   name: task.value?.name,

@@ -7,7 +7,7 @@ export const createTaskSchema = type({
   name: type('2 <= string <= 150').describe('error.length.invalid'),
   description: type('string <= 250 | undefined').describe('error.length.invalid').optional(),
   performerId: type('string | undefined').describe('error.length.invalid').optional(),
-  chatId: type('string | undefined').describe('error.length.invalid').optional(),
+  listId: type('string').describe('error.length.invalid'),
 })
 export type CreateTask = typeof createTaskSchema.infer
 
@@ -24,3 +24,15 @@ export const completeTaskSchema = type({
   report: type('string | undefined').describe('error.length.invalid').optional(),
 })
 export type CompleteTask = typeof completeTaskSchema.infer
+
+export const createTaskListSchema = type({
+  name: type('2 <= string <= 150').describe('error.length.invalid'),
+  userId: type('string | undefined').describe('error.length.invalid').optional(),
+  chatId: type('string | undefined').describe('error.length.invalid').optional(),
+})
+export type CreateTaskList = typeof createTaskListSchema.infer
+
+export const updateTaskListSchema = type({
+  name: type('2 <= string <= 150').describe('error.length.invalid').optional(),
+})
+export type UpdateTaskList = typeof updateTaskListSchema.infer
