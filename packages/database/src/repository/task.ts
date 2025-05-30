@@ -10,6 +10,12 @@ export class Task {
     })
   }
 
+  static async findAll() {
+    return useDatabase().query.tasks.findMany({
+      orderBy: (tasks, { desc }) => desc(tasks.updatedAt),
+    })
+  }
+
   static async findList(id: string) {
     return useDatabase().query.taskLists.findFirst({
       where: (taskLists, { eq }) => eq(taskLists.id, id),

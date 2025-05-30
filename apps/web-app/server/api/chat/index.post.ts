@@ -47,6 +47,12 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Create default task list
+    await repository.task.createList({
+      name: 'Общий список',
+      chatId: chat.id,
+    })
+
     return {
       ok: true,
       result: chat,

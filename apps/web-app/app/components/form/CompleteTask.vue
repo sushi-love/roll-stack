@@ -5,8 +5,8 @@
     class="flex flex-col gap-3"
     @submit="onSubmit"
   >
-    <div class="mb-4">
-      <h2 class="text-lg md:text-xl font-medium">
+    <div class="mb-4 flex flex-col gap-1">
+      <h2 class="text-lg/5 font-semibold">
         «{{ task?.name }}»
       </h2>
       <p class="text-sm text-muted leading-4">

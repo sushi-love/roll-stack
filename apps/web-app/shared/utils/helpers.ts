@@ -10,3 +10,14 @@ export function getLocalizedResolution(resolution: Resolution) {
       return 'Не ясно, есть вопросы'
   }
 }
+
+export function getResolutionIcon(resolution: Resolution) {
+  switch (resolution) {
+    case 'success':
+      return 'i-lucide-circle-check'
+    case 'failure':
+      return 'i-lucide-circle-x'
+    case 'unknown':
+      return 'i-lucide-circle-help'
+  }
+}

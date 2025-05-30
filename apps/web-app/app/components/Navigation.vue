@@ -50,7 +50,6 @@ const menuItems = computed(() => [
   },
   {
     label: t('app.menu.menu'),
-    // to: '/menu',
     icon: 'i-lucide-book-copy',
     defaultOpen: route.path.startsWith('/menu'),
     children: [
@@ -79,6 +78,12 @@ const menuItems = computed(() => [
 ])
 
 const linkItems = computed(() => [
+  {
+    label: 'Все задачи',
+    to: '/head/task',
+    icon: 'i-lucide-list-checks',
+    active: route.path.startsWith('/head/task'),
+  },
   {
     label: t('app.menu.suggest-idea'),
     to: '/idea',

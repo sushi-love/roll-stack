@@ -37,14 +37,14 @@
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <TaskPerformerList
+        :tasks="otherTasks"
+        :is-private="true"
+      />
       <TaskList
         v-for="taskList in myLists"
         :key="taskList.id"
         :list-id="taskList.id"
-        :is-private="true"
-      />
-      <TaskPerformerList
-        :tasks="otherTasks"
         :is-private="true"
       />
     </div>
