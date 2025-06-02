@@ -2,7 +2,7 @@
   <div v-if="isFirstMessageOfDay" class="mt-6.5 mb-2.5 w-full flex flex-row items-center justify-center">
     <UBadge color="neutral" variant="soft">
       {{ isToday(new Date(createdAt)) ? 'Сегодня, ' : '' }}
-      {{ format(new Date(createdAt), 'dd MMM', { locale: ru }) }}
+      {{ format(new Date(createdAt), 'd MMMM', { locale: ru }) }}
     </UBadge>
   </div>
 

@@ -5,6 +5,7 @@ type ChatMemberWithUser = ChatMember & {
 }
 
 type ChatWithData = Chat & {
+  messages: ChatMessage[]
   members: ChatMemberWithUser[]
   lastMessage: ChatMessage | null
 }

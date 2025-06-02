@@ -45,6 +45,9 @@ export class Chat {
               },
             },
             lastMessage: true,
+            messages: {
+              orderBy: (chatMessages, { asc }) => asc(chatMessages.createdAt),
+            },
           },
         },
       },

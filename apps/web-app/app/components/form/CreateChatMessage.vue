@@ -4,11 +4,10 @@
     class="mt-auto bg-elevated/25"
     :ui="{ body: '!p-4' }"
   >
-    <div v-if="!user.id" class="text-center text-muted">
-      <ULink to="/sign-in">
-        Необходимо авторизоваться
-      </ULink>
+    <div v-if="!user.id" class="flex flex-row items-center justify-center">
+      <Loader />
     </div>
+
     <UForm
       v-else
       :state="state"
@@ -64,7 +63,9 @@ const { chatId } = defineProps<{
   chatId: string
 }>()
 
+const toast = useToast()
 const user = useUserStore()
+const chatStore = useChatStore()
 
 const loading = ref(false)
 
@@ -87,13 +88,18 @@ async function onSubmit(event: FormSubmitEvent<CreateChatMessage>) {
       body: event.data,
     })
 
-    // await channel.update()
-    // actionToast.success(t('toast.idea-created'))
+    await chatStore.update()
 
     resetState()
   } catch (error) {
     console.error(error)
-    // actionToast.error()
+
+    toast.add({
+      title: 'Ошибка!',
+      description: 'Добавить сообщение не удалось. Попробуйте еще раз.',
+      icon: 'i-lucide-x',
+      color: 'error',
+    })
   } finally {
     loading.value = false
   }

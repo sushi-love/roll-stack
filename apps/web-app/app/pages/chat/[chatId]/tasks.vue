@@ -39,7 +39,6 @@
 
 <script setup lang="ts">
 import { ModalCreateTask } from '#components'
-import Loader from '~/components/Loader.vue'
 
 const { params } = useRoute('chat-chatId-tasks')
 

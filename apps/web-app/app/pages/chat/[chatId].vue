@@ -9,7 +9,7 @@
         }"
       >
         <UAvatar
-          v-for="member in members"
+          v-for="member in activeMembers"
           :key="member.id"
           :src="member.user.avatarUrl ?? undefined"
           alt=""
@@ -18,10 +18,10 @@
 
       <div class="min-w-0">
         <p class="text-sm font-semibold text-highlighted leading-5">
-          {{ data?.name }}
+          {{ chat?.name }}
         </p>
         <p class="text-muted text-xs">
-          {{ data?.description ?? 'Общий чат' }}
+          {{ chat?.description ?? 'Общий чат' }}
         </p>
       </div>
     </div>
@@ -40,9 +40,10 @@
 <script setup lang="ts">
 const { params } = useRoute('chat-chatId')
 
-const { data } = await useFetch(`/api/chat/id/${params.chatId}`)
+const chatStore = useChatStore()
 
-const members = computed(() => data.value?.members.filter((member) => member.user.type !== 'bot'))
+const chat = computed(() => chatStore.chats.find((chat) => chat.id === params.chatId))
+const activeMembers = computed(() => chat.value?.members.filter((member) => member.user.type !== 'bot'))
 
 const items = ref([
   {
