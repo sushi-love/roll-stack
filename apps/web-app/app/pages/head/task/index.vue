@@ -1,12 +1,28 @@
 <template>
   <Content>
     <div class="flex flex-wrap items-center justify-between gap-1.5">
-      <UInput
-        v-model="filterValue"
-        :placeholder="$t('common.filter')"
-        class="max-w-sm"
-        icon="i-lucide-search"
-      />
+      <div class="flex flex-row gap-2.5">
+        <UInput
+          v-model="filterValue"
+          placeholder="По названию"
+          icon="i-lucide-search"
+          class="w-48"
+        />
+
+        <USelectMenu
+          v-model="selectedPerformer"
+          :items="availablePerformers"
+          placeholder="Исполнитель"
+          class="w-48"
+        />
+
+        <USelectMenu
+          v-model="selectedResolution"
+          :items="availableResolutions"
+          placeholder="Резолюция"
+          class="w-48"
+        />
+      </div>
 
       <div class="flex flex-wrap items-center gap-1.5">
         <UDropdownMenu
@@ -77,11 +93,14 @@
           {{ row.getValue('description') }}
         </div>
       </template>
+      <template #updatedAt-cell="{ row }">
+        {{ row.getValue('updatedAt') ? df.format(new Date(row.getValue('updatedAt'))) : '' }}
+      </template>
       <template #completedAt-cell="{ row }">
         {{ row.getValue('completedAt') ? df.format(new Date(row.getValue('completedAt'))) : '' }}
       </template>
       <template #resolution-cell="{ row }">
-        <div class="flex items-center justify-center">
+        <div class="relative flex items-center justify-center">
           <UPopover
             mode="hover"
             :content="{
@@ -90,11 +109,13 @@
               sideOffset: 8,
             }"
           >
-            <UIcon
-              v-if="row.getValue('resolution')"
-              :name="getResolutionIcon(row.getValue('resolution'))"
-              class="size-6"
-            />
+            <div>
+              <UIcon
+                v-if="row.getValue('resolution')"
+                :name="getResolutionIcon(row.getValue('resolution'))"
+                class="size-6"
+              />
+            </div>
 
             <template #content>
               <div class="h-auto w-64 p-4 flex flex-col gap-2 text-sm/4">
@@ -131,9 +152,12 @@
     </UTable>
 
     <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
-      <div class="text-sm text-muted">
+      <div v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length" class="text-sm text-muted">
         {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} {{ t('common.table.rows-selected', table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0) }}
         {{ $t('common.table.rows-from') }} {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }}
+      </div>
+      <div v-else class="text-sm text-muted">
+        {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} {{ t('common.table.rows', table?.tableApi?.getFilteredRowModel().rows.length || 0) }}
       </div>
 
       <div class="flex items-center gap-1.5">
@@ -155,6 +179,11 @@ import { UIcon } from '#components'
 import { DateFormatter } from '@internationalized/date'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
+import { getLocalizedResolution } from '~~/shared/utils/helpers'
+
+useHead({
+  title: 'Все задачи',
+})
 
 const { t } = useI18n()
 
@@ -162,9 +191,70 @@ const { data } = await useFetch('/api/task/list/completed')
 
 const userStore = useUserStore()
 
+const availablePerformers = computed(() => [{
+  label: 'Все исполнители',
+  value: '',
+  avatar: {
+    src: undefined,
+    alt: '',
+  },
+  onSelect: () => {
+    selectedPerformer.value = undefined
+  },
+}, {
+  label: 'Нет исполнителя',
+  value: 'empty',
+  avatar: {
+    src: undefined,
+    alt: '',
+  },
+}, ...userStore.staff.map((staff) => ({
+  label: `${staff.name} ${staff.surname}`,
+  value: staff.id,
+  avatar: {
+    src: staff.avatarUrl ?? undefined,
+    alt: '',
+  },
+}))])
+
+const selectedPerformer = ref<{ label: string, value: string, avatar: { src: string | undefined, alt: string } } | undefined>()
+
+const availableResolutions = computed(() => [{
+  label: 'Все статусы',
+  value: '',
+  onSelect: () => {
+    selectedResolution.value = undefined
+  },
+}, {
+  label: 'Без резолюции',
+  value: 'empty',
+}, ...getResolutionForSelect()])
+
+const selectedResolution = ref<{ label: string, value: string, icon: string } | undefined>()
+
 const filterValue = ref('')
 
-const dataFiltered = computed(() => data.value?.filter((t) => t.name.toLowerCase().includes(filterValue.value.toLowerCase())))
+const dataFiltered = computed(() => {
+  let finalRows = data.value?.filter((t) => t.name.toLowerCase().includes(filterValue.value.toLowerCase()))
+
+  if (selectedPerformer.value?.value) {
+    if (selectedPerformer.value?.value === 'empty') {
+      finalRows = finalRows?.filter((t) => t.performerId === null)
+    } else {
+      finalRows = finalRows?.filter((t) => t.performerId === selectedPerformer.value?.value)
+    }
+  }
+
+  if (selectedResolution.value?.value) {
+    if (selectedResolution.value?.value === 'empty') {
+      finalRows = finalRows?.filter((t) => t.resolution === null)
+    } else {
+      finalRows = finalRows?.filter((t) => t.resolution === selectedResolution.value?.value)
+    }
+  }
+
+  return finalRows
+})
 
 const columnFilters = ref([{
   id: 'id',
@@ -193,6 +283,9 @@ const columns: Ref<TableColumn<Task>[]> = ref([{
 {
   accessorKey: 'description',
   header: 'Описание',
+}, {
+  accessorKey: 'updatedAt',
+  header: 'Дата обновления',
 }, {
   accessorKey: 'completedAt',
   header: 'Дата закрытия',
