@@ -134,6 +134,27 @@ export const productsInMenuCategories = pgTable('products_in_menu_categories', {
   }),
 })
 
+export const productTags = pgTable('product_tags', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+})
+
+export const productTagsOnProducts = pgTable('product_tags_on_products', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  productId: cuid2('product_id').notNull().references(() => products.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  productTagId: cuid2('product_tag_id').notNull().references(() => productTags.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
 export const media = pgTable('media', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -253,6 +274,7 @@ export const productRelations = relations(products, ({ many, one }) => ({
     fields: [products.mediaId],
     references: [media.id],
   }),
+  tags: many(productTagsOnProducts),
 }))
 
 export const productVariantRelations = relations(productVariants, ({ one }) => ({
@@ -270,6 +292,17 @@ export const productsInMenuCategoriesRelations = relations(productsInMenuCategor
   product: one(products, {
     fields: [productsInMenuCategories.productId],
     references: [products.id],
+  }),
+}))
+
+export const productTagsOnProductsRelations = relations(productTagsOnProducts, ({ one }) => ({
+  product: one(products, {
+    fields: [productTagsOnProducts.productId],
+    references: [products.id],
+  }),
+  productTag: one(productTags, {
+    fields: [productTagsOnProducts.productTagId],
+    references: [productTags.id],
   }),
 }))
 

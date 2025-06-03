@@ -20,6 +20,11 @@ export default defineEventHandler(async (event) => {
 
     const product = await repository.product.update(productId, data)
 
+    // Update all product tags
+    if (data.tagsId) {
+      await repository.product.updateTags(productId, data.tagsId)
+    }
+
     return {
       ok: true,
       result: product,

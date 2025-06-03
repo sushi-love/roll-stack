@@ -52,6 +52,7 @@
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { CompleteTask, Resolution } from '~~/shared/services/task'
 import { completeTaskSchema } from '~~/shared/services/task'
+import { getResolutionForSelect } from '~~/shared/utils/helpers'
 
 const { taskId } = defineProps<{
   taskId: string

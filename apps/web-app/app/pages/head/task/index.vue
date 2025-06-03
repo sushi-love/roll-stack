@@ -175,11 +175,10 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { Task } from '@sushi-atrium/database'
-import { UIcon } from '#components'
 import { DateFormatter } from '@internationalized/date'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
-import { getLocalizedResolution } from '~~/shared/utils/helpers'
+import { getLocalizedResolution, getResolutionForSelect } from '~~/shared/utils/helpers'
 
 useHead({
   title: 'Все задачи',

@@ -1,7 +1,7 @@
 import type { ProductDraft, ProductVariantDraft } from '../types'
 import { eq } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { products, productVariants } from '../tables'
+import { products, productTagsOnProducts, productVariants } from '../tables'
 
 export class Product {
   static async find(id: string) {
@@ -10,6 +10,11 @@ export class Product {
       with: {
         categories: true,
         variants: true,
+        tags: {
+          with: {
+            productTag: true,
+          },
+        },
         media: {
           with: {
             items: true,
@@ -31,12 +36,23 @@ export class Product {
       with: {
         categories: true,
         variants: true,
+        tags: {
+          with: {
+            productTag: true,
+          },
+        },
         media: {
           with: {
             items: true,
           },
         },
       },
+    })
+  }
+
+  static async listTags() {
+    return useDatabase().query.productTags.findMany({
+      orderBy: (productTags, { asc }) => asc(productTags.name),
     })
   }
 
@@ -48,6 +64,14 @@ export class Product {
   static async createVariant(data: ProductVariantDraft) {
     const [variant] = await useDatabase().insert(productVariants).values(data).returning()
     return variant
+  }
+
+  static async createTagOnProduct(productId: string, productTagId: string) {
+    const [tag] = await useDatabase().insert(productTagsOnProducts).values({
+      productId,
+      productTagId,
+    }).returning()
+    return tag
   }
 
   static async update(id: string, data: Partial<ProductDraft>) {
@@ -68,11 +92,35 @@ export class Product {
     return variant
   }
 
+  static async updateTags(productId: string, tagsId: string[]) {
+    const currentTags = await useDatabase().query.productTagsOnProducts.findMany({
+      where: (tag, { eq }) => eq(tag.productId, productId),
+    })
+
+    // If some tags are removed
+    for (const tag of currentTags) {
+      if (!tagsId.includes(tag.productTagId)) {
+        await Product.deleteTagOnProduct(tag.id)
+      }
+    }
+
+    // If some tags are added
+    for (const tagId of tagsId) {
+      if (!currentTags.find((tag) => tag.productTagId === tagId)) {
+        await Product.createTagOnProduct(productId, tagId)
+      }
+    }
+  }
+
   static async delete(id: string) {
     return useDatabase().delete(products).where(eq(products.id, id))
   }
 
   static async deleteVariant(id: string) {
     return useDatabase().delete(productVariants).where(eq(productVariants.id, id))
+  }
+
+  static async deleteTagOnProduct(id: string) {
+    return useDatabase().delete(productTagsOnProducts).where(eq(productTagsOnProducts.id, id))
   }
 }

@@ -15,7 +15,7 @@
     <div class="flex flex-wrap items-center justify-between gap-1.5">
       <UInput
         v-model="filterValue"
-        :placeholder="$t('common.filter')"
+        placeholder="По названию"
         class="max-w-sm"
         icon="i-lucide-search"
       />
@@ -91,12 +91,12 @@
             :key="variant.id"
             class="font-medium"
           >
-            {{ `${variant.name}, ${variant.weightValue}${getWeightLocalizedUnit(variant.weightUnit)}, ${new Intl.NumberFormat(locale).format(variant.gross)}${menuStore.currencySign}` }}
+            {{ `${variant.name}, ${variant.weightValue}${getWeightLocalizedUnit(variant.weightUnit)}, ${variant.gross}${menuStore.currencySign}` }}
           </div>
         </div>
       </template>
-      <template #isAvailableForPurchase-cell="{ row }">
-        <FormUpdateProductAvailability :product-id="row.getValue('id')" :is-available-for-purchase="row.getValue('isAvailableForPurchase')" />
+      <template #tags-cell="{ row }">
+        <ProductTagsBlock :tags="row.getValue('tags')" />
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-end" data-action="true">
@@ -144,7 +144,7 @@ import { upperFirst } from 'scule'
 const overlay = useOverlay()
 const modalCreateProduct = overlay.create(ModalCreateProduct)
 
-const { locale, t } = useI18n()
+const { t } = useI18n()
 const menuStore = useMenuStore()
 const productStore = useProductStore()
 
@@ -157,7 +157,7 @@ const columnVisibility = ref({
 const rowSelection = ref()
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 25,
+  pageSize: 50,
 })
 
 const columns: Ref<TableColumn<ProductWithData>[]> = ref([{
@@ -174,8 +174,8 @@ const columns: Ref<TableColumn<ProductWithData>[]> = ref([{
   accessorKey: 'variants',
   header: 'Вариации продукта',
 }, {
-  accessorKey: 'isAvailableForPurchase',
-  header: 'Доступность',
+  accessorKey: 'tags',
+  header: 'Теги',
 }, {
   id: 'action',
   enableSorting: false,

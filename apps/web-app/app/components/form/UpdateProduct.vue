@@ -30,6 +30,17 @@
       />
     </UFormField>
 
+    <UFormField label="Теги" name="tags">
+      <USelectMenu
+        v-model="selectedTags"
+        :items="availableTags"
+        :placeholder="$t('common.select')"
+        multiple
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
     <div class="mt-3 flex flex-row gap-3">
       <UButton
         type="submit"
@@ -73,10 +84,18 @@ const actionToast = useActionToast()
 const productStore = useProductStore()
 const product = computed(() => productStore.products.find((product) => product.id === productId))
 
+const availableTags = computed(() => productStore.tags.map((t) => ({ label: t.name, value: t.id })))
+const selectedTags = ref<{ label: string, value: string }[]>(product.value?.tags.map((t) => ({ label: t.productTag.name, value: t.productTag.id })) ?? [])
+
 const state = ref<Partial<UpdateProduct>>({
   name: product.value?.name,
   description: product.value?.description,
   slug: product.value?.slug,
+  tagsId: selectedTags.value.map((t) => t.value),
+})
+
+watch(selectedTags, () => {
+  state.value.tagsId = selectedTags.value.map((t) => t.value)
 })
 
 async function onSubmit(event: FormSubmitEvent<UpdateProduct>) {

@@ -12,6 +12,7 @@ export const updateProductSchema = type({
   description: type('0 <= string <= 1000').describe('error.length.invalid').optional(),
   slug: type('2 <= string <= 50').describe('error.length.invalid').optional(),
   isAvailableForPurchase: type('boolean').optional(),
+  tagsId: type('string[]').optional(),
 })
 export type UpdateProduct = typeof updateProductSchema.infer
 
