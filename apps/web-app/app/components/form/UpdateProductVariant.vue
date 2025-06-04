@@ -56,6 +56,17 @@
       />
     </UFormField>
 
+    <UFormField label="Теги" name="tags">
+      <USelectMenu
+        v-model="selectedTags"
+        :items="availableTags"
+        :placeholder="$t('common.select')"
+        multiple
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
     <div class="pt-6">
       <h3 class="pb-1 font-medium text-highlighted text-lg">
         {{ $t('common.nutrition.value-title') }}
@@ -193,6 +204,9 @@ const menuStore = useMenuStore()
 const allVariants = computed(() => productStore.products.flatMap((product) => product.variants))
 const productVariant = computed(() => allVariants.value.find((variant) => variant.id === productVariantId))
 
+const availableTags = computed(() => productStore.variantTags.map((t) => ({ label: t.name, value: t.id })))
+const selectedTags = ref<{ label: string, value: string }[]>(productVariant.value?.tags.map((t) => ({ label: t.name, value: t.id })) ?? [])
+
 const state = ref<Partial<UpdateProductVariant>>({
   name: productVariant.value?.name,
   weightUnit: productVariant.value?.weightUnit,
@@ -204,6 +218,11 @@ const state = ref<Partial<UpdateProductVariant>>({
   carbohydrate: productVariant.value?.carbohydrate ?? undefined,
   protein: productVariant.value?.protein ?? undefined,
   fat: productVariant.value?.fat ?? undefined,
+  tagsId: selectedTags.value.map((t) => t.value),
+})
+
+watch(selectedTags, () => {
+  state.value.tagsId = selectedTags.value.map((t) => t.value)
 })
 
 async function onSubmit(event: FormSubmitEvent<UpdateProductVariant>) {

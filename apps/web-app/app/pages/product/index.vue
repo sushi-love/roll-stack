@@ -13,12 +13,21 @@
 
   <Content>
     <div class="flex flex-wrap items-center justify-between gap-1.5">
-      <UInput
-        v-model="filterValue"
-        placeholder="По названию"
-        class="max-w-sm"
-        icon="i-lucide-search"
-      />
+      <div class="flex flex-row gap-2.5">
+        <UInput
+          v-model="filterValue"
+          placeholder="По названию"
+          class="max-w-sm"
+          icon="i-lucide-search"
+        />
+
+        <UInput
+          v-model="filterByTagValue"
+          placeholder="По тегу"
+          class="max-w-sm"
+          icon="i-lucide-search"
+        />
+      </div>
 
       <div class="flex flex-wrap items-center gap-1.5">
         <UDropdownMenu
@@ -85,13 +94,24 @@
         </ULink>
       </template>
       <template #variants-cell="{ row }">
-        <div class="font-medium">
+        <div class="flex flex-col gap-1">
           <div
-            v-for="variant in row.getValue('variants') as ProductVariant[]"
+            v-for="variant in (row.getValue('variants') as ProductVariantWithData[])"
             :key="variant.id"
-            class="font-medium"
+            class="flex items-center gap-1.5"
           >
-            {{ `${variant.name}, ${variant.weightValue}${getWeightLocalizedUnit(variant.weightUnit)}, ${variant.gross}${menuStore.currencySign}` }}
+            <UBadge
+              v-for="tag in variant.tags"
+              :key="tag.id"
+              color="neutral"
+              variant="soft"
+              size="sm"
+              :label="tag.name"
+            />
+
+            <p class="text-sm">
+              {{ `${variant.name}, ${variant.weightValue}${getWeightLocalizedUnit(variant.weightUnit)}, ${variant.gross}${menuStore.currencySign}` }}
+            </p>
           </div>
         </div>
       </template>
@@ -116,9 +136,12 @@
     </UTable>
 
     <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
-      <div class="text-sm text-muted">
+      <div v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length" class="text-sm text-muted">
         {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} {{ t('common.table.rows-selected', table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0) }}
         {{ $t('common.table.rows-from') }} {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }}
+      </div>
+      <div v-else class="text-sm text-muted">
+        {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} {{ t('common.table.rows', table?.tableApi?.getFilteredRowModel().rows.length || 0) }}
       </div>
 
       <div class="flex items-center gap-1.5">
@@ -135,9 +158,9 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { Product, ProductVariant } from '@sushi-atrium/database'
-import type { ProductWithData } from '~~/types'
-import { ModalCreateProduct } from '#components'
+import type { Product } from '@sushi-atrium/database'
+import type { ProductVariantWithData, ProductWithData } from '~~/types'
+import { ModalCreateProduct, UBadge } from '#components'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 
@@ -149,7 +172,17 @@ const menuStore = useMenuStore()
 const productStore = useProductStore()
 
 const filterValue = ref('')
-const data = computed<ProductWithData[]>(() => productStore.products.filter((product) => product.name.toLowerCase().includes(filterValue.value.toLowerCase())))
+const filterByTagValue = ref('')
+
+const data = computed<ProductWithData[]>(() => {
+  let finalRows = productStore.products.filter((product) => product.name.toLowerCase().includes(filterValue.value.toLowerCase()))
+
+  if (filterByTagValue.value) {
+    finalRows = finalRows.filter((product) => product.tags.some((tag) => tag.name.toLowerCase().includes(filterByTagValue.value.toLowerCase())))
+  }
+
+  return finalRows
+})
 
 const columnVisibility = ref({
   id: false,

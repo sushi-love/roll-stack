@@ -85,7 +85,7 @@ const productStore = useProductStore()
 const product = computed(() => productStore.products.find((product) => product.id === productId))
 
 const availableTags = computed(() => productStore.tags.map((t) => ({ label: t.name, value: t.id })))
-const selectedTags = ref<{ label: string, value: string }[]>(product.value?.tags.map((t) => ({ label: t.productTag.name, value: t.productTag.id })) ?? [])
+const selectedTags = ref<{ label: string, value: string }[]>(product.value?.tags.map((t) => ({ label: t.name, value: t.id })) ?? [])
 
 const state = ref<Partial<UpdateProduct>>({
   name: product.value?.name,

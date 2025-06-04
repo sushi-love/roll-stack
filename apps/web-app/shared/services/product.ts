@@ -42,5 +42,6 @@ export const updateProductVariantSchema = type({
   fat: type('number | undefined | null').optional(),
   carbohydrate: type('number | undefined | null').optional(),
   sku: type('string | undefined').optional(),
+  tagsId: type('string[]').optional(),
 })
 export type UpdateProductVariant = typeof updateProductVariantSchema.infer

@@ -5,13 +5,14 @@
       :key="tag.id"
       color="neutral"
       variant="outline"
-      :label="tag.productTag.name"
+      size="sm"
+      :label="tag.name"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ProductWithData } from '~~/types'
+import type { ProductTag } from '@sushi-atrium/database'
 
-defineProps<{ tags: ProductWithData['tags'] }>()
+defineProps<{ tags: ProductTag[] }>()
 </script>

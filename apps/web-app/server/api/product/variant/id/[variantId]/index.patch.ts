@@ -28,6 +28,11 @@ export default defineEventHandler(async (event) => {
 
     const updatedVariant = await repository.product.updateVariant(variantId, data)
 
+    // Update all tags
+    if (data.tagsId) {
+      await repository.product.updateTagsOnVariant(variantId, data.tagsId)
+    }
+
     return {
       ok: true,
       result: updatedVariant,

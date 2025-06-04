@@ -1,9 +1,13 @@
-import type { Media, MediaItem, Product, ProductsInMenuCategory, ProductTag, ProductTagOnProduct, ProductVariant } from '@sushi-atrium/database'
+import type { Media, MediaItem, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
+
+export type ProductVariantWithData = ProductVariant & {
+  tags: ProductVariantTag[]
+}
 
 export type ProductWithData = Product & {
   categories: ProductsInMenuCategory[]
-  variants: ProductVariant[]
-  tags: (ProductTagOnProduct & { productTag: ProductTag })[]
+  variants: ProductVariantWithData[]
+  tags: ProductTag[]
   media: MediaWithItems | null
 }
 

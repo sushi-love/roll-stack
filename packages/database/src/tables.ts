@@ -155,6 +155,27 @@ export const productTagsOnProducts = pgTable('product_tags_on_products', {
   }),
 })
 
+export const productVariantTags = pgTable('product_variant_tags', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+})
+
+export const productVariantTagsOnProductVariants = pgTable('product_variant_tags_on_product_variants', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  productVariantId: cuid2('product_variant_id').notNull().references(() => productVariants.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  productVariantTagId: cuid2('product_variant_tag_id').notNull().references(() => productVariantTags.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
 export const media = pgTable('media', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -277,11 +298,12 @@ export const productRelations = relations(products, ({ many, one }) => ({
   tags: many(productTagsOnProducts),
 }))
 
-export const productVariantRelations = relations(productVariants, ({ one }) => ({
+export const productVariantRelations = relations(productVariants, ({ one, many }) => ({
   product: one(products, {
     fields: [productVariants.productId],
     references: [products.id],
   }),
+  tags: many(productVariantTagsOnProductVariants),
 }))
 
 export const productsInMenuCategoriesRelations = relations(productsInMenuCategories, ({ one }) => ({
@@ -303,6 +325,17 @@ export const productTagsOnProductsRelations = relations(productTagsOnProducts, (
   productTag: one(productTags, {
     fields: [productTagsOnProducts.productTagId],
     references: [productTags.id],
+  }),
+}))
+
+export const productVariantTagsOnProductVariantsRelations = relations(productVariantTagsOnProductVariants, ({ one }) => ({
+  productVariant: one(productVariants, {
+    fields: [productVariantTagsOnProductVariants.productVariantId],
+    references: [productVariants.id],
+  }),
+  productVariantTag: one(productVariantTags, {
+    fields: [productVariantTagsOnProductVariants.productVariantTagId],
+    references: [productVariantTags.id],
   }),
 }))
 

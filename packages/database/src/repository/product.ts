@@ -1,15 +1,23 @@
 import type { ProductDraft, ProductVariantDraft } from '../types'
 import { eq } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { products, productTagsOnProducts, productVariants } from '../tables'
+import { products, productTagsOnProducts, productVariants, productVariantTagsOnProductVariants } from '../tables'
 
 export class Product {
   static async find(id: string) {
-    return useDatabase().query.products.findFirst({
+    const product = await useDatabase().query.products.findFirst({
       where: (products, { eq }) => eq(products.id, id),
       with: {
         categories: true,
-        variants: true,
+        variants: {
+          with: {
+            tags: {
+              with: {
+                productVariantTag: true,
+              },
+            },
+          },
+        },
         tags: {
           with: {
             productTag: true,
@@ -22,20 +30,49 @@ export class Product {
         },
       },
     })
+
+    return {
+      ...product,
+      variants: product?.variants.map((variant) => ({
+        ...variant,
+        tags: variant?.tags.map((tag) => tag.productVariantTag),
+      })),
+      tags: product?.tags.map((tag) => tag.productTag),
+    }
   }
 
   static async findVariant(id: string) {
-    return useDatabase().query.productVariants.findFirst({
+    const variant = await useDatabase().query.productVariants.findFirst({
       where: (productVariants, { eq }) => eq(productVariants.id, id),
+      with: {
+        tags: {
+          with: {
+            productVariantTag: true,
+          },
+        },
+      },
     })
+
+    return {
+      ...variant,
+      tags: variant?.tags.map((tag) => tag.productVariantTag),
+    }
   }
 
   static async list() {
-    return useDatabase().query.products.findMany({
+    const products = await useDatabase().query.products.findMany({
       orderBy: (products, { asc }) => asc(products.name),
       with: {
         categories: true,
-        variants: true,
+        variants: {
+          with: {
+            tags: {
+              with: {
+                productVariantTag: true,
+              },
+            },
+          },
+        },
         tags: {
           with: {
             productTag: true,
@@ -48,11 +85,26 @@ export class Product {
         },
       },
     })
+
+    return products.map((product) => ({
+      ...product,
+      variants: product.variants.map((variant) => ({
+        ...variant,
+        tags: variant?.tags.map((tag) => tag.productVariantTag),
+      })),
+      tags: product.tags.map((tag) => tag.productTag),
+    }))
   }
 
   static async listTags() {
     return useDatabase().query.productTags.findMany({
       orderBy: (productTags, { asc }) => asc(productTags.name),
+    })
+  }
+
+  static async listVariantTags() {
+    return useDatabase().query.productVariantTags.findMany({
+      orderBy: (productVariantTags, { asc }) => asc(productVariantTags.name),
     })
   }
 
@@ -70,6 +122,14 @@ export class Product {
     const [tag] = await useDatabase().insert(productTagsOnProducts).values({
       productId,
       productTagId,
+    }).returning()
+    return tag
+  }
+
+  static async createTagOnProductVariant(productVariantId: string, productVariantTagId: string) {
+    const [tag] = await useDatabase().insert(productVariantTagsOnProductVariants).values({
+      productVariantId,
+      productVariantTagId,
     }).returning()
     return tag
   }
@@ -112,6 +172,26 @@ export class Product {
     }
   }
 
+  static async updateTagsOnVariant(variantId: string, tagsId: string[]) {
+    const currentTags = await useDatabase().query.productVariantTagsOnProductVariants.findMany({
+      where: (tag, { eq }) => eq(tag.productVariantId, variantId),
+    })
+
+    // If some tags are removed
+    for (const tag of currentTags) {
+      if (!tagsId.includes(tag.productVariantTagId)) {
+        await Product.deleteTagOnProductVariant(tag.id)
+      }
+    }
+
+    // If some tags are added
+    for (const tagId of tagsId) {
+      if (!currentTags.find((tag) => tag.productVariantTagId === tagId)) {
+        await Product.createTagOnProductVariant(variantId, tagId)
+      }
+    }
+  }
+
   static async delete(id: string) {
     return useDatabase().delete(products).where(eq(products.id, id))
   }
@@ -122,5 +202,9 @@ export class Product {
 
   static async deleteTagOnProduct(id: string) {
     return useDatabase().delete(productTagsOnProducts).where(eq(productTagsOnProducts.id, id))
+  }
+
+  static async deleteTagOnProductVariant(id: string) {
+    return useDatabase().delete(productVariantTagsOnProductVariants).where(eq(productVariantTagsOnProductVariants.id, id))
   }
 }

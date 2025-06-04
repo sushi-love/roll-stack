@@ -99,7 +99,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const product = await repository.product.find(productId)
-    if (product?.mediaId) {
+    if (product?.id && product?.mediaId) {
       const media = await repository.media.find(product.mediaId)
       if (media) {
         // Remove old images

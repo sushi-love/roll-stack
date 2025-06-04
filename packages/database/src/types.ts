@@ -36,6 +36,12 @@ export type ProductTagDraft = InferInsertModel<typeof tables.productTags>
 export type ProductTagOnProduct = InferSelectModel<typeof tables.productTagsOnProducts>
 export type ProductTagOnProductDraft = InferInsertModel<typeof tables.productTagsOnProducts>
 
+export type ProductVariantTag = InferSelectModel<typeof tables.productVariantTags>
+export type ProductVariantTagDraft = InferInsertModel<typeof tables.productVariantTags>
+
+export type ProductVariantTagOnProductVariant = InferSelectModel<typeof tables.productVariantTagsOnProductVariants>
+export type ProductVariantTagOnProductVariantDraft = InferInsertModel<typeof tables.productVariantTagsOnProductVariants>
+
 export type Media = InferSelectModel<typeof tables.media>
 export type MediaDraft = InferInsertModel<typeof tables.media>
 
