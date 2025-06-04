@@ -20,10 +20,6 @@ const { params } = useRoute('menu-menuId')
 const menuStore = useMenuStore()
 const menu = computed(() => menuStore.menus.find((menu) => menu.id === params.menuId))
 
-// if (!menu.menus) {
-//   throw createError({ statusCode: 404, statusMessage: 'Menu not found' })
-// }
-
 const { t } = useI18n()
 
 const categoryItems = computed(() => menu.value?.categories.map((category) => {

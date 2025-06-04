@@ -18,9 +18,11 @@
 
     <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
       <ProductCard
-        v-for="product in productsInCategory"
+        v-for="product in products"
         :key="product.id"
         :product-id="product.id"
+        :menu-id="category?.menuId ?? ''"
+        :category-id="category?.id ?? ''"
       />
       <CreateCard
         icon="i-lucide-cooking-pot"
@@ -38,14 +40,13 @@ const { t } = useI18n()
 const { params } = useRoute('menu-menuId-category-categoryId')
 
 const menuStore = useMenuStore()
-const productStore = useProductStore()
 
 const category = computed(() => menuStore.menus.find((menu) => menu.id === params.menuId)?.categories.find((c) => c.id === params.categoryId))
 if (!category.value) {
   throw createError({ statusCode: 404, statusMessage: 'Category not found' })
 }
 
-const productsInCategory = computed(() => productStore.products.filter((product) => product.categories.some((c) => c.menuCategoryId === params.categoryId)))
+const products = computed(() => category.value?.products || [])
 
 const overlay = useOverlay()
 const modalUpdateMenuCategory = overlay.create(ModalUpdateMenuCategory)

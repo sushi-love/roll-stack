@@ -1,8 +1,5 @@
-import type { Menu, MenuCategory } from '@sushi-atrium/database'
-
-type MenuWithData = Menu & {
-  categories: MenuCategory[]
-}
+import type { MenuCategory } from '@sushi-atrium/database'
+import type { MenuWithData } from '~~/types'
 
 export const useMenuStore = defineStore('menu', () => {
   const currencySign = ref('₽')

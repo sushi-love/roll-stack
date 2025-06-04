@@ -27,5 +27,12 @@ export type UpdateMenuCategory = typeof updateMenuCategorySchema.infer
 export const attachProductToMenuCategorySchema = type({
   categoryId: type('string'),
   productId: type('string'),
+  productVariantsId: type('string[]'),
 })
 export type AttachProductToMenuCategory = typeof attachProductToMenuCategorySchema.infer
+
+export const detachProductFromMenuCategorySchema = type({
+  categoryId: type('string'),
+  productId: type('string'),
+})
+export type DetachProductFromMenuCategory = typeof detachProductFromMenuCategorySchema.infer

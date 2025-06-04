@@ -1,6 +1,6 @@
 import { repository } from '@sushi-atrium/database'
 import { type } from 'arktype'
-import { attachProductToMenuCategorySchema } from '~~/shared/services/menu'
+import { detachProductFromMenuCategorySchema } from '~~/shared/services/menu'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody(event)
-    const data = attachProductToMenuCategorySchema(body)
+    const data = detachProductFromMenuCategorySchema(body)
     if (data instanceof type.errors) {
       throw data
     }

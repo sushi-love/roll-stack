@@ -134,6 +134,20 @@ export const productsInMenuCategories = pgTable('products_in_menu_categories', {
   }),
 })
 
+export const productVariantsOnMenuCategories = pgTable('product_variants_on_menu_categories', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  productInMenuCategoryId: cuid2('product_in_menu_category_id').notNull().references(() => productsInMenuCategories.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  productVariantId: cuid2('product_variant_id').notNull().references(() => productVariants.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
 export const productTags = pgTable('product_tags', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -306,7 +320,7 @@ export const productVariantRelations = relations(productVariants, ({ one, many }
   tags: many(productVariantTagsOnProductVariants),
 }))
 
-export const productsInMenuCategoriesRelations = relations(productsInMenuCategories, ({ one }) => ({
+export const productsInMenuCategoriesRelations = relations(productsInMenuCategories, ({ one, many }) => ({
   category: one(menuCategories, {
     fields: [productsInMenuCategories.menuCategoryId],
     references: [menuCategories.id],
@@ -314,6 +328,18 @@ export const productsInMenuCategoriesRelations = relations(productsInMenuCategor
   product: one(products, {
     fields: [productsInMenuCategories.productId],
     references: [products.id],
+  }),
+  productVariants: many(productVariantsOnMenuCategories),
+}))
+
+export const productVariantsOnMenuCategoriesRelations = relations(productVariantsOnMenuCategories, ({ one }) => ({
+  productInMenuCategory: one(productsInMenuCategories, {
+    fields: [productVariantsOnMenuCategories.productInMenuCategoryId],
+    references: [productsInMenuCategories.id],
+  }),
+  productVariant: one(productVariants, {
+    fields: [productVariantsOnMenuCategories.productVariantId],
+    references: [productVariants.id],
   }),
 }))
 

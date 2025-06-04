@@ -114,7 +114,7 @@ async function onDelete() {
   emit('submitted')
 
   try {
-    await $fetch(`/api/category/id/${categoryId}`, {
+    await $fetch(`/api/menu/category/id/${categoryId}`, {
       method: 'DELETE',
     })
 

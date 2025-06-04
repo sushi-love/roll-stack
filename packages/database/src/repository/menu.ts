@@ -1,16 +1,53 @@
-import type { MenuCategoryDraft, MenuDraft } from '../types'
+import type { MenuCategoryDraft, MenuDraft, ProductVariantsOnMenuCategoryDraft } from '../types'
 import { and, eq } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { menuCategories, menus, productsInMenuCategories } from '../tables'
+import { menuCategories, menus, productsInMenuCategories, productVariantsOnMenuCategories } from '../tables'
 
 export class Menu {
   static async find(id: string) {
-    return useDatabase().query.menus.findFirst({
+    const menu = await useDatabase().query.menus.findFirst({
       where: (menus, { eq }) => eq(menus.id, id),
       with: {
-        categories: true,
+        categories: {
+          with: {
+            products: {
+              orderBy: (product, { asc }) => asc(product.updatedAt),
+              with: {
+                product: {
+                  with: {
+                    media: {
+                      with: {
+                        items: true,
+                      },
+                    },
+                  },
+                },
+                productVariants: {
+                  orderBy: (variant, { asc }) => asc(variant.updatedAt),
+                  with: {
+                    productVariant: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     })
+    if (!menu) {
+      return
+    }
+
+    return {
+      ...menu,
+      categories: menu.categories.map((category) => ({
+        ...category,
+        products: category.products.map((product) => ({
+          ...product.product,
+          variants: product.productVariants.map((productVariant) => productVariant.productVariant),
+        })),
+      })),
+    }
   }
 
   static async findCategory(id: string) {
@@ -23,11 +60,45 @@ export class Menu {
   }
 
   static async list() {
-    return useDatabase().query.menus.findMany({
+    const menus = await useDatabase().query.menus.findMany({
       with: {
-        categories: true,
+        categories: {
+          with: {
+            products: {
+              orderBy: (product, { asc }) => asc(product.updatedAt),
+              with: {
+                product: {
+                  with: {
+                    media: {
+                      with: {
+                        items: true,
+                      },
+                    },
+                  },
+                },
+                productVariants: {
+                  orderBy: (variant, { asc }) => asc(variant.updatedAt),
+                  with: {
+                    productVariant: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     })
+
+    return menus.map((menu) => ({
+      ...menu,
+      categories: menu.categories.map((category) => ({
+        ...category,
+        products: category.products.map((product) => ({
+          ...product.product,
+          variants: product.productVariants.map((productVariant) => productVariant.productVariant),
+        })),
+      })),
+    }))
   }
 
   static async create(data: MenuDraft) {
@@ -37,6 +108,11 @@ export class Menu {
 
   static async createCategory(data: MenuCategoryDraft) {
     const [category] = await useDatabase().insert(menuCategories).values(data).returning()
+    return category
+  }
+
+  static async createProductVariantOnCategory(data: ProductVariantsOnMenuCategoryDraft) {
+    const [category] = await useDatabase().insert(productVariantsOnMenuCategories).values(data).returning()
     return category
   }
 
@@ -62,11 +138,25 @@ export class Menu {
     return useDatabase().delete(menus).where(eq(menus.id, id))
   }
 
-  static async attachProduct(categoryId: string, productId: string) {
+  static async deleteCategory(id: string) {
+    return useDatabase().delete(menuCategories).where(eq(menuCategories.id, id))
+  }
+
+  static async attachProduct(categoryId: string, productId: string, productVariantsId: string[]) {
     const [product] = await useDatabase().insert(productsInMenuCategories).values({
       menuCategoryId: categoryId,
       productId,
     }).returning()
+    if (!product) {
+      return
+    }
+
+    for (const productVariantId of productVariantsId) {
+      await Menu.createProductVariantOnCategory({
+        productInMenuCategoryId: product.id,
+        productVariantId,
+      })
+    }
 
     return product
   }

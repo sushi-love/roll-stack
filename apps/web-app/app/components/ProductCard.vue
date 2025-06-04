@@ -20,7 +20,7 @@
         </div>
 
         <div class="px-3 py-3 h-full flex flex-col justify-between">
-          <p class="text-sm leading-tight line-clamp-2">
+          <p class="font-medium leading-tight line-clamp-2">
             {{ product?.name }}
           </p>
 
@@ -45,15 +45,17 @@
 </template>
 
 <script setup lang="ts">
-const { productId } = defineProps<{
+const { productId, menuId, categoryId } = defineProps<{
   productId: string
+  menuId: string
+  categoryId: string
 }>()
 
 const { locale } = useI18n()
 
 const menuStore = useMenuStore()
-const productStore = useProductStore()
 
-const product = computed(() => productStore.products.find((product) => product.id === productId))
+const product = computed(() => menuStore.menus.find((menu) => menu.id === menuId)?.categories.find((category) => category.id === categoryId)?.products.find((product) => product.id === productId))
+
 const isWarning = computed(() => product.value?.variants?.length === 0 || !product.value?.isAvailableForPurchase)
 </script>

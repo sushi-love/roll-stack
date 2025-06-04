@@ -75,7 +75,7 @@
         thead: '[&>tr]:after:content-none',
         tbody: '[&>tr]:last:[&>td]:border-b-0',
         th: 'py-1 bg-elevated/50 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
-        td: 'border-b border-default [&:has([data-media=true]))]:px-0 [&:has([data-media=true]))]:max-w-10 [&:has([data-action=true]))]:pr-0',
+        td: 'border-b border-default [&:has([data-media=true]))]:px-0 [&:has([data-media=true]))]:max-w-16 [&:has([data-action=true]))]:pr-0',
       }"
     >
       <template #id-cell="{ row }">
@@ -92,6 +92,11 @@
         <ULink :to="`/product/${row.getValue('id')}`" class="font-medium text-highlighted">
           {{ row.getValue('name') }}
         </ULink>
+      </template>
+      <template #description-cell="{ row }">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-64">
+          {{ row.getValue('description') }}
+        </div>
       </template>
       <template #variants-cell="{ row }">
         <div class="flex flex-col gap-1">
@@ -190,7 +195,7 @@ const columnVisibility = ref({
 const rowSelection = ref()
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 50,
+  pageSize: 100,
 })
 
 const columns: Ref<TableColumn<ProductWithData>[]> = ref([{
@@ -203,6 +208,9 @@ const columns: Ref<TableColumn<ProductWithData>[]> = ref([{
 }, {
   accessorKey: 'name',
   header: 'Название',
+}, {
+  accessorKey: 'description',
+  header: 'Описание',
 }, {
   accessorKey: 'variants',
   header: 'Вариации продукта',

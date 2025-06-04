@@ -15,6 +15,17 @@
       />
     </UFormField>
 
+    <UFormField label="Вариации" name="variations">
+      <USelectMenu
+        v-model="selectedVariants"
+        :items="availableVariants"
+        :placeholder="$t('common.select')"
+        multiple
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
     <UButton
       type="submit"
       variant="solid"
@@ -49,13 +60,21 @@ const availableProducts = computed(() => productStore.products.filter((p) => !pr
 const preparedProducts = computed(() => availableProducts.value.map((p) => ({ label: p.name, value: p.id })))
 const selectedProduct = ref<{ label: string, value: string }>()
 
+const availableVariants = computed(() => selectedProduct.value ? productStore.products.find((p) => p.id === selectedProduct.value?.value)?.variants.map((v) => ({ label: `${v.name}, ${v.gross} ${menuStore.currencySign} / ${v.tags.map((t) => t.name).join(', ')}`, value: v.id })) : [])
+const selectedVariants = ref<{ label: string, value: string }[]>([])
+
 const state = ref<AttachProductToMenuCategory>({
   categoryId,
   productId: '',
+  productVariantsId: [],
 })
 
 watch(selectedProduct, () => {
   state.value.productId = selectedProduct.value?.value || ''
+})
+
+watch(selectedVariants, () => {
+  state.value.productVariantsId = selectedVariants.value.map((v) => v.value)
 })
 
 async function onSubmit(event: FormSubmitEvent<AttachProductToMenuCategory>) {

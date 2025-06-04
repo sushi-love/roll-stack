@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    await repository.menu.attachProduct(categoryId, data.productId)
+    await repository.menu.attachProduct(categoryId, data.productId, data.productVariantsId)
 
     return { ok: true }
   } catch (error) {
