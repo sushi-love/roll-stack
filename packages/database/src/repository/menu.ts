@@ -9,6 +9,7 @@ export class Menu {
       where: (menus, { eq }) => eq(menus.id, id),
       with: {
         categories: {
+          orderBy: (category, { asc }) => asc(category.priority),
           with: {
             products: {
               orderBy: (product, { asc }) => asc(product.updatedAt),
@@ -63,6 +64,7 @@ export class Menu {
     const menus = await useDatabase().query.menus.findMany({
       with: {
         categories: {
+          orderBy: (category, { asc }) => asc(category.priority),
           with: {
             products: {
               orderBy: (product, { asc }) => asc(product.updatedAt),

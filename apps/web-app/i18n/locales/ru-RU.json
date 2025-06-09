@@ -197,6 +197,17 @@
       }
     }
   },
+  "storefront": {
+    "open-category": "Открыть категорию",
+    "catalog": "Каталог",
+    "category-page-description": "Здесь представлены все товары из этой категории",
+    "cart": {
+      "from": "от",
+      "add": "Добавить",
+      "add-full": "Добавить в корзину"
+    },
+    "search-placeholder": "Найти блюдо"
+  },
   "error": {
     "common": "Неверное значение",
     "not-selected": "Не выбрано",

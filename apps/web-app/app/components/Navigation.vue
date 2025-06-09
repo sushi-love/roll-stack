@@ -79,6 +79,13 @@ const menuItems = computed(() => [
 
 const linkItems = computed(() => [
   {
+    label: 'Новое меню',
+    to: '/storefront',
+    target: '_blank',
+    icon: 'i-lucide-flask-conical',
+    active: route.path.startsWith('/storefront'),
+  },
+  {
     label: 'Все задачи',
     to: '/head/task',
     icon: 'i-lucide-list-checks',

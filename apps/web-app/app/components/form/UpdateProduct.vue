@@ -81,6 +81,7 @@ const { t } = useI18n()
 const router = useRouter()
 const actionToast = useActionToast()
 
+const menuStore = useMenuStore()
 const productStore = useProductStore()
 const product = computed(() => productStore.products.find((product) => product.id === productId))
 
@@ -109,6 +110,7 @@ async function onSubmit(event: FormSubmitEvent<UpdateProduct>) {
     })
 
     await productStore.update()
+    await menuStore.update()
 
     actionToast.success(toastId, t('toast.product-updated'))
     emit('success')
@@ -128,6 +130,7 @@ async function onDelete() {
     })
 
     await productStore.update()
+    await menuStore.update()
 
     actionToast.success(toastId, t('toast.product-deleted'))
     emit('success')

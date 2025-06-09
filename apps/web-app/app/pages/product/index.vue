@@ -195,7 +195,7 @@ const columnVisibility = ref({
 const rowSelection = ref()
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 100,
+  pageSize: 50,
 })
 
 const columns: Ref<TableColumn<ProductWithData>[]> = ref([{

@@ -83,6 +83,7 @@ export const menuCategories = pgTable('menu_categories', {
   slug: varchar('slug').notNull(),
   name: varchar('name').notNull(),
   icon: varchar('icon'),
+  priority: integer('priority').notNull().default(0),
   menuId: cuid2('menu_id').notNull().references(() => menus.id, {
     onDelete: 'cascade',
     onUpdate: 'cascade',

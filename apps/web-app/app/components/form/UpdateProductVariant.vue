@@ -236,6 +236,7 @@ async function onSubmit(event: FormSubmitEvent<UpdateProductVariant>) {
     })
 
     await productStore.update()
+    await menuStore.update()
 
     actionToast.success(toastId, t('toast.variant-updated'))
     emit('success')
@@ -255,6 +256,7 @@ async function onDelete() {
     })
 
     await productStore.update()
+    await menuStore.update()
 
     actionToast.success(toastId, t('toast.variant-deleted'))
     emit('success')

@@ -1,5 +1,7 @@
-import type { MenuCategory } from '@sushi-atrium/database'
+import type { MenuCategory, Product } from '@sushi-atrium/database'
 import type { MenuWithData } from '~~/types'
+
+type ProductWithCategory = Product & { category: MenuCategory }
 
 export const useMenuStore = defineStore('menu', () => {
   const currencySign = ref('₽')
@@ -32,6 +34,23 @@ export const useMenuStore = defineStore('menu', () => {
     }
   }
 
+  function getProductsForSearch(menuId: string): ProductWithCategory[] {
+    const menu = menus.value.find((menu) => menu.id === menuId)
+    if (!menu) {
+      return []
+    }
+
+    const result: ProductWithCategory[] = []
+
+    menu.categories.forEach((category) => {
+      category.products.forEach((product) => {
+        result.push({ ...product, category })
+      })
+    })
+
+    return result
+  }
+
   return {
     currencySign,
     menus,
@@ -39,5 +58,6 @@ export const useMenuStore = defineStore('menu', () => {
     categories,
 
     update,
+    getProductsForSearch,
   }
 })
