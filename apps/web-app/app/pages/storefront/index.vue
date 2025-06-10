@@ -1,19 +1,19 @@
 <template>
-  <div class="mb-12 flex flex-row gap-6 items-center">
+  <div class="mb-12 flex flex-row gap-6 md:items-center">
     <div class="flex flex-col items-center justify-center shrink-0 size-28 bg-secondary rounded-lg">
       <img
-        src="/sushi-heart.svg"
+        src="/sushi-heart-light.png"
         alt=""
-        class="w-20 h-auto grayscale-100 brightness-1000 motion-preset-pulse motion-duration-4000"
+        class="w-20 h-auto motion-preset-pulse motion-duration-4000"
       >
     </div>
 
     <div class="flex flex-col gap-2">
-      <h1 class="text-3xl md:text-4xl font-semibold tracking-tight">
+      <h1 class="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight">
         {{ menu?.name }}
       </h1>
-      <div class="max-w-xl text-lg/5">
-        Более 170 гастрономических открытий ждут вас в нашем новом меню - от традиционных суши до смелых кулинарных экспериментов.
+      <div class="max-w-xl text-base/5 md:text-lg/5">
+        Более 180 гастрономических открытий ждут вас в нашем новом меню - от традиционных суши до смелых кулинарных экспериментов.
       </div>
     </div>
   </div>
