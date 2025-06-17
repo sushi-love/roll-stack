@@ -1,5 +1,17 @@
 <template>
   <div class="flex flex-col gap-4 flex-1 overflow-y-auto py-2">
+    <div class="px-0 flex flex-col gap-1">
+      <UButton
+        variant="link"
+        color="secondary"
+        size="md"
+        class="!text-secondary px-2.5 py-0 text-lg font-semibold cursor-pointer"
+        @click="modalCitySelector.open()"
+      >
+        {{ city?.name }}
+      </UButton>
+    </div>
+
     <div class="px-2.5 flex flex-col gap-1">
       <NuxtLink
         href="/"
@@ -30,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ModalDeliveryInfo } from '#components'
+import { ModalCitySelector, ModalDeliveryInfo } from '#components'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -38,8 +50,13 @@ const route = useRoute()
 const menuStore = useMenuStore()
 const checkoutStore = useCheckoutStore()
 
+const { public: publicEnv } = useRuntimeConfig()
+const cityStore = useCityStore()
+const city = computed(() => cityStore.cities.find((c) => c.id === publicEnv.cityId))
+
 const overlay = useOverlay()
 const modalDeliveryInfo = overlay.create(ModalDeliveryInfo)
+const modalCitySelector = overlay.create(ModalCitySelector)
 
 const preparedCategories = computed(() => menuStore.menu?.categories.map((c) => ({
   label: c.name,

@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       mediaUrl: '',
+      cityId: '',
     },
   },
   css: ['~/assets/css/styles.css'],
