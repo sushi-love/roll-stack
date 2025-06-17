@@ -6,6 +6,18 @@
 @theme static {
   --font-sans: Nunito Sans, sans-serif;
   --font-headers: Nunito, sans-serif;
+
+  --color-green-50: #eef8ed;
+  --color-green-100: #ddf1da;
+  --color-green-200: #bbe3b6;
+  --color-green-300: #98d591;
+  --color-green-400: #76c76d;
+  --color-green-500: #54b948;
+  --color-green-600: #43943a;
+  --color-green-700: #326f2b;
+  --color-green-800: #224a1d;
+  --color-green-900: #11250e;
+  --color-green-950: #11250e;
 }
 
 :root {

@@ -10,7 +10,7 @@ export default defineAppConfig({
   ui: {
     colors: {
       primary: 'black',
-      secondary: 'lime',
+      secondary: 'green',
       neutral: 'zinc',
       error: 'rose',
     },
@@ -23,9 +23,6 @@ export default defineAppConfig({
           xl: {
             base: 'px-4 py-3 font-semibold',
           },
-        },
-        variant: {
-          gradient: 'text-neutral-950 bg-linear-to-br from-lime-300 to-green-400 hover:opacity-90 disabled:bg-none disabled:bg-(--ui-bg-accented) disabled:text-neutral-400 aria-disabled:bg-(--ui-bg-accented) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary)',
         },
       },
     },

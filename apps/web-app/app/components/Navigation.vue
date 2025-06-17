@@ -80,10 +80,9 @@ const menuItems = computed(() => [
 const linkItems = computed(() => [
   {
     label: 'Новое меню',
-    to: '/storefront',
+    to: 'https://orderdemo.online',
     target: '_blank',
     icon: 'i-lucide-flask-conical',
-    active: route.path.startsWith('/storefront'),
   },
   {
     label: 'Все задачи',

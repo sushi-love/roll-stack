@@ -13,6 +13,16 @@ type NotificationType = 'task_completed'
 
 type ResolutionType = 'success' | 'failure' | 'unknown'
 
+type CheckoutStatus = 'forming'
+  | 'canceled'
+  | 'created'
+  | 'confirmed'
+  | 'cooking'
+  | 'prepared'
+  | 'on_delivery'
+  | 'at_client'
+type CheckoutDeliveryMethod = 'delivery' | 'pickup'
+
 export const users = pgTable('users', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -247,6 +257,33 @@ export const notifications = pgTable('notifications', {
   taskId: cuid2('task_id').references(() => tasks.id),
 })
 
+export const checkouts = pgTable('checkouts', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  status: varchar('status').notNull().$type<CheckoutStatus>(),
+  deliveryMethod: varchar('delivery_method').notNull().$type<CheckoutDeliveryMethod>(),
+  itemsPrice: numeric('items_price', { mode: 'number' }).notNull().default(0),
+  deliveryPrice: numeric('delivery_price', { mode: 'number' }).notNull().default(0),
+  totalPrice: numeric('total_price', { mode: 'number' }).notNull().default(0),
+  name: varchar('name'),
+  phone: varchar('phone'),
+})
+
+export const checkoutItems = pgTable('checkout_items', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  quantity: integer('quantity').notNull().default(1),
+  unitPrice: numeric('unit_price', { mode: 'number' }).notNull().default(0),
+  totalPrice: numeric('total_price', { mode: 'number' }).notNull().default(0),
+  productVariantId: cuid2('product_variant_id').notNull().references(() => productVariants.id),
+  checkoutId: cuid2('checkout_id').notNull().references(() => checkouts.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
@@ -408,5 +445,20 @@ export const notificationRelations = relations(notifications, ({ one }) => ({
   task: one(tasks, {
     fields: [notifications.taskId],
     references: [tasks.id],
+  }),
+}))
+
+export const checkoutRelations = relations(checkouts, ({ many }) => ({
+  items: many(checkoutItems),
+}))
+
+export const checkoutItemRelations = relations(checkoutItems, ({ one }) => ({
+  checkout: one(checkouts, {
+    fields: [checkoutItems.checkoutId],
+    references: [checkouts.id],
+  }),
+  productVariant: one(productVariants, {
+    fields: [checkoutItems.productVariantId],
+    references: [productVariants.id],
   }),
 }))

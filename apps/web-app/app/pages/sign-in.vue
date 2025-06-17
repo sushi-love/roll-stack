@@ -2,9 +2,9 @@
   <div class="w-full h-screen mx-auto grid grid-cols-1 lg:grid-cols-2">
     <div class="hidden lg:block bg-[#54b948]">
       <img
-        src="/sushi-heart.svg"
+        src="/sushi-heart-light.png"
         alt=""
-        class="w-2/3 opacity-10 brightness-[1000] absolute bottom-0 left-0 motion-preset-pulse motion-duration-4000"
+        class="w-2/3 max-w-4xl opacity-10 fixed bottom-0 left-0 motion-preset-pulse motion-duration-4000"
       >
     </div>
 

@@ -51,6 +51,15 @@ export class Menu {
     }
   }
 
+  static async checkIfUpdated(id: string) {
+    const [menu] = await useDatabase().select({
+      id: menus.id,
+      updatedAt: menus.updatedAt,
+    }).from(menus).where(eq(menus.id, id))
+
+    return menu
+  }
+
   static async findCategory(id: string) {
     return useDatabase().query.menuCategories.findFirst({
       where: (menuCategories, { eq }) => eq(menuCategories.id, id),

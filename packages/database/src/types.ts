@@ -59,3 +59,9 @@ export type TaskListDraft = InferInsertModel<typeof tables.taskLists>
 
 export type Notification = InferSelectModel<typeof tables.notifications>
 export type NotificationDraft = InferInsertModel<typeof tables.notifications>
+
+export type Checkout = InferSelectModel<typeof tables.checkouts>
+export type CheckoutDraft = InferInsertModel<typeof tables.checkouts>
+
+export type CheckoutItem = InferSelectModel<typeof tables.checkoutItems>
+export type CheckoutItemDraft = InferInsertModel<typeof tables.checkoutItems>
