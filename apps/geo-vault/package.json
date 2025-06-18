@@ -1,0 +1,30 @@
+{
+  "name": "@sushi-atrium/geo-vault",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --port 3503",
+    "preview": "PORT=3501 nuxt preview",
+    "clean": "rm -rf dist",
+    "clean:modules": "rm -rf .nuxt node_modules",
+    "typecheck": "nuxt typecheck",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@sushi-atrium/database": "workspace:*",
+    "arktype": "catalog:",
+    "aws4fetch": "catalog:",
+    "date-fns": "catalog:",
+    "ioredis": "catalog:",
+    "libphonenumber-js": "catalog:",
+    "ru-nalog-fias-gar": "catalog:",
+    "sharp": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "nuxt": "catalog:",
+    "nuxt-auth-utils": "catalog:"
+  }
+}
