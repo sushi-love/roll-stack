@@ -33,8 +33,12 @@ useHead({
 })
 
 // Init Stores
-const menu = useMenuStore()
-const checkout = useCheckoutStore()
+const menuStore = useMenuStore()
+const checkoutStore = useCheckoutStore()
+const cityStore = useCityStore()
+
+// Always update cities
+await cityStore.update()
 
 onMounted(async () => {
   if (!publicEnv.cityId) {
@@ -43,8 +47,8 @@ onMounted(async () => {
   }
 
   await Promise.all([
-    menu.update(),
-    checkout.update(),
+    menuStore.update(),
+    checkoutStore.update(),
   ])
 })
 </script>

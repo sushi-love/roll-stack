@@ -296,6 +296,17 @@ export const kitchens = pgTable('kitchens', {
   longitude: numeric('longitude', { mode: 'number' }),
 })
 
+export const cities = pgTable('cities', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  code: varchar('code').notNull(),
+  name: varchar('name').notNull(),
+  storefrontUrl: varchar('storefront_url'),
+  latitude: numeric('latitude', { mode: 'number' }),
+  longitude: numeric('longitude', { mode: 'number' }),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
