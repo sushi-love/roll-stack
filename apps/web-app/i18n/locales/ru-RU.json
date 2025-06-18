@@ -239,6 +239,7 @@
     "task-list-deleted": "Список задач удален",
     "chat-created": "Чат создан",
     "chat-updated": "Чат обновлен",
-    "chat-deleted": "Чат удален"
+    "chat-deleted": "Чат удален",
+    "user-updated": "Пользователь обновлен"
   }
 }

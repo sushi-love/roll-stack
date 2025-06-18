@@ -3,7 +3,7 @@
     :ui="{ footer: 'justify-end', header: 'min-h-30 pb-2' }"
     :close="dismissible"
     :dismissible="dismissible"
-    class="!h-1/2 max-w-sm"
+    class="h-2/3 lg:h-1/2 max-w-sm"
   >
     <template #header>
       <div class="w-full flex flex-col gap-2">

@@ -26,6 +26,17 @@ useHead({
   },
 })
 
+// Fix system theme
+const colorMode = useColorMode()
+watch(colorMode, () => {
+  const colorModeStorage = localStorage.getItem('color-mode')
+
+  if (colorMode.value === 'system' || colorModeStorage === 'system') {
+    colorMode.value = 'light'
+    localStorage.setItem('color-mode', 'light')
+  }
+})
+
 // Init Stores
 const user = useUserStore()
 const menu = useMenuStore()
