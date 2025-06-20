@@ -37,6 +37,10 @@ export class Task {
     })
   }
 
+  static async autoCreatorsList() {
+    return useDatabase().query.taskAutoCreators.findMany()
+  }
+
   static async create(data: TaskDraft) {
     const [task] = await useDatabase().insert(tasks).values(data).returning()
     return task

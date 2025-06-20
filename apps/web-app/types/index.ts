@@ -23,3 +23,5 @@ export type MenuWithData = Menu & {
 export type MediaWithItems = Media & {
   items: MediaItem[]
 }
+
+export type PermissionCode = 'product:view' | 'product:edit' | 'product:delete' | 'product:image:edit'

@@ -4,6 +4,8 @@ import { updateProductVariantSchema } from '~~/shared/services/product'
 
 export default defineEventHandler(async (event) => {
   try {
+    await hasPermission(event, 'product:edit')
+
     const variantId = getRouterParam(event, 'variantId')
     if (!variantId) {
       throw createError({

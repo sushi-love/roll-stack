@@ -2,6 +2,8 @@ import { repository } from '@sushi-atrium/database'
 
 export default defineEventHandler(async (event) => {
   try {
+    await hasPermission(event, 'product:delete')
+
     const variantId = getRouterParam(event, 'variantId')
     if (!variantId) {
       throw createError({

@@ -5,6 +5,8 @@ import { createProductSchema } from '~~/shared/services/product'
 
 export default defineEventHandler(async (event) => {
   try {
+    await hasPermission(event, 'product:edit')
+
     const body = await readBody(event)
     const data = createProductSchema(body)
     if (data instanceof type.errors) {

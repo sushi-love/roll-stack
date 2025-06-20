@@ -1,9 +1,11 @@
 import { cuid2 } from 'drizzle-cuid2/postgres'
 import { relations } from 'drizzle-orm'
-import { boolean, date, integer, numeric, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { boolean, date, integer, jsonb, numeric, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
 
-type UserType = 'staff' | 'head' | 'partner' | 'guest' | 'bot'
+type UserType = 'staff' | 'head' | 'partner' | 'guest' | 'bot' | 'bot_agent'
 type UserGender = 'male' | 'female' | 'unknown'
+
+type PermissionCode = 'product:view' | 'product:edit' | 'product:delete' | 'product:image:edit'
 
 type WeightUnit = 'G' | 'KG' | 'ML' | 'L' | 'OZ' | 'LB'
 
@@ -23,6 +25,14 @@ type CheckoutStatus = 'forming'
   | 'at_client'
 type CheckoutDeliveryMethod = 'delivery' | 'pickup'
 
+export const permissions = pgTable('permissions', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  code: varchar('code').notNull(),
+  description: varchar('description'),
+})
+
 export const users = pgTable('users', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -37,6 +47,7 @@ export const users = pgTable('users', {
   avatarUrl: varchar('avatar_url'),
   prestige: integer('prestige').notNull().default(0),
   focusedTaskId: cuid2('focused_task_id'),
+  permissions: jsonb('permissions').notNull().default([]).$type<PermissionCode[]>(),
 })
 
 export const chats = pgTable('chats', {
@@ -241,6 +252,18 @@ export const taskLists = pgTable('task_lists', {
   name: varchar('name').notNull(),
   userId: cuid2('user_id').references(() => users.id),
   chatId: cuid2('chat_id').references(() => chats.id),
+})
+
+export const taskAutoCreators = pgTable('task_auto_creators', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  cron: varchar('cron').notNull(),
+  templateTitle: varchar('template_title').notNull(),
+  templateDescription: varchar('template_description'),
+  templateDate: varchar('template_date'),
+  listId: cuid2('list_id').notNull().references(() => taskLists.id),
+  performerId: cuid2('performer_id').references(() => users.id),
 })
 
 export const notifications = pgTable('notifications', {

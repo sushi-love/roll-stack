@@ -4,6 +4,8 @@ import { createProductVariantSchema } from '~~/shared/services/product'
 
 export default defineEventHandler(async (event) => {
   try {
+    await hasPermission(event, 'product:edit')
+
     const body = await readBody(event)
     const data = createProductVariantSchema(body)
     if (data instanceof type.errors) {

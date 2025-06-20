@@ -32,10 +32,6 @@
       </p>
     </div>
 
-    <p class="text-sm text-muted">
-      Описание, контакты, какие вопросы может решать, какие задачи может выполнять...
-    </p>
-
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <TaskPerformerList
         :tasks="otherTasks"

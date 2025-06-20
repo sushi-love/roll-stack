@@ -4,6 +4,8 @@ import { updateProductSchema } from '~~/shared/services/product'
 
 export default defineEventHandler(async (event) => {
   try {
+    await hasPermission(event, 'product:edit')
+
     const productId = getRouterParam(event, 'productId')
     if (!productId) {
       throw createError({

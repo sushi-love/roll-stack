@@ -29,6 +29,14 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./stores/**'],
   },
+  nitro: {
+    experimental: {
+      tasks: true,
+    },
+    scheduledTasks: {
+      '* * * * *': ['task:auto-create'],
+    },
+  },
   tiptap: {
     prefix: 'Tiptap',
   },

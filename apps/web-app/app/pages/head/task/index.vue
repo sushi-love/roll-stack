@@ -79,7 +79,9 @@
       <template #performerId-cell="{ row }">
         <div class="flex items-center justify-center">
           <UserPopover :user="userStore.staff.find((staff) => staff.id === row.getValue('performerId'))">
-            <UAvatar :src="userStore.staff.find((staff) => staff.id === row.getValue('performerId'))?.avatarUrl ?? undefined" class="hover:scale-110 duration-200" />
+            <NuxtLink :to="`/staff/${row.getValue('performerId')}`">
+              <UAvatar :src="userStore.staff.find((staff) => staff.id === row.getValue('performerId'))?.avatarUrl ?? undefined" class="hover:scale-110 duration-200" />
+            </NuxtLink>
           </UserPopover>
         </div>
       </template>
@@ -134,7 +136,7 @@
           {{ row.getValue('report') }}
         </div>
       </template>
-      <template #action-cell="{ row }">
+      <!-- <template #action-cell="{ row }">
         <div class="flex items-end" data-action="true">
           <UDropdownMenu
             :items="getDropdownActions(row.original as Task)"
@@ -148,7 +150,7 @@
             />
           </UDropdownMenu>
         </div>
-      </template>
+      </template> -->
     </UTable>
 
     <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
@@ -173,8 +175,9 @@
 </template>
 
 <script setup lang="ts">
-import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
+import type { TableColumn } from '@nuxt/ui'
 import type { Task } from '@sushi-atrium/database'
+import { NuxtLink } from '#components'
 import { DateFormatter } from '@internationalized/date'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
@@ -300,22 +303,22 @@ const columns: Ref<TableColumn<Task>[]> = ref([{
   enableHiding: false,
 }])
 
-function getDropdownActions(_: Task): DropdownMenuItem[][] {
-  return [
-    [
-      {
-        type: 'label',
-        label: t('common.actions'),
-      },
-      // {
-      //   label: t('common.open-page'),
-      //   type: 'link',
-      //   to: `/menu/${category.menuId}/category/${category.id}`,
-      //   icon: 'i-lucide-notebook-text',
-      // },
-    ],
-  ]
-}
+// function getDropdownActions(_: Task): DropdownMenuItem[][] {
+//   return [
+//     [
+//       {
+//         type: 'label',
+//         label: t('common.actions'),
+//       },
+//       // {
+//       //   label: t('common.open-page'),
+//       //   type: 'link',
+//       //   to: `/menu/${category.menuId}/category/${category.id}`,
+//       //   icon: 'i-lucide-notebook-text',
+//       // },
+//     ],
+//   ]
+// }
 
 const table = useTemplateRef('table')
 

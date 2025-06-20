@@ -3,6 +3,9 @@ import type * as tables from './tables'
 
 export type { Database } from './connection'
 
+export type Permission = InferSelectModel<typeof tables.permissions>
+export type PermissionDraft = InferInsertModel<typeof tables.permissions>
+
 export type User = InferSelectModel<typeof tables.users>
 export type UserDraft = InferInsertModel<typeof tables.users>
 
@@ -56,6 +59,9 @@ export type TaskDraft = InferInsertModel<typeof tables.tasks>
 
 export type TaskList = InferSelectModel<typeof tables.taskLists>
 export type TaskListDraft = InferInsertModel<typeof tables.taskLists>
+
+export type taskAutoCreator = InferSelectModel<typeof tables.taskAutoCreators>
+export type taskAutoCreatorDraft = InferInsertModel<typeof tables.taskAutoCreators>
 
 export type Notification = InferSelectModel<typeof tables.notifications>
 export type NotificationDraft = InferInsertModel<typeof tables.notifications>
