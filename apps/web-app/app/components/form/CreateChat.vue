@@ -59,6 +59,7 @@ const { t } = useI18n()
 const actionToast = useActionToast()
 const chatStore = useChatStore()
 const userStore = useUserStore()
+const taskStore = useTaskStore()
 
 const state = ref<Partial<CreateChat>>({
   name: undefined,
@@ -92,6 +93,7 @@ async function onSubmit(event: FormSubmitEvent<CreateChat>) {
 
     await chatStore.update()
     await userStore.update()
+    await taskStore.update()
 
     actionToast.success(toastId, t('toast.chat-created'))
     emit('success')

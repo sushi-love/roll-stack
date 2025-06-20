@@ -1,13 +1,7 @@
 <template>
   <div class="h-16 shrink-0 flex items-center justify-between border-b border-default px-4 sm:px-6 gap-1.5">
     <div class="flex items-center gap-1.5 min-w-0">
-      <UButton
-        icon="i-lucide-menu"
-        color="neutral"
-        variant="ghost"
-        class="visible lg:hidden"
-        @click="isNavbarOpened = true"
-      />
+      <HeaderMenuButton />
 
       <h1 class="flex items-center gap-1.5 font-medium text-lg text-highlighted truncate">
         {{ title }}
@@ -28,6 +22,4 @@
 
 <script setup lang="ts">
 defineProps<{ title: string }>()
-
-const { isNavbarOpened } = useApp()
 </script>

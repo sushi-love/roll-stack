@@ -5,7 +5,7 @@
         {{ list?.name }}
       </h3>
 
-      <UTooltip :text="$t('app.create.task.button')">
+      <UTooltip :text="`${$t('app.create.task.button')} в списке «${list?.name}»`">
         <UButton
           variant="solid"
           color="secondary"

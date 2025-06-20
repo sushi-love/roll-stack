@@ -115,6 +115,7 @@ export const useUserStore = defineStore('user', () => {
     id,
     name,
     surname,
+    caption,
     email,
     avatarUrl,
     focusedTaskId,

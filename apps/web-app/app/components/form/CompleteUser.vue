@@ -6,7 +6,7 @@
     class="flex flex-col gap-3"
     @submit="onSubmit"
   >
-    <UFormField label="Имя" name="name">
+    <UFormField :label="$t('common.name')" name="name">
       <UInput
         v-model="state.name"
         size="xl"
@@ -14,7 +14,7 @@
       />
     </UFormField>
 
-    <UFormField label="Фамилия" name="surname">
+    <UFormField :label="$t('common.surname')" name="surname">
       <UInput
         v-model="state.surname"
         size="xl"
@@ -30,7 +30,7 @@
       />
     </UFormField>
 
-    <UFormField label="Email" name="email">
+    <UFormField :label="$t('common.email')" name="email">
       <UInput
         v-model="state.email"
         size="xl"
@@ -38,7 +38,7 @@
       />
     </UFormField>
 
-    <UFormField label="Должность или короткое описание" name="caption">
+    <UFormField :label="$t('common.caption')" name="caption">
       <UInput
         v-model="state.caption"
         size="xl"
@@ -99,7 +99,7 @@ async function onSubmit(event: FormSubmitEvent<CompleteUser>) {
   emit('submitted')
 
   try {
-    await $fetch(`/api/user/${userId}/complete`, {
+    await $fetch(`/api/user/id/${userId}/complete`, {
       method: 'POST',
       body: event.data,
     })

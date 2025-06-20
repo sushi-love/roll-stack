@@ -1,4 +1,6 @@
 <template>
+  <Header title="Все задачи" />
+
   <Content>
     <div class="flex flex-wrap items-center justify-between gap-1.5">
       <div class="flex flex-row gap-2.5">

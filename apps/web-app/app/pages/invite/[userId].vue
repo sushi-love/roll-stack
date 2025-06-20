@@ -32,7 +32,7 @@ definePageMeta({
 const { params } = useRoute('invite-userId')
 const { width, height } = useWindowSize()
 
-const { data, error } = await useFetch(`/api/user/${params.userId}`)
+const { data, error } = await useFetch(`/api/user/id/${params.userId}`)
 if (error.value) {
   await navigateTo('/')
 }

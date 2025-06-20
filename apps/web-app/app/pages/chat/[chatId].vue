@@ -1,5 +1,14 @@
 <template>
   <div class="h-16 shrink-0 flex items-center justify-between border-b border-default px-4 sm:px-6 gap-1.5">
+    <UButton
+      icon="i-lucide-arrow-left"
+      color="neutral"
+      variant="ghost"
+      class="visible lg:hidden"
+      to="/chat"
+      external
+    />
+
     <div class="flex items-center gap-4 sm:my-1.5">
       <UPopover
         mode="hover"
@@ -45,7 +54,7 @@
         </template>
       </UPopover>
 
-      <div class="min-w-0">
+      <div class="hidden md:block min-w-0">
         <p class="text-sm font-semibold text-highlighted leading-5">
           {{ chat?.name }}
         </p>

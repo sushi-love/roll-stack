@@ -32,9 +32,9 @@
             isFocused ? 'text-info' : undefined,
           ],
         }"
-        class="group/task duration-200 motion-preset-bounce"
+        class="group/task duration-200 motion-preset-bounce cursor-pointer"
         :class="{
-          'text-neutral-900 bg-info-100 dark:bg-info-200 border-b-2 border-l-2 border-info-200 hover:bg-info-200 dark:hover:bg-info-300': isFocused,
+          'text-neutral-900 bg-info-100 dark:bg-inverted border-b-2 border-l-2 border-info-200 dark:border-info-300 hover:bg-info-200 dark:hover:bg-info-100': isFocused,
         }"
       >
         <div class="flex flex-col gap-2 items-start">

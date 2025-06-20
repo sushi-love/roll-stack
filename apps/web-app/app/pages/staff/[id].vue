@@ -10,7 +10,7 @@
           class="w-full rounded-lg"
         >
 
-        <UButton
+        <!-- <UButton
           v-if="canSendMessage"
           variant="solid"
           color="secondary"
@@ -18,7 +18,7 @@
           label="Написать"
           icon="i-lucide-message-square-text"
           block
-        />
+        /> -->
       </div>
     </div>
 
@@ -51,21 +51,21 @@
 const { t } = useI18n()
 const { params } = useRoute('staff-id')
 
-const { data, error } = await useFetch(`/api/user/${params.id}`)
+const { data, error } = await useFetch(`/api/user/id/${params.id}`)
 if (error.value) {
   await navigateTo('/')
 }
 
-const userStore = useUserStore()
+// const userStore = useUserStore()
 const taskStore = useTaskStore()
 
 const myLists = computed(() => taskStore.lists.filter((taskList) => taskList.userId === params.id))
 const otherLists = computed(() => taskStore.lists.filter((taskList) => taskList.userId !== params.id))
 const otherTasks = computed(() => otherLists.value.flatMap((list) => list.tasks).filter((task) => task.performerId === params.id))
 
-const canSendMessage = computed(() => {
-  return userStore.id !== data.value?.id
-})
+// const canSendMessage = computed(() => {
+//   return userStore.id !== data.value?.id
+// })
 
 useHead({
   title: t('common.staff'),

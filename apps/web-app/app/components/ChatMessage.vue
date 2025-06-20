@@ -7,7 +7,7 @@
   </div>
 
   <article class="group/message relative w-full scroll-mt-4 sm:scroll-mt-6">
-    <div class="relative flex items-start gap-2 pb-2" :class="{ 'ms-auto max-w-[75%] ltr:justify-end': side === 'right', 'rtl:justify-end': side === 'left' }">
+    <div class="relative flex items-start gap-2 pb-2" :class="{ 'ms-auto max-w-[90%] md:max-w-[85%] lg:max-w-[70%] ltr:justify-end': side === 'right', 'rtl:justify-end': side === 'left' }">
       <div class="inline-flex items-center justify-center min-h-6 mt-1.5">
         <UserPopover :user="user">
           <UAvatar :src="avatarUrl" class="hover:scale-110 duration-200" />
@@ -17,12 +17,12 @@
       <div
         class="min-h-12 min-w-18 relative bg-elevated/50 px-3.5 py-2 rounded-lg"
         :class="[
-          side === 'left' && 'text-neutral-900 bg-orange-100 dark:bg-orange-200 border-b-2 border-l-2 border-orange-200 dark:border-orange-300',
-          isBot && '!w-full !text-neutral-900 !bg-transparent !border-transparent !border-0',
+          side === 'left' && 'text-neutral-900 md:max-w-[85%] lg:max-w-[70%] bg-orange-100 dark:bg-orange-200 border-b-2 border-l-2 border-orange-200 dark:border-orange-300',
+          isBot && '!w-full !text-neutral-900 !max-w-full !bg-transparent !border-transparent !border-0',
         ]"
       >
         <div
-          class="text-base/6 font-medium whitespace-break-spaces text-pretty"
+          class="text-sm/5 md:text-base/5 font-medium whitespace-break-spaces text-pretty"
           :class="[
             side === 'left' && 'font-semibold',
             isBot && '!font-medium !text-muted !text-sm/5',

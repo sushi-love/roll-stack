@@ -3,8 +3,14 @@
 
   <Content>
     <template v-if="user.id">
-      <div class="flex flex-row gap-3.5">
-        <UAvatar :src="user?.avatarUrl ?? undefined" class="size-16" />
+      <div class="flex flex-row gap-3.5 items-center">
+        <UTooltip :text="$t('app.update.user-photo.button')">
+          <UAvatar
+            :src="user?.avatarUrl ?? undefined"
+            class="size-18 cursor-pointer hover:scale-95 active:scale-90 duration-200"
+            @click="modalUploadUserAvatar.open()"
+          />
+        </UTooltip>
 
         <div class="flex flex-col gap-0">
           <h2 class="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight">
@@ -43,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ModalCreateTaskList } from '#components'
+import { ModalCreateTaskList, ModalUploadUserAvatar } from '#components'
 
 definePageMeta({
   middleware: ['01-auth-only'],
@@ -51,6 +57,7 @@ definePageMeta({
 
 const overlay = useOverlay()
 const modalCreateTaskList = overlay.create(ModalCreateTaskList)
+const modalUploadUserAvatar = overlay.create(ModalUploadUserAvatar)
 
 const user = useUserStore()
 const taskStore = useTaskStore()

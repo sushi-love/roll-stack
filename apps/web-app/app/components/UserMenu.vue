@@ -21,6 +21,8 @@
 </template>
 
 <script setup lang="ts">
+import { ModalUpdateUser } from '#components'
+
 const { clear, fetch: refreshSession } = useUserSession()
 const { t } = useI18n()
 const colorMode = useColorMode()
@@ -34,6 +36,9 @@ async function signOut() {
   await navigateTo('/sign-in')
 }
 
+const overlay = useOverlay()
+const modalUpdateUser = overlay.create(ModalUpdateUser)
+
 const userMenuItems = computed(() => [
   {
     label: user.fullName ?? t('common.colleague'),
@@ -44,6 +49,14 @@ const userMenuItems = computed(() => [
   },
   {
     type: 'separator' as const,
+  },
+  {
+    label: 'Редактировать профиль',
+    type: 'link' as const,
+    icon: 'lucide:edit',
+    onClick() {
+      modalUpdateUser.open()
+    },
   },
   {
     label: 'Изображения',

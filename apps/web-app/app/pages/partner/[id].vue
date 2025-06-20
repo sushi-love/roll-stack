@@ -57,7 +57,7 @@
 const { t } = useI18n()
 const { params } = useRoute('partner-id')
 
-const { data, error } = await useFetch(`/api/user/${params.id}`)
+const { data, error } = await useFetch(`/api/user/id/${params.id}`)
 if (error.value) {
   await navigateTo('/')
 }
