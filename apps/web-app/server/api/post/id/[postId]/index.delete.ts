@@ -1,0 +1,21 @@
+import { repository } from '@sushi-atrium/database'
+
+export default defineEventHandler(async (event) => {
+  try {
+    await hasPermission(event, 'post:delete')
+
+    const postId = getRouterParam(event, 'postId')
+    if (!postId) {
+      throw createError({
+        statusCode: 400,
+        message: 'Id is required',
+      })
+    }
+
+    await repository.post.delete(postId)
+
+    return { ok: true }
+  } catch (error) {
+    throw errorResolver(error)
+  }
+})

@@ -1,11 +1,18 @@
 import { cuid2 } from 'drizzle-cuid2/postgres'
 import { relations } from 'drizzle-orm'
-import { boolean, date, integer, jsonb, numeric, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { boolean, date, integer, jsonb, numeric, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 type UserType = 'staff' | 'head' | 'partner' | 'guest' | 'bot' | 'bot_agent'
 type UserGender = 'male' | 'female' | 'unknown'
 
-type PermissionCode = 'product:view' | 'product:edit' | 'product:delete' | 'product:image:edit'
+type PermissionCode = 'product:view'
+  | 'product:edit'
+  | 'product:delete'
+  | 'product:image:edit'
+  | 'post:view'
+  | 'post:edit'
+  | 'post:delete'
+  | 'post:image:edit'
 
 type WeightUnit = 'G' | 'KG' | 'ML' | 'L' | 'OZ' | 'LB'
 
@@ -24,6 +31,9 @@ type CheckoutStatus = 'forming'
   | 'on_delivery'
   | 'at_client'
 type CheckoutDeliveryMethod = 'delivery' | 'pickup'
+
+type PostType = 'telegram' | 'vk'
+type PostStatus = 'draft' | 'scheduled' | 'published'
 
 export const permissions = pgTable('permissions', {
   id: cuid2('id').defaultRandom().primaryKey(),
@@ -330,6 +340,20 @@ export const cities = pgTable('cities', {
   longitude: numeric('longitude', { mode: 'number' }),
 })
 
+export const posts = pgTable('posts', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  publishAt: timestamp('publish_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull(),
+  status: varchar('status').notNull().$type<PostStatus>(),
+  type: varchar('type').notNull().$type<PostType>(),
+  url: varchar('url'),
+  description: varchar('description'),
+  content: text('content'),
+  authorId: cuid2('author_id').references(() => users.id),
+  mediaId: cuid2('media_id').references(() => media.id),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
@@ -451,6 +475,7 @@ export const productVariantTagsOnProductVariantsRelations = relations(productVar
 
 export const mediaRelations = relations(media, ({ many }) => ({
   items: many(mediaItems),
+  posts: many(posts),
 }))
 
 export const mediaItemRelations = relations(mediaItems, ({ one }) => ({
@@ -506,5 +531,12 @@ export const checkoutItemRelations = relations(checkoutItems, ({ one }) => ({
   productVariant: one(productVariants, {
     fields: [checkoutItems.productVariantId],
     references: [productVariants.id],
+  }),
+}))
+
+export const postRelations = relations(posts, ({ one }) => ({
+  media: one(media, {
+    fields: [posts.mediaId],
+    references: [media.id],
   }),
 }))

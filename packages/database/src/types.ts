@@ -77,3 +77,6 @@ export type KitchenDraft = InferInsertModel<typeof tables.kitchens>
 
 export type City = InferSelectModel<typeof tables.cities>
 export type CityDraft = InferInsertModel<typeof tables.cities>
+
+export type Post = InferSelectModel<typeof tables.posts>
+export type PostDraft = InferInsertModel<typeof tables.posts>

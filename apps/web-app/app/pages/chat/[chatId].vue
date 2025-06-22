@@ -34,11 +34,12 @@
         </UAvatarGroup>
 
         <template #content>
-          <div class="h-auto w-64 p-4 flex flex-col gap-2">
+          <div class="h-auto w-68 p-2 flex flex-col gap-2">
             <UButtonGroup orientation="vertical">
               <UButton
                 v-for="member in chat?.members"
                 :key="member.id"
+                :to="`/staff/${member.user.id}`"
                 :avatar="{ src: member.user.avatarUrl ?? undefined }"
                 :ui="{
                   leadingAvatarSize: 'sm',
@@ -47,7 +48,7 @@
                 block
                 color="primary"
                 variant="link"
-                class="text-base justify-start"
+                class="text-sm justify-start"
               />
             </UButtonGroup>
           </div>

@@ -75,6 +75,12 @@ const menuItems = computed(() => [
     icon: 'i-lucide-contact-round',
     active: route.path.startsWith('/staff'),
   },
+  {
+    label: 'SMM',
+    to: '/post',
+    icon: 'i-lucide-sticker',
+    active: route.path.startsWith('/post'),
+  },
 ])
 
 const linkItems = computed(() => [

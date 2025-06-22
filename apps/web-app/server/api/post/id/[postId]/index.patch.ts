@@ -1,0 +1,32 @@
+import { repository } from '@sushi-atrium/database'
+import { type } from 'arktype'
+import { updatePostSchema } from '~~/shared/services/post'
+
+export default defineEventHandler(async (event) => {
+  try {
+    await hasPermission(event, 'post:edit')
+
+    const postId = getRouterParam(event, 'postId')
+    if (!postId) {
+      throw createError({
+        statusCode: 400,
+        message: 'Id is required',
+      })
+    }
+
+    const body = await readBody(event)
+    const data = updatePostSchema(body)
+    if (data instanceof type.errors) {
+      throw data
+    }
+
+    const post = await repository.post.update(postId, data)
+
+    return {
+      ok: true,
+      result: post,
+    }
+  } catch (error) {
+    throw errorResolver(error)
+  }
+})

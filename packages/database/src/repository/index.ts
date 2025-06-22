@@ -7,6 +7,7 @@ import { Media } from './media'
 import { Menu } from './menu'
 import { Notification } from './notification'
 import { Permission } from './permission'
+import { Post } from './post'
 import { Product } from './product'
 import { Task } from './task'
 import { User } from './user'
@@ -20,6 +21,7 @@ class Repository {
   readonly menu = Menu
   readonly notification = Notification
   readonly permission = Permission
+  readonly post = Post
   readonly product = Product
   readonly task = Task
   readonly user = User

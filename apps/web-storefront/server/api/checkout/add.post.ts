@@ -1,4 +1,5 @@
-import { type Checkout, repository } from '@sushi-atrium/database'
+import type { Checkout } from '@sushi-atrium/database'
+import { repository } from '@sushi-atrium/database'
 
 const MAX_LINES_PER_CHECKOUT = 20
 

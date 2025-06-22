@@ -6,7 +6,7 @@
         style="--last-message-height: 0px;"
       >
         <div
-          v-for="message in messages"
+          v-for="message in chat?.messages"
           :id="message.id"
           :key="message.id"
         >
@@ -14,7 +14,7 @@
             :created-at="message.createdAt"
             :user-id="message.userId"
             :text="message.text"
-            :avatar-url="members.find((member) => member.id === message.userId)?.avatarUrl ?? undefined"
+            :avatar-url="members?.find((member) => member.id === message.userId)?.avatarUrl ?? undefined"
             :side="userStore.id === message.userId ? 'right' : 'left'"
             :is-first-message-of-day="messagesWithIsFirstMessageOfDay.some((item) => item.id === message.id)"
           />
@@ -25,28 +25,29 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@sushi-atrium/database'
-
-interface Message {
-  id: string
-  createdAt: string
-  text: string | null
-  userId: string
-}
-
-const { messages } = defineProps<{ messages: Message[], members: User[] }>()
+const { chatId } = defineProps<{ chatId: string }>()
 
 const route = useRoute()
 const targetId = route.query['target-id']
 
 const userStore = useUserStore()
+const chatStore = useChatStore()
+
+const chat = computed(() => chatStore.chats.find((chat) => chat.id === chatId))
+const members = computed(() => chat.value?.members.map((member) => member.user))
 
 // show is-first-message-of-day if it's first message of day
 const messagesWithIsFirstMessageOfDay = ref<{ id: string, isFirstMessageOfDay: boolean }[]>([])
 const lastDay = ref<number>()
 
 function recalculate() {
-  for (const message of messages) {
+  if (!chat.value?.messages) {
+    return
+  }
+
+  messagesWithIsFirstMessageOfDay.value = []
+
+  for (const message of chat.value.messages) {
     const day = new Date(message.createdAt).getDate()
     if (lastDay.value !== day) {
       lastDay.value = day
@@ -61,17 +62,15 @@ const block = useTemplateRef<HTMLDivElement>('block')
 const { arrivedState } = useScroll(block, { behavior: 'smooth' })
 
 onMounted(() => {
-  targetMessageId.value = targetId as string ?? messages[messages.length - 1]?.id
+  targetMessageId.value = targetId as string ?? chat.value?.messages[chat.value.messages.length - 1]?.id
   scrollToMessage()
-
   recalculate()
 })
 
-onUpdated(() => {
-  recalculate()
-
-  scrollToMessage()
-})
+// onUpdated(() => {
+//   recalculate()
+//   scrollToMessage()
+// })
 
 function scrollToMessage() {
   const message = window.document.getElementById(targetMessageId.value ?? 'none')

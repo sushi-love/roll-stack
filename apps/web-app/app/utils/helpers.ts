@@ -1,5 +1,4 @@
 import type { WeightUnit } from '~~/shared/services/common'
-import type { Resolution } from '~~/shared/services/task'
 
 export function getCategoryInfo(category: string) {
   if (category === 'development') {
@@ -35,14 +34,6 @@ export function getWeightLocalizedUnit<WeightUnitLiteral = string & object>(unit
     default:
       return ''
   }
-}
-
-export function getResolutionForSelect(): { value: Resolution, label: string, icon: string }[] {
-  return [
-    { value: 'success', label: 'Успешно выполнена', icon: 'i-lucide-circle-check' },
-    { value: 'failure', label: 'Не выполнена', icon: 'i-lucide-circle-x' },
-    { value: 'unknown', label: 'Не ясно, есть вопросы', icon: 'i-lucide-circle-help' },
-  ]
 }
 
 export function getLocalizedWeightUnitsForSelect(): { value: WeightUnit, label: string }[] {
