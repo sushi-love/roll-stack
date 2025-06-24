@@ -91,6 +91,11 @@ const linkItems = computed(() => [
     icon: 'i-lucide-flask-conical',
   },
   {
+    label: 'Заявки',
+    to: '/checkout/list',
+    icon: 'i-lucide-receipt-text',
+  },
+  {
     label: 'Все задачи',
     to: '/head/task',
     icon: 'i-lucide-list-checks',

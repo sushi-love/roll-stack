@@ -1,0 +1,72 @@
+import type { Checkout, CheckoutItem, Kitchen, Product, ProductVariant } from '@sushi-atrium/database'
+
+type CheckoutWithData = Checkout & {
+  items: (CheckoutItem & {
+    productVariant: ProductVariant & {
+      product: Product
+    }
+  })[]
+}
+
+export const useCheckoutStore = defineStore('checkout', () => {
+  const checkouts = ref<CheckoutWithData[]>([])
+  const kitchens = ref<Kitchen[]>([])
+
+  async function update() {
+    try {
+      const data = await $fetch('/api/checkout/list', {
+        lazy: true,
+        server: true,
+        cache: 'no-cache',
+        getCachedData: undefined,
+      })
+      if (!data) {
+        return
+      }
+
+      checkouts.value = data
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('401')) {
+          // No
+        }
+        if (error.message.includes('404')) {
+          // Not found
+        }
+      }
+    }
+  }
+
+  async function updateKitchens() {
+    try {
+      const data = await $fetch('/api/kitchen/list', {
+        lazy: true,
+        server: true,
+        cache: 'no-cache',
+        getCachedData: undefined,
+      })
+      if (!data) {
+        return
+      }
+
+      kitchens.value = data
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('401')) {
+          // No
+        }
+        if (error.message.includes('404')) {
+          // Not found
+        }
+      }
+    }
+  }
+
+  return {
+    checkouts,
+    kitchens,
+
+    update,
+    updateKitchens,
+  }
+})

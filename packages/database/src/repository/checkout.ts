@@ -1,5 +1,5 @@
 import type { CheckoutDraft, CheckoutItemDraft } from '../types'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
 import { checkoutItems, checkouts } from '../tables'
 
@@ -11,7 +11,29 @@ export class Checkout {
         items: {
           orderBy: (items, { asc }) => asc(items.createdAt),
           with: {
-            productVariant: true,
+            productVariant: {
+              with: {
+                product: true,
+              },
+            },
+          },
+        },
+      },
+    })
+  }
+
+  static async listLatest() {
+    return useDatabase().query.checkouts.findMany({
+      orderBy: (checkout, { desc }) => desc(checkout.updatedAt),
+      with: {
+        items: {
+          orderBy: (items, { asc }) => asc(items.createdAt),
+          with: {
+            productVariant: {
+              with: {
+                product: true,
+              },
+            },
           },
         },
       },
@@ -33,6 +55,12 @@ export class Checkout {
 
       item.totalPrice = item.quantity * item.productVariant.gross
       item.unitPrice = item.productVariant.gross
+
+      // Update prices
+      await Checkout.updateItem(item.id, {
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice,
+      })
     }
 
     const deliveryPrice = checkout.deliveryMethod === 'delivery' ? 150 : 0
@@ -63,7 +91,10 @@ export class Checkout {
   static async update(id: string, data: Partial<CheckoutDraft>) {
     const [checkout] = await useDatabase()
       .update(checkouts)
-      .set(data)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
       .where(eq(checkouts.id, id))
       .returning()
     return checkout

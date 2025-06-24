@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
     const task = await repository.task.create({
       name: data.name,
       description: data.description,
+      date: data.date,
       performerId: data.performerId,
       listId: data.listId,
     })

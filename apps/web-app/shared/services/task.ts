@@ -7,6 +7,7 @@ export const createTaskSchema = type({
   name: type('2 <= string <= 150').describe('error.length.invalid'),
   description: type('string <= 250 | undefined').describe('error.length.invalid').optional(),
   performerId: type('string | undefined').describe('error.length.invalid').optional(),
+  date: type('string | undefined | null').describe('error.length.invalid').optional(),
   listId: type('string').describe('error.length.invalid'),
 })
 export type CreateTask = typeof createTaskSchema.infer

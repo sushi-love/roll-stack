@@ -22,6 +22,34 @@
       />
     </UFormField>
 
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <UPopover>
+        <UFormField :label="$t('common.date')" name="date">
+          <UInput
+            :value="selectedDate ? df.format(selectedDate.toDate(getLocalTimeZone())) : ''"
+            placeholder="Выберите дату"
+            size="xl"
+            class="w-full items-center justify-center cursor-pointer"
+            :ui="{ trailing: 'pe-1.5' }"
+          >
+            <template v-if="selectedDate" #trailing>
+              <UButton
+                color="neutral"
+                variant="ghost"
+                size="md"
+                icon="i-lucide-x"
+                @click="selectedDate = undefined"
+              />
+            </template>
+          </UInput>
+        </UFormField>
+
+        <template #content>
+          <UCalendar v-model="selectedDate" class="p-2" />
+        </template>
+      </UPopover>
+    </div>
+
     <UButton
       type="submit"
       variant="solid"
@@ -35,8 +63,10 @@
 </template>
 
 <script setup lang="ts">
+import type { CalendarDate } from '@internationalized/date'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { CreateTask } from '~~/shared/services/task'
+import { DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import { createTaskSchema } from '~~/shared/services/task'
 
 const { performerId, listId } = defineProps<{
@@ -54,8 +84,24 @@ const taskStore = useTaskStore()
 const state = ref<Partial<CreateTask>>({
   name: undefined,
   description: undefined,
+  date: undefined,
   performerId,
   listId,
+})
+
+const df = new DateFormatter('ru-RU', {
+  dateStyle: 'long',
+})
+
+const selectedDate = shallowRef<CalendarDate | undefined>()
+
+watch(selectedDate, () => {
+  if (!selectedDate.value) {
+    state.value.date = null
+    return
+  }
+
+  state.value.date = selectedDate.value.toString()
 })
 
 async function onSubmit(event: FormSubmitEvent<CreateTask>) {

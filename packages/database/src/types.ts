@@ -75,6 +75,12 @@ export type CheckoutItemDraft = InferInsertModel<typeof tables.checkoutItems>
 export type Kitchen = InferSelectModel<typeof tables.kitchens>
 export type KitchenDraft = InferInsertModel<typeof tables.kitchens>
 
+export type Channel = InferSelectModel<typeof tables.channels>
+export type ChannelDraft = InferInsertModel<typeof tables.channels>
+
+export type PaymentMethod = InferSelectModel<typeof tables.paymentMethods>
+export type PaymentMethodDraft = InferInsertModel<typeof tables.paymentMethods>
+
 export type City = InferSelectModel<typeof tables.cities>
 export type CityDraft = InferInsertModel<typeof tables.cities>
 

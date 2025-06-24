@@ -1,4 +1,5 @@
 import { useDatabase } from '../database'
+import { Channel } from './channel'
 import { Chat } from './chat'
 import { Checkout } from './checkout'
 import { City } from './city'
@@ -13,6 +14,7 @@ import { Task } from './task'
 import { User } from './user'
 
 class Repository {
+  readonly channel = Channel
   readonly chat = Chat
   readonly checkout = Checkout
   readonly city = City

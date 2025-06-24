@@ -35,6 +35,10 @@ type CheckoutDeliveryMethod = 'delivery' | 'pickup'
 type PostType = 'telegram' | 'vk'
 type PostStatus = 'draft' | 'scheduled' | 'published'
 
+type ChannelType = 'website'
+
+type PaymentMethodType = 'card' | 'cash' | 'online'
+
 export const permissions = pgTable('permissions', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -301,6 +305,16 @@ export const checkouts = pgTable('checkouts', {
   totalPrice: numeric('total_price', { mode: 'number' }).notNull().default(0),
   name: varchar('name'),
   phone: varchar('phone'),
+  note: varchar('note'),
+  street: varchar('street'),
+  flat: varchar('flat'),
+  intercom: varchar('intercom'),
+  entrance: varchar('entrance'),
+  floor: varchar('floor'),
+  addressNote: varchar('address_note'),
+  cashAmount: integer('cash_amount'),
+  kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
+  paymentMethodId: cuid2('payment_method_id').references(() => paymentMethods.id),
 })
 
 export const checkoutItems = pgTable('checkout_items', {
@@ -327,6 +341,43 @@ export const kitchens = pgTable('kitchens', {
   city: varchar('city'),
   latitude: numeric('latitude', { mode: 'number' }),
   longitude: numeric('longitude', { mode: 'number' }),
+  minAmountForDelivery: numeric('min_amount_for_delivery', { mode: 'number' }),
+  isDeliveryAvailable: boolean('is_delivery_available').notNull().default(true),
+  isPickupAvailable: boolean('is_pickup_available').notNull().default(true),
+})
+
+export const channels = pgTable('channels', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  description: varchar('description'),
+  type: varchar('type').notNull().$type<ChannelType>(),
+})
+
+export const channelKitchens = pgTable('channel_kitchens', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
+  channelId: cuid2('channel_id').notNull().references(() => channels.id),
+})
+
+export const paymentMethods = pgTable('payment_methods', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  description: varchar('description'),
+  type: varchar('type').notNull().$type<PaymentMethodType>(),
+})
+
+export const paymentMethodsOnKitchens = pgTable('payment_methods_on_kitchens', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
+  paymentMethodId: cuid2('payment_method_id').notNull().references(() => paymentMethods.id),
 })
 
 export const cities = pgTable('cities', {
@@ -519,8 +570,16 @@ export const notificationRelations = relations(notifications, ({ one }) => ({
   }),
 }))
 
-export const checkoutRelations = relations(checkouts, ({ many }) => ({
+export const checkoutRelations = relations(checkouts, ({ many, one }) => ({
   items: many(checkoutItems),
+  paymentMethod: one(paymentMethods, {
+    fields: [checkouts.paymentMethodId],
+    references: [paymentMethods.id],
+  }),
+  kitchen: one(kitchens, {
+    fields: [checkouts.kitchenId],
+    references: [kitchens.id],
+  }),
 }))
 
 export const checkoutItemRelations = relations(checkoutItems, ({ one }) => ({
@@ -531,6 +590,43 @@ export const checkoutItemRelations = relations(checkoutItems, ({ one }) => ({
   productVariant: one(productVariants, {
     fields: [checkoutItems.productVariantId],
     references: [productVariants.id],
+  }),
+}))
+
+export const kitchenRelations = relations(kitchens, ({ many }) => ({
+  channels: many(channelKitchens),
+  checkouts: many(checkouts),
+  paymentMethods: many(paymentMethodsOnKitchens),
+}))
+
+export const channelRelations = relations(channels, ({ many }) => ({
+  kitchens: many(channelKitchens),
+}))
+
+export const channelKitchenRelations = relations(channelKitchens, ({ one }) => ({
+  channel: one(channels, {
+    fields: [channelKitchens.channelId],
+    references: [channels.id],
+  }),
+  kitchen: one(kitchens, {
+    fields: [channelKitchens.kitchenId],
+    references: [kitchens.id],
+  }),
+}))
+
+export const paymentMethodRelations = relations(paymentMethods, ({ many }) => ({
+  checkouts: many(checkouts),
+  kitchens: many(paymentMethodsOnKitchens),
+}))
+
+export const paymentMethodsOnKitchenRelations = relations(paymentMethodsOnKitchens, ({ one }) => ({
+  kitchen: one(kitchens, {
+    fields: [paymentMethodsOnKitchens.kitchenId],
+    references: [kitchens.id],
+  }),
+  paymentMethod: one(paymentMethods, {
+    fields: [paymentMethodsOnKitchens.paymentMethodId],
+    references: [paymentMethods.id],
   }),
 }))
 
