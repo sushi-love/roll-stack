@@ -11,7 +11,7 @@ export default defineAppConfig({
           },
         },
         variant: {
-          gradient: 'text-neutral-950 bg-linear-to-br from-lime-300 to-lime-500 hover:opacity-90 disabled:bg-none disabled:bg-(--ui-bg-accented) disabled:text-neutral-400 aria-disabled:bg-(--ui-bg-accented) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary)',
+          gradient: 'text-white bg-linear-to-br from-secondary-400 to-secondary-500 hover:opacity-90 disabled:from-neutral-300 disabled:to-neutral-400 aria-disabled:from-neutral-300 aria-disabled:to-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
         },
         color: {
           secondary: '!text-white disabled:!bg-inverted/50',

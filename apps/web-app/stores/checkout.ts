@@ -1,4 +1,4 @@
-import type { Checkout, CheckoutItem, Kitchen, Product, ProductVariant } from '@sushi-atrium/database'
+import type { Checkout, CheckoutItem, Kitchen, PaymentMethod, Product, ProductVariant } from '@sushi-atrium/database'
 
 type CheckoutWithData = Checkout & {
   items: (CheckoutItem & {
@@ -11,6 +11,7 @@ type CheckoutWithData = Checkout & {
 export const useCheckoutStore = defineStore('checkout', () => {
   const checkouts = ref<CheckoutWithData[]>([])
   const kitchens = ref<Kitchen[]>([])
+  const paymentMethods = ref<PaymentMethod[]>([])
 
   async function update() {
     try {
@@ -62,11 +63,38 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
+  async function updatePaymentMethods() {
+    try {
+      const data = await $fetch('/api/payment/method/list', {
+        lazy: true,
+        server: true,
+        cache: 'no-cache',
+        getCachedData: undefined,
+      })
+      if (!data) {
+        return
+      }
+
+      paymentMethods.value = data
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('401')) {
+          // No
+        }
+        if (error.message.includes('404')) {
+          // Not found
+        }
+      }
+    }
+  }
+
   return {
     checkouts,
     kitchens,
+    paymentMethods,
 
     update,
     updateKitchens,
+    updatePaymentMethods,
   }
 })

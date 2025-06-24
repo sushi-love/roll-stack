@@ -1,26 +1,26 @@
 <template>
   <div class="flex flex-row gap-2 items-center justify-between">
     <div class="max-w-[16rem] flex flex-col flex-nowrap">
-      <div class="font-medium leading-tight line-clamp-2">
+      <div class="font-semibold leading-tight line-clamp-2">
         {{ item.productVariant.product?.name }}
       </div>
-      <div class="mt-1 flex flex-row gap-2 flex-nowrap items-center">
-        <p class="text-neutral-500 dark:text-neutral-400 leading-tight">
+      <div class="flex flex-row gap-2 flex-nowrap items-center">
+        <p class="text-muted leading-tight">
           {{ item.productVariant?.name }}
         </p>
-        <p class="text-neutral-500 dark:text-neutral-400">
+        <p class="text-muted">
           {{ item.productVariant?.weightValue }}{{ getWeightLocalizedUnit(item.productVariant?.weightUnit) }}
         </p>
       </div>
     </div>
 
     <div class="ml-auto">
-      <div class="text-lg">
+      <div class="text-lg text-muted">
         x{{ item?.quantity }}
       </div>
     </div>
 
-    <div class="min-w-[3rem] ml-0 md:ml-4 text-base md:text-lg text-right tracking-tight">
+    <div class="min-w-14 ml-0 md:ml-4 text-base md:text-lg text-right tracking-tight">
       {{ item?.totalPrice }} <span class="text-xs">₽</span>
     </div>
   </div>

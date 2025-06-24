@@ -20,8 +20,11 @@ const checkoutStore = useCheckoutStore()
 let interval: NodeJS.Timeout
 
 onMounted(async () => {
-  await checkoutStore.update()
-  await checkoutStore.updateKitchens()
+  await Promise.all([
+    checkoutStore.update(),
+    checkoutStore.updateKitchens(),
+    checkoutStore.updatePaymentMethods(),
+  ])
 
   interval = setInterval(async () => {
     await checkoutStore.update()

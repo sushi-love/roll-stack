@@ -20,7 +20,6 @@ const modalCitySelector = overlay.create(ModalCitySelector)
 
 const { public: publicEnv } = useRuntimeConfig()
 
-const { t } = useI18n()
 const { locale } = useI18n()
 
 const lang = computed(() => locales[locale.value].code)
@@ -56,14 +55,6 @@ await Promise.all([
   channelStore.update(),
   menuStore.update(),
 ])
-
-// Guard
-if (!channelStore.id) {
-  throw createError({
-    statusCode: 503,
-    statusMessage: t('error.channel-problem'),
-  })
-}
 
 // Auto update selected kitchen
 watch(() => checkoutStore.kitchenId, () => {
