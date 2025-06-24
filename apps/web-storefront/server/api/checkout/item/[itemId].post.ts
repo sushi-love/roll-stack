@@ -3,59 +3,63 @@ import { repository } from '@sushi-atrium/database'
 const MAX_QUANTITY_PER_LINE = 99
 
 export default defineEventHandler(async (event) => {
-  const itemId = getRouterParam(event, 'itemId')
-  const body = await readBody(event)
+  try {
+    const itemId = getRouterParam(event, 'itemId')
+    const body = await readBody(event)
 
-  if (!itemId || !body.method) {
-    throw createError({
-      statusCode: 400,
-      message: 'Missing data',
-    })
-  }
-
-  const method = body.method === 'increment' ? 'increment' : 'decrement'
-
-  const { secure } = await getUserSession(event)
-  if (!secure?.checkoutId) {
-    throw createError({
-      statusCode: 404,
-      message: 'No checkout',
-    })
-  }
-
-  const checkoutInDB = await repository.checkout.find(secure.checkoutId)
-  if (!checkoutInDB?.id) {
-    throw createError({
-      statusCode: 404,
-      message: 'No checkout',
-    })
-  }
-
-  const item = checkoutInDB.items.find((i) => i.id === itemId)
-  if (!item) {
-    throw createError({
-      statusCode: 404,
-      message: 'No item',
-    })
-  }
-
-  if (method === 'increment') {
-    // Check limit
-    if (item.quantity >= MAX_QUANTITY_PER_LINE) {
+    if (!itemId || !body.method) {
       throw createError({
         statusCode: 400,
-        message: 'Limit reached',
+        message: 'Missing data',
       })
     }
 
-    await repository.checkout.updateItem(item.id, { quantity: item.quantity + 1 })
-  } else if (method === 'decrement') {
-    await repository.checkout.updateItem(item.id, { quantity: item.quantity - 1 })
-  }
+    const method = body.method === 'increment' ? 'increment' : 'decrement'
 
-  await repository.checkout.recalculate(checkoutInDB.id)
+    const { secure } = await getUserSession(event)
+    if (!secure?.checkoutId) {
+      throw createError({
+        statusCode: 404,
+        message: 'No checkout',
+      })
+    }
 
-  return {
-    ok: true,
+    const checkoutInDB = await repository.checkout.find(secure.checkoutId)
+    if (!checkoutInDB?.id) {
+      throw createError({
+        statusCode: 404,
+        message: 'No checkout',
+      })
+    }
+
+    const item = checkoutInDB.items.find((i) => i.id === itemId)
+    if (!item) {
+      throw createError({
+        statusCode: 404,
+        message: 'No item',
+      })
+    }
+
+    if (method === 'increment') {
+    // Check limit
+      if (item.quantity >= MAX_QUANTITY_PER_LINE) {
+        throw createError({
+          statusCode: 400,
+          message: 'Limit reached',
+        })
+      }
+
+      await repository.checkout.updateItem(item.id, { quantity: item.quantity + 1 })
+    } else if (method === 'decrement') {
+      await repository.checkout.updateItem(item.id, { quantity: item.quantity - 1 })
+    }
+
+    await repository.checkout.recalculate(checkoutInDB.id)
+
+    return {
+      ok: true,
+    }
+  } catch (error) {
+    throw errorResolver(error)
   }
 })

@@ -15,12 +15,12 @@
     <div class="px-2.5 flex flex-col gap-1">
       <NuxtLink
         href="/"
-        class="font-semibold text-xl tracking-tight"
+        class="font-semibold text-xl/6 tracking-tight"
       >
-        {{ menuStore.menu?.name }}
+        {{ channelStore?.name }}
       </NuxtLink>
       <div class="text-sm/4 text-muted">
-        Более 180 гастрономических открытий ждут вас в нашем новом меню - от традиционных суши до смелых кулинарных экспериментов.
+        {{ channelStore?.description }}
       </div>
     </div>
 
@@ -48,6 +48,7 @@ const { t } = useI18n()
 const route = useRoute()
 
 const menuStore = useMenuStore()
+const channelStore = useChannelStore()
 const checkoutStore = useCheckoutStore()
 
 const { public: publicEnv } = useRuntimeConfig()
@@ -84,7 +85,7 @@ const deliveryMenuItems = computed(() => [
     icon: 'i-lucide-clock',
   },
   {
-    label: `${t('storefront.cart.from')} ${minAmountForDelivery} ${menuStore.currencySign}`,
+    label: `${t('storefront.cart.from')} ${minAmountForDelivery} ${channelStore.currencySign}`,
     icon: 'i-lucide-wallet',
     class: (checkoutStore.deliveryMethod === 'delivery' && minAmountForDelivery) ? undefined : 'hidden',
     onSelect: () => modalDeliveryInfo.open(),

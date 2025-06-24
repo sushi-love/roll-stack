@@ -43,6 +43,15 @@
           />
 
           <UButton
+            v-if="channelStore.selectedKitchen"
+            variant="link"
+            color="neutral"
+            icon="i-lucide-map-pinned"
+            class="px-0"
+            :label="channelStore.selectedKitchen.address ?? ''"
+          />
+
+          <UButton
             v-if="checkoutStore.deliveryPrice > 0"
             variant="link"
             color="neutral"
@@ -52,7 +61,7 @@
             <div class="w-full flex flex-row justify-between">
               <p>{{ $t('storefront.delivery-price') }}</p>
               <p class="text-sm">
-                {{ checkoutStore.deliveryPrice }} <span>{{ menuStore.currencySign }}</span>
+                {{ checkoutStore.deliveryPrice }} <span>{{ channelStore.currencySign }}</span>
               </p>
             </div>
           </UButton>
@@ -60,17 +69,17 @@
 
         <UButton
           v-if="!checkoutStore.isEmpty"
+          to="/checkout"
           variant="gradient"
           size="xl"
           block
           class="justify-between"
-          @click="nextStep"
         >
           <p class="font-semibold">
             {{ $t('storefront.cart.next-label') }}
           </p>
           <p class="text-lg tracking-tight">
-            {{ new Intl.NumberFormat(locale).format(checkoutStore.totalPrice) }} <span class="text-base">{{ menuStore.currencySign }}</span>
+            {{ new Intl.NumberFormat(locale).format(checkoutStore.totalPrice) }} <span class="text-base">{{ channelStore.currencySign }}</span>
           </p>
         </UButton>
       </div>
@@ -82,22 +91,11 @@
 import { ModalDeliveryInfo } from '#components'
 
 const { locale } = useI18n()
-const toast = useToast()
 const { isCartDrawerOpened } = useApp()
 
-const menuStore = useMenuStore()
+const channelStore = useChannelStore()
 const checkoutStore = useCheckoutStore()
 
 const overlay = useOverlay()
 const modalDeliveryInfo = overlay.create(ModalDeliveryInfo)
-
-function nextStep() {
-  toast.add({
-    title: `Упс...`,
-    description: 'Следующая страница пока не готова 😕',
-    color: 'error',
-    icon: 'i-lucide-ban',
-    duration: 3000,
-  })
-}
 </script>

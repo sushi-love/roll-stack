@@ -13,7 +13,7 @@
         <div class="flex flex-row justify-between">
           <div>{{ $t('storefront.minimum-order-value') }}</div>
           <div>
-            {{ minAmountForDelivery }} <span class="text-sm">{{ menuStore.currencySign }}</span>
+            {{ minAmountForDelivery }} <span class="text-sm">{{ channelStore.currencySign }}</span>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-const menuStore = useMenuStore()
+const channelStore = useChannelStore()
 const checkoutStore = useCheckoutStore()
 
 const overlay = useOverlay()

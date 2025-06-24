@@ -6,6 +6,8 @@
     "to-home": "На главную",
     "description": "Описание",
     "more-information": "Больше информации",
+    "select": "Выберите",
+    "optional": "Опционально",
     "return": "Вернуться",
     "yes": "Да",
     "no": "Нет",
@@ -62,9 +64,61 @@
       "deliver-by": "Доставить к",
       "now": "Сейчас"
     },
+    "checkout": {
+      "title": "Оформление заказа",
+      "contacts": "Контакты",
+      "your-phone": "Ваш телефон",
+      "your-name": "Ваше имя",
+      "enter-address": "Укажите свой адрес",
+      "select-address": "Выберите адрес",
+      "address": {
+        "title": "Адрес",
+        "street": "Улица и дом",
+        "flat": "Кв./офис",
+        "intercom": "Домофон",
+        "entrance": "Подъезд",
+        "floor": "Этаж",
+        "note": "Комментарий",
+        "note-placeholder": "Чтобы курьер быстрее вас нашел, укажите дополнительную информацию"
+      },
+      "time-title": "Время",
+      "select-time-title": "Выберите время",
+      "on-time": "Ко времени",
+      "as-soon-as-possible": "Побыстрее",
+      "order-title": "Вы заказываете",
+      "order-note": "Комментарий для кухни",
+      "order-note-placeholder": "Пожелания к заказу",
+      "payment-title": "Метод оплаты",
+      "total-title": "Итого",
+      "create-order": "Создать заказ",
+      "cost": {
+        "delivery": "Стоимость доставки",
+        "products": "Стоимость товаров"
+      },
+      "change-label": "С какой суммы подготовить сдачу",
+      "info-shipping-price": "Веб-сайт не учитывает стоимость доставки. Итоговая сумма может отличаться",
+      "warning-data": "Пожалуйста, заполните все обязательные поля"
+    },
+    "finish": {
+      "title": "Заказ оформлен",
+      "success-message": "Ваша заявка была успешно передана на обработку.",
+      "expect-call": "Ожидайте звонка от оператора.",
+      "ordered-title": "Вы заказали"
+    },
     "search-placeholder": "Найти блюдо",
     "minimum-order-value": "Минимальная стоимость заказа",
     "maximum-order-weight": "Максимальный вес заказа",
     "delivery-price": "Стоимость доставки"
+  },
+  "error": {
+    "channel-problem": "Канал продаж не настроен",
+    "product-not-found": "Товар не найден",
+    "category-not-found": "Категория не найдена",
+    "common": "Неверное значение",
+    "not-selected": "Не выбрано",
+    "length": {
+      "invalid": "Недопустимое количество символов"
+    },
+    "file-size-or-type": "Недопустимый размер или тип файла"
   }
 }

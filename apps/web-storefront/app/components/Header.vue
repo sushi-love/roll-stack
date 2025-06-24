@@ -40,14 +40,13 @@
 const { isNavbarOpened } = useApp()
 
 const menuStore = useMenuStore()
-const allProducts = menuStore.getProductsForSearch()
 
 const isModalOpened = ref(false)
 
 const groups = computed(() => [
   {
     id: 'products',
-    items: allProducts.map((product) => {
+    items: menuStore.getProductsForSearch().map((product) => {
       return {
         label: product.name,
         suffix: product.category.name,

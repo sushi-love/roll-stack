@@ -4,7 +4,6 @@ import type { MenuWithData } from '~~/types'
 type ProductWithCategory = Product & { category: MenuCategory }
 
 export const useMenuStore = defineStore('menu', () => {
-  const currencySign = ref('₽')
   const menu = ref<MenuWithData>()
 
   const products = computed(() => menu.value?.categories.flatMap((c) => c.products) || [])
@@ -47,7 +46,6 @@ export const useMenuStore = defineStore('menu', () => {
   }
 
   return {
-    currencySign,
     menu,
 
     products,

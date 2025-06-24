@@ -1,4 +1,5 @@
 import type { Checkout } from '@sushi-atrium/database'
+import type { H3Event } from 'h3'
 import { repository } from '@sushi-atrium/database'
 
 const MAX_LINES_PER_CHECKOUT = 20
@@ -23,57 +24,22 @@ export default defineEventHandler(async (event) => {
     //   })
     // }
 
-    // Check if checkout exists
-    let checkoutId = ''
+    const session = await getUserSession(event)
 
-    const { secure } = await getUserSession(event)
-    if (!secure?.checkoutId) {
-      // Create new checkout
-      const deliveryMethod: Checkout['deliveryMethod'] = isDeliveryAvailable ? 'delivery' : 'pickup'
-
-      const createdCheckout = await repository.checkout.create({
-        status: 'forming',
-        deliveryMethod,
-        name: '',
-        phone: '',
-        // street: '',
-        // flat: null,
-        // intercom: null,
-        // entrance: null,
-        // floor: null,
-        // addressNote: null,
-        itemsPrice: 0,
-        deliveryPrice: 0,
-        totalPrice: 0,
-        // paymentMethodId: '',
-        // discount: 0,
-        // note: null,
-        // change: null,
-        // time: '',
-        // timeType: 'ASAP',
-        // warehouseId: null,
-      })
-      if (!createdCheckout?.id) {
-        throw createError({
-          statusCode: 400,
-          message: 'Failed to create checkout',
-        })
-      }
-
-      // Update user session
-      await setUserSession(event, {
-        secure: {
-          checkoutId: createdCheckout.id,
-        },
-      })
-
-      checkoutId = createdCheckout.id
-    } else {
-      checkoutId = secure.checkoutId
-    }
+    // Check if checkout already exists
+    const checkoutId = session.secure?.checkoutId ?? await createCheckout(event)
 
     const checkoutInDB = await repository.checkout.find(checkoutId)
     if (!checkoutInDB?.id) {
+      // Clear session
+      await replaceUserSession(event, {
+        ...session,
+        secure: {
+          ...session.secure,
+          checkoutId: null,
+        },
+      })
+
       throw createError({
         statusCode: 404,
         message: 'No checkout',
@@ -116,3 +82,35 @@ export default defineEventHandler(async (event) => {
     throw errorResolver(error)
   }
 })
+
+async function createCheckout(event: H3Event) {
+  // Create new checkout
+  const deliveryMethod: Checkout['deliveryMethod'] = isDeliveryAvailable ? 'delivery' : 'pickup'
+
+  const createdCheckout = await repository.checkout.create({
+    status: 'forming',
+    deliveryMethod,
+    itemsPrice: 0,
+    deliveryPrice: 0,
+    totalPrice: 0,
+    kitchenId: 'm68foq9qtpsxd69eayom7bjn', // Фрунзе
+  })
+  if (!createdCheckout?.id) {
+    throw createError({
+      statusCode: 400,
+      message: 'Failed to create checkout',
+    })
+  }
+
+  // Update user session
+  const session = await getUserSession(event)
+  await replaceUserSession(event, {
+    ...session,
+    secure: {
+      ...session.secure,
+      checkoutId: createdCheckout.id,
+    },
+  })
+
+  return createdCheckout.id
+}

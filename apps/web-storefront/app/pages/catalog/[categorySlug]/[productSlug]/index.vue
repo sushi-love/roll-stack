@@ -1,5 +1,5 @@
 <template>
-  <CatalogBreadcrumb :items="breadcrumbs" />
+  <CatalogBreadcrumb :items="breadcrumbs ?? []" />
 
   <div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-0 gap-y-4 sm:gap-4">
@@ -15,7 +15,7 @@
         <h1 class="text-xl/6 md:text-2xl/6 lg:text-3xl/7 font-medium">
           {{ product?.name }}
         </h1>
-        <div class="mt-1 font-normal text-muted flex flex-row gap-3">
+        <div class="mt-1 font-medium text-muted flex flex-row gap-3">
           <span>{{ weightValue }}{{ weightUnit }}</span>
           <span>{{ selectedVariant?.name }}</span>
         </div>
@@ -32,7 +32,7 @@
 
         <div class="mt-4 flex flex-row gap-6 items-center">
           <div class="text-2xl font-medium tracking-tight">
-            {{ price }} <span class="text-xl">{{ menuStore.currencySign }}</span>
+            {{ price }} <span class="text-xl">{{ channelStore.currencySign }}</span>
           </div>
 
           <CartItemCounter v-if="inCart" :item-id="inCart.id" />
@@ -53,7 +53,7 @@
         <div class="mb-2 font-medium text-muted">
           {{ $t('common.description') }}
         </div>
-        <div class="text-lg/6">
+        <div class="font-medium text-lg/6">
           {{ product.description }}
         </div>
       </div>
@@ -64,34 +64,34 @@
         </div>
         <div class="p-4 w-fit flex flex-row gap-4 md:gap-6 bg-elevated/50 rounded-lg">
           <div v-if="selectedVariant?.calories != null">
-            <div class="font-medium">
+            <div class="font-medium text-lg/6">
               {{ selectedVariant?.calories.toFixed(1) }}
             </div>
-            <div class="lowercase">
+            <div class="lowercase text-muted">
               {{ $t('common.nutrition.kcal') }}
             </div>
           </div>
           <div v-if="selectedVariant?.protein">
-            <div class="font-medium">
+            <div class="font-medium text-lg/6">
               {{ selectedVariant?.protein.toFixed(1) }}{{ $t('common.abbreviation.g') }}
             </div>
-            <div class="lowercase">
+            <div class="lowercase text-muted">
               {{ $t('common.nutrition.protein') }}
             </div>
           </div>
           <div v-if="selectedVariant?.fat">
-            <div class="font-medium">
+            <div class="font-medium text-lg/6">
               {{ selectedVariant?.fat.toFixed(1) }}{{ $t('common.abbreviation.g') }}
             </div>
-            <div class="lowercase">
+            <div class="lowercase text-muted">
               {{ $t('common.nutrition.fat') }}
             </div>
           </div>
           <div v-if="selectedVariant?.carbohydrate">
-            <div class="font-medium">
+            <div class="font-medium text-lg/6">
               {{ selectedVariant?.carbohydrate.toFixed(1) }}{{ $t('common.abbreviation.g') }}
             </div>
-            <div class="lowercase">
+            <div class="lowercase text-muted">
               {{ $t('common.nutrition.carbohydrate') }}
             </div>
           </div>
@@ -107,6 +107,7 @@ const { params } = useRoute('catalog-categorySlug-productSlug')
 const toast = useToast()
 
 const checkoutStore = useCheckoutStore()
+const channelStore = useChannelStore()
 const menuStore = useMenuStore()
 const category = computed(() => menuStore.menu?.categories.find((category) => category.slug === params.categorySlug))
 
@@ -114,7 +115,7 @@ const product = computed(() => category.value?.products.find((product) => produc
 if (!product.value) {
   throw createError({
     statusCode: 404,
-    statusMessage: 'Product not found',
+    statusMessage: t('error.product-not-found'),
   })
 }
 

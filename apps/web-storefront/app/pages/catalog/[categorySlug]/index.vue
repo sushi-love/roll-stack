@@ -27,7 +27,7 @@ const category = computed(() => menuStore.menu?.categories.find((category) => ca
 if (!category.value) {
   throw createError({
     statusCode: 404,
-    message: 'Category not found',
+    statusMessage: t('error.category-not-found'),
   })
 }
 

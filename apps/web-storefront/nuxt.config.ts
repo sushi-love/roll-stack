@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     public: {
       mediaUrl: '',
       cityId: '',
+      channelId: '',
     },
   },
   css: ['~/assets/css/styles.css'],

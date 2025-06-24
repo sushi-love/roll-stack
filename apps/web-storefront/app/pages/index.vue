@@ -4,16 +4,16 @@
       <img
         src="/sushi-heart-light.png"
         alt=""
-        class="w-20 h-auto motion-preset-pulse motion-duration-4000"
+        class="w-20 h-auto"
       >
     </div>
 
     <div class="flex flex-col gap-2">
       <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">
-        {{ menuStore.menu?.name }}
+        {{ channelStore?.name }}
       </h1>
       <div class="max-w-xl text-base/5 md:text-lg/5">
-        Более 180 гастрономических открытий ждут вас в нашем новом меню - от традиционных суши до смелых кулинарных экспериментов.
+        {{ channelStore?.description }}
       </div>
     </div>
   </div>
@@ -29,9 +29,10 @@
 </template>
 
 <script setup lang="ts">
+const channelStore = useChannelStore()
 const menuStore = useMenuStore()
 
 useHead({
-  title: menuStore.menu?.name,
+  title: channelStore?.name,
 })
 </script>

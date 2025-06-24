@@ -57,6 +57,12 @@ export default defineEventHandler(async (event) => {
       // time: data.time ? new Date(data.time).toISOString() : new Date().toISOString(),
       // timeType: data.time ? 'SCHEDULED' : 'ASAP',
     })
+    if (!updatedCheckout?.id) {
+      throw createError({
+        statusCode: 400,
+        message: 'Failed to update checkout',
+      })
+    }
 
     await repository.checkout.recalculate(secure.checkoutId)
 

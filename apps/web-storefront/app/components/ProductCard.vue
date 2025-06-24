@@ -17,7 +17,7 @@
         <div class="text-xl font-medium">
           <span v-if="!withSingleVariant" class="pr-1">{{ $t('storefront.cart.from') }}</span>
           <span>{{ price }}</span>
-          <span class="pl-1 text-lg">{{ menuStore.currencySign }}</span>
+          <span class="pl-1 text-lg">{{ channelStore.currencySign }}</span>
         </div>
         <p class="font-normal leading-tight line-clamp-2">
           {{ product?.name }}
@@ -53,6 +53,7 @@ const { productId, categoryId } = defineProps<{
 
 const { locale } = useI18n()
 
+const channelStore = useChannelStore()
 const menuStore = useMenuStore()
 const category = computed(() => menuStore.menu?.categories.find((category) => category.id === categoryId))
 const product = category.value?.products.find((product) => product.id === productId)

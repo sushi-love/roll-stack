@@ -20,6 +20,7 @@ const modalCitySelector = overlay.create(ModalCitySelector)
 
 const { public: publicEnv } = useRuntimeConfig()
 
+const { t } = useI18n()
 const { locale } = useI18n()
 
 const lang = computed(() => locales[locale.value].code)
@@ -47,9 +48,27 @@ watch(colorMode, () => {
 const menuStore = useMenuStore()
 const checkoutStore = useCheckoutStore()
 const cityStore = useCityStore()
+const channelStore = useChannelStore()
 
-// Always update cities
-await cityStore.update()
+// Always update
+await Promise.all([
+  cityStore.update(),
+  channelStore.update(),
+  menuStore.update(),
+])
+
+// Guard
+if (!channelStore.id) {
+  throw createError({
+    statusCode: 503,
+    statusMessage: t('error.channel-problem'),
+  })
+}
+
+// Auto update selected kitchen
+watch(() => checkoutStore.kitchenId, () => {
+  channelStore.selectedKitchenId = checkoutStore.kitchenId
+})
 
 onMounted(async () => {
   if (!publicEnv.cityId) {
@@ -58,7 +77,6 @@ onMounted(async () => {
   }
 
   await Promise.all([
-    menuStore.update(),
     checkoutStore.update(),
   ])
 })

@@ -12,7 +12,7 @@
           </p>
           <div class="mt-1 flex flex-row gap-2 flex-nowrap items-center">
             <div class="text-sm font-medium tracking-tight">
-              {{ new Intl.NumberFormat(locale).format(productVariant?.gross ?? 0) }} <span class="text-xs">{{ menuStore.currencySign }}</span>
+              {{ new Intl.NumberFormat(locale).format(productVariant?.gross ?? 0) }} <span class="text-xs">{{ channelStore.currencySign }}</span>
             </div>
             <div class="text-sm text-dimmed font-light">
               {{ productVariant?.weightValue }}{{ getWeightLocalizedUnit(productVariant?.weightUnit) }}
@@ -34,6 +34,7 @@ const { itemId } = defineProps<{
 const { locale } = useI18n()
 
 const checkoutStore = useCheckoutStore()
+const channelStore = useChannelStore()
 const menuStore = useMenuStore()
 
 const item = computed(() => checkoutStore.items?.find((i) => i.id === itemId))
