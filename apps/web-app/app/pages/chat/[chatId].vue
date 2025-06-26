@@ -60,7 +60,7 @@
           {{ chat?.name }}
         </p>
         <p class="text-muted text-xs">
-          {{ chat?.description ?? 'Общий чат' }}
+          {{ chat?.description ?? 'Общий проект' }}
         </p>
       </div>
     </div>
@@ -86,7 +86,7 @@ const activeMembers = computed(() => chat.value?.members.filter((member) => memb
 
 const items = ref([
   {
-    label: 'Чат',
+    label: 'Проект',
     to: `/chat/${params.chatId}`,
     icon: 'i-lucide-message-square-text',
     exact: true,

@@ -1,6 +1,4 @@
 import { repository } from '@sushi-atrium/database'
-import { type } from 'arktype'
-import { updateUserSchema } from '~~/shared/services/user'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -36,17 +34,10 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const body = await readBody(event)
-    const data = updateUserSchema(body)
-    if (data instanceof type.errors) {
-      throw data
-    }
-
-    const updatedUser = await repository.user.update(userId, data)
+    await repository.user.updateOnline(userId)
 
     return {
       ok: true,
-      result: updatedUser,
     }
   } catch (error) {
     throw errorResolver(error)

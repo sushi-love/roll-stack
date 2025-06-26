@@ -102,6 +102,27 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  async function updateOnline() {
+    try {
+      await $fetch(`/api/user/id/${id.value}/online`, {
+        method: 'POST',
+        lazy: true,
+        server: true,
+        cache: 'no-cache',
+        getCachedData: undefined,
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('401')) {
+          // No session
+        }
+        if (error.message.includes('404')) {
+          // Not found
+        }
+      }
+    }
+  }
+
   function find(userId: string): UserWithData | undefined {
     const user = staff.value.find((user) => user.id === userId)
     if (user) {
@@ -126,6 +147,7 @@ export const useUserStore = defineStore('user', () => {
     partners,
 
     update,
+    updateOnline,
     find,
   }
 })

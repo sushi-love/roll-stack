@@ -63,6 +63,17 @@ export class User {
     return user
   }
 
+  static async updateOnline(id: string) {
+    const [user] = await useDatabase()
+      .update(users)
+      .set({
+        onlineAt: sql`now()`,
+      })
+      .where(eq(users.id, id))
+      .returning()
+    return user
+  }
+
   static async delete(id: string) {
     return useDatabase().delete(users).where(eq(users.id, id))
   }

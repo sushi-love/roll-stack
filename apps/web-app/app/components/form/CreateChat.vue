@@ -16,7 +16,7 @@
     <UFormField :label="$t('common.short-description')" name="description">
       <UInput
         v-model="state.description"
-        placeholder="Для чего создан чат и что в нем будет обсуждаться"
+        placeholder="Для чего создан и что в нем будет обсуждаться"
         size="xl"
         class="w-full items-center justify-center"
       />

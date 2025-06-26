@@ -6,6 +6,7 @@ type TaskListWithTasks = TaskList & {
 
 export const useTaskStore = defineStore('task', () => {
   const lists = ref<TaskListWithTasks[]>([])
+  const isTodayOnly = ref(false)
 
   async function update() {
     try {
@@ -54,6 +55,7 @@ export const useTaskStore = defineStore('task', () => {
 
   return {
     lists,
+    isTodayOnly,
 
     update,
     setAsFocused,

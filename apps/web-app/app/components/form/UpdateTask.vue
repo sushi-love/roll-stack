@@ -63,6 +63,18 @@
       </UPopover>
     </div>
 
+    <template v-if="isPrivate">
+      <UFormField label="В списке" name="listId">
+        <USelectMenu
+          v-model="selectedList"
+          :items="availableLists"
+          :placeholder="$t('common.select')"
+          size="xl"
+          class="w-full"
+        />
+      </UFormField>
+    </template>
+
     <div class="mt-3 flex flex-row gap-3">
       <UButton
         type="submit"
@@ -124,6 +136,17 @@ const taskStore = useTaskStore()
 const list = computed(() => taskStore.lists.find((list) => list.tasks.find((task) => task.id === taskId)))
 const task = computed(() => list.value?.tasks.find((task) => task.id === taskId))
 
+const availableLists = computed(() => taskStore.lists.filter((list) => list.userId === userStore.id).map((list) => ({
+  label: list.name,
+  value: list.id,
+})))
+
+const selectedList = ref<{ label: string, value: string } | undefined>(list.value ? { label: list.value.name, value: list.value.id } : undefined)
+
+watch(selectedList, () => {
+  state.value.listId = selectedList.value?.value
+})
+
 const isPrivate = computed(() => task.value?.performerId === userStore.id && !list.value?.chatId)
 
 const state = ref<Partial<UpdateTask>>({
@@ -131,6 +154,7 @@ const state = ref<Partial<UpdateTask>>({
   description: task.value?.description ?? undefined,
   performerId: task.value?.performerId,
   date: task.value?.date,
+  listId: task.value?.listId,
 })
 
 const selectedPerformer = ref<{ label: string, value: string, avatar: { src: string | undefined, alt: string } } | undefined>(state.value.performerId ? availablePerformers.value.find((performer) => performer?.value === state.value.performerId) : undefined)

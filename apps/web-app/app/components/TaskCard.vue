@@ -137,7 +137,7 @@ const toastId = ref(`task-close-${task.id}`)
 const items = computed<DropdownMenuItem[]>(() => {
   const menuItems: DropdownMenuItem[] = [
     {
-      label: 'Перейти в чат',
+      label: 'Перейти в проект',
       icon: 'i-lucide-messages-square',
       color: 'neutral',
       disabled: false,

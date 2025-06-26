@@ -18,12 +18,14 @@ export class Task {
 
   static async findList(id: string) {
     return useDatabase().query.taskLists.findFirst({
-      where: (taskLists, { eq }) => eq(taskLists.id, id),
+      where: (taskLists, { eq, and }) => and(eq(taskLists.id, id), eq(taskLists.isArchived, false)),
     })
   }
 
   static async lists() {
     return useDatabase().query.taskLists.findMany({
+      where: (taskLists, { eq }) => eq(taskLists.isArchived, false),
+      orderBy: (taskLists, { desc }) => desc(taskLists.updatedAt),
       with: {
         tasks: {
           where: (tasks, { or, isNull, gte }) =>

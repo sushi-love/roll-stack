@@ -1,23 +1,22 @@
 import { repository } from '@sushi-atrium/database'
 import { type } from 'arktype'
-import { updateUserSchema } from '~~/shared/services/user'
+import { updateTaskListSchema } from '~~/shared/services/task'
 
 export default defineEventHandler(async (event) => {
   try {
-    const userId = getRouterParam(event, 'userId')
-    if (!userId) {
+    const listId = getRouterParam(event, 'listId')
+    if (!listId) {
       throw createError({
         statusCode: 400,
         message: 'Id is required',
       })
     }
 
-    // Guard: if no user
-    const user = await repository.user.find(userId)
-    if (!user?.id) {
+    const list = await repository.task.findList(listId)
+    if (!list) {
       throw createError({
-        statusCode: 400,
-        message: 'User already have info',
+        statusCode: 404,
+        message: 'Task list not found',
       })
     }
 
@@ -29,7 +28,7 @@ export default defineEventHandler(async (event) => {
         message: 'Not logged in',
       })
     }
-    if (session.user.id !== userId) {
+    if (session.user.id !== list.userId) {
       throw createError({
         statusCode: 403,
         message: 'Forbidden',
@@ -37,16 +36,16 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody(event)
-    const data = updateUserSchema(body)
+    const data = updateTaskListSchema(body)
     if (data instanceof type.errors) {
       throw data
     }
 
-    const updatedUser = await repository.user.update(userId, data)
+    const updatedList = await repository.task.updateList(listId, data)
 
     return {
       ok: true,
-      result: updatedUser,
+      result: updatedList,
     }
   } catch (error) {
     throw errorResolver(error)

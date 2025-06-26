@@ -51,6 +51,7 @@ export const users = pgTable('users', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  onlineAt: timestamp('online_at', { precision: 3, withTimezone: true, mode: 'string' }),
   type: varchar('type').notNull().$type<UserType>(),
   gender: varchar('gender').notNull().default('unknown').$type<UserGender>(),
   name: varchar('name').notNull(),
@@ -264,6 +265,7 @@ export const taskLists = pgTable('task_lists', {
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   name: varchar('name').notNull(),
+  isArchived: boolean('is_archived').notNull().default(false),
   userId: cuid2('user_id').references(() => users.id),
   chatId: cuid2('chat_id').references(() => chats.id),
 })

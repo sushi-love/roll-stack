@@ -8,7 +8,6 @@
 
     <div
       v-if="tasks.length"
-      ref="tasksRef"
       class="w-full flex flex-col gap-3"
     >
       <TaskCard
@@ -19,7 +18,7 @@
     </div>
     <template v-else>
       <p class="text-base text-dimmed">
-        Тут пока пусто
+        Список пуст
       </p>
     </template>
   </div>
@@ -27,16 +26,15 @@
 
 <script setup lang="ts">
 import type { Task } from '@sushi-atrium/database'
-import { useSortable } from '@vueuse/integrations/useSortable'
 
 const { tasks } = defineProps<{
   tasks: Task[]
   isPrivate: boolean
 }>()
 
-const tasksRef = useTemplateRef<HTMLElement>('tasks')
+// const tasksRef = useTemplateRef<HTMLElement>('tasks')
 
-useSortable(tasksRef, tasks, {
-  animation: 150,
-})
+// useSortable(tasksRef, tasks, {
+//   animation: 150,
+// })
 </script>

@@ -2,28 +2,63 @@
   <Header title="Все задачи" />
 
   <Content>
-    <div class="flex flex-wrap items-center justify-between gap-1.5">
-      <div class="flex flex-row gap-2.5">
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <div class="w-full lg:w-auto flex flex-col lg:flex-row gap-2.5">
         <UInput
           v-model="filterValue"
           placeholder="По названию"
           icon="i-lucide-search"
-          class="w-48"
+          class="w-full lg:w-48"
         />
 
         <USelectMenu
           v-model="selectedPerformer"
           :items="availablePerformers"
+          :avatar="selectedPerformer?.avatar"
           placeholder="Исполнитель"
-          class="w-48"
+          class="w-full lg:w-48"
         />
 
         <USelectMenu
           v-model="selectedResolution"
           :items="availableResolutions"
+          :icon="selectedResolution?.icon"
           placeholder="Резолюция"
-          class="w-48"
+          class="w-full lg:w-48"
         />
+
+        <UPopover>
+          <UButton
+            color="neutral"
+            variant="outline"
+            icon="i-lucide-calendar"
+            :ui="{
+              leadingIcon: 'text-dimmed',
+            }"
+          >
+            <template v-if="selectedDates.start">
+              <template v-if="selectedDates.end">
+                {{ df.format(selectedDates.start.toDate(getLocalTimeZone())) }} - {{ df.format(selectedDates.end.toDate(getLocalTimeZone())) }}
+              </template>
+
+              <template v-else>
+                {{ df.format(selectedDates.start.toDate(getLocalTimeZone())) }}
+              </template>
+            </template>
+            <template v-else>
+              Выберите даты
+            </template>
+          </UButton>
+
+          <template #content>
+            <UCalendar
+              v-model="selectedDates"
+              class="p-2"
+              :number-of-months="2"
+              range
+            />
+          </template>
+        </UPopover>
       </div>
 
       <div class="flex flex-wrap items-center gap-1.5">
@@ -164,8 +199,9 @@
         {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} {{ t('common.table.rows', table?.tableApi?.getFilteredRowModel().rows.length || 0) }}
       </div>
 
-      <div class="flex items-center gap-1.5">
+      <div class="max-w-48 md:max-w-80 flex items-center gap-1.5">
         <UPagination
+          :show-controls="width > 768"
           :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
           :items-per-page="table?.tableApi?.getState().pagination.pageSize"
           :total="table?.tableApi?.getFilteredRowModel().rows.length"
@@ -177,10 +213,10 @@
 </template>
 
 <script setup lang="ts">
+import type { CalendarDate } from '@internationalized/date'
 import type { TableColumn } from '@nuxt/ui'
 import type { Task } from '@sushi-atrium/database'
-import { NuxtLink } from '#components'
-import { DateFormatter } from '@internationalized/date'
+import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 import { getLocalizedResolution, getResolutionForSelect } from '~~/shared/utils/helpers'
@@ -189,7 +225,10 @@ useHead({
   title: 'Все задачи',
 })
 
+const router = useRouter()
+const route = useRoute()
 const { t } = useI18n()
+const { width } = useWindowSize()
 
 const { data } = await useFetch('/api/task/list/completed')
 
@@ -226,15 +265,21 @@ const selectedPerformer = ref<{ label: string, value: string, avatar: { src: str
 const availableResolutions = computed(() => [{
   label: 'Все статусы',
   value: '',
+  icon: '',
   onSelect: () => {
     selectedResolution.value = undefined
   },
 }, {
   label: 'Без резолюции',
   value: 'empty',
+  icon: '',
 }, ...getResolutionForSelect()])
 
 const selectedResolution = ref<{ label: string, value: string, icon: string } | undefined>()
+const selectedDates = shallowRef<{ start: CalendarDate | undefined, end: CalendarDate | undefined }>({
+  start: undefined,
+  end: undefined,
+})
 
 const filterValue = ref('')
 
@@ -257,6 +302,10 @@ const dataFiltered = computed(() => {
     }
   }
 
+  if (selectedDates.value?.start && selectedDates.value?.end) {
+    finalRows = finalRows?.filter((t) => new Date(t.updatedAt).getTime() >= new Date(selectedDates.value?.start?.toString() ?? '').getTime() && new Date(t.updatedAt).getTime() <= new Date(selectedDates.value?.end?.toString() ?? '').getTime())
+  }
+
   return finalRows
 })
 
@@ -267,10 +316,13 @@ const columnFilters = ref([{
 const columnVisibility = ref({
   id: false,
   report: false,
+  resolution: true,
+  performerId: true,
+  updatedAt: true,
 })
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 25,
+  pageSize: 50,
 })
 
 const columns: Ref<TableColumn<Task>[]> = ref([{
@@ -327,4 +379,46 @@ const table = useTemplateRef('table')
 const df = new DateFormatter('ru-RU', {
   dateStyle: 'long',
 })
+
+// Get state from URL
+onMounted(() => {
+  if (!route.query) {
+    return
+  }
+
+  selectedPerformer.value = availablePerformers.value.find((performer) => performer?.value === route.query.performer)
+  selectedResolution.value = availableResolutions.value.find((resolution) => resolution?.value === route.query.resolution)
+  filterValue.value = route.query.name?.toString() ?? ''
+
+  if (route.query.start && route.query.end) {
+    selectedDates.value = {
+      start: parseDate(route.query.start.toString()),
+      end: parseDate(route.query.end.toString()),
+    }
+  }
+
+  if (route.query.preset === 'weekly') {
+    columnVisibility.value = {
+      id: false,
+      report: true,
+      resolution: false,
+      performerId: false,
+      updatedAt: false,
+    }
+  }
+})
+
+// Save state in URL on every filter change
+watch([selectedPerformer, selectedResolution, filterValue, selectedDates], () => {
+  router.push({
+    query: {
+      performer: selectedPerformer.value?.value,
+      resolution: selectedResolution.value?.value,
+      name: filterValue.value,
+      preset: route.query.preset,
+      start: selectedDates.value?.start?.toString(),
+      end: selectedDates.value?.end?.toString(),
+    },
+  })
+}, { deep: true })
 </script>
