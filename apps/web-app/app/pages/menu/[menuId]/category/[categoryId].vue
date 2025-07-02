@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ModalAttachProduct, ModalUpdateMenuCategory, UButton } from '#components'
+import { ModalAttachProduct, ModalUpdateMenuCategory } from '#components'
 
 const { t } = useI18n()
 const { params } = useRoute('menu-menuId-category-categoryId')

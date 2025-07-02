@@ -1,13 +1,13 @@
 <template>
-  <Header :title="t('app.menu.products')">
+  <Header :title="t('app.menu.prints')">
     <UButton
       size="lg"
       variant="solid"
       color="secondary"
       class="w-full md:w-fit"
       icon="i-lucide-circle-plus"
-      :label="t('app.create.product.button')"
-      @click="modalCreateProduct.open()"
+      :label="t('app.create.print.button')"
+      @click="modalCreatePrint.open()"
     />
   </Header>
 
@@ -21,12 +21,12 @@
           icon="i-lucide-search"
         />
 
-        <UInput
+        <!-- <UInput
           v-model="filterByTagValue"
           placeholder="По тегу"
           class="max-w-sm"
           icon="i-lucide-search"
-        />
+        /> -->
       </div>
 
       <div class="flex flex-wrap items-center gap-1.5">
@@ -81,15 +81,15 @@
       <template #id-cell="{ row }">
         {{ row.getValue('id') }}
       </template>
-      <template #media-cell="{ row }">
-        <ULink :to="`/product/${row.getValue('id')}`">
+      <!-- <template #media-cell="{ row }">
+        <ULink :to="`/print/${row.getValue('id')}`">
           <div class="h-12 aspect-3/2 object-cover pl-0" data-media="true">
             <ProductImage :media="row.getValue('media')" size="xs" />
           </div>
         </ULink>
-      </template>
+      </template> -->
       <template #name-cell="{ row }">
-        <ULink :to="`/product/${row.getValue('id')}`" class="font-medium text-highlighted">
+        <ULink :to="`/print/${row.getValue('id')}`" class="font-medium text-highlighted">
           {{ row.getValue('name') }}
         </ULink>
       </template>
@@ -98,35 +98,20 @@
           {{ row.getValue('description') }}
         </div>
       </template>
-      <template #variants-cell="{ row }">
-        <div class="flex flex-col gap-1">
-          <div
-            v-for="variant in (row.getValue('variants') as ProductVariantWithData[])"
-            :key="variant.id"
-            class="flex items-center gap-1.5"
-          >
-            <UBadge
-              v-for="tag in variant.tags"
-              :key="tag.id"
-              color="neutral"
-              variant="soft"
-              size="sm"
-              :label="tag.name"
-            />
-
-            <p class="text-sm">
-              {{ `${variant.name}, ${variant.weightValue}${getWeightLocalizedUnit(variant.weightUnit)}, ${variant.gross}${menuStore.currencySign}` }}
-            </p>
-          </div>
+      <template #importantInfo-cell="{ row }">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-64">
+          {{ row.getValue('importantInfo') }}
         </div>
       </template>
-      <template #tags-cell="{ row }">
-        <ProductTagsBlock :tags="row.getValue('tags')" />
+      <template #technicalInfo-cell="{ row }">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-64">
+          {{ row.getValue('technicalInfo') }}
+        </div>
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-end" data-action="true">
           <UDropdownMenu
-            :items="getDropdownActions(row.original as Product)"
+            :items="getDropdownActions(row.original as Print)"
             :content="{ align: 'end' }"
             class="ml-auto"
           >
@@ -163,28 +148,27 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { Product } from '@sushi-atrium/database'
-import type { ProductVariantWithData, ProductWithData } from '~~/types'
-import { ModalCreateProduct } from '#components'
+import type { Print } from '@sushi-atrium/database'
+import type { PrintWithData } from '~~/types'
+import { ModalCreatePrint } from '#components'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 
 const overlay = useOverlay()
-const modalCreateProduct = overlay.create(ModalCreateProduct)
+const modalCreatePrint = overlay.create(ModalCreatePrint)
 
 const { t } = useI18n()
-const menuStore = useMenuStore()
-const productStore = useProductStore()
+const printStore = usePrintStore()
 
 const filterValue = ref('')
-const filterByTagValue = ref('')
+// const filterByTagValue = ref('')
 
-const data = computed<ProductWithData[]>(() => {
-  let finalRows = productStore.products.filter((product) => product.name.toLowerCase().includes(filterValue.value.toLowerCase()))
+const data = computed<PrintWithData[]>(() => {
+  const finalRows = printStore.prints.filter((p) => p.name.toLowerCase().includes(filterValue.value.toLowerCase()))
 
-  if (filterByTagValue.value) {
-    finalRows = finalRows.filter((product) => product.tags.some((tag) => tag.name.toLowerCase().includes(filterByTagValue.value.toLowerCase())))
-  }
+  // if (filterByTagValue.value) {
+  //   finalRows = finalRows.filter((p) => p.tags.some((tag) => tag.name.toLowerCase().includes(filterByTagValue.value.toLowerCase())))
+  // }
 
   return finalRows
 })
@@ -195,45 +179,48 @@ const columnVisibility = ref({
 const rowSelection = ref()
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 50,
+  pageSize: 25,
 })
 
-const columns: Ref<TableColumn<ProductWithData>[]> = ref([{
+const columns: Ref<TableColumn<PrintWithData>[]> = ref([{
   accessorKey: 'id',
   header: 'Id',
-}, {
-  accessorKey: 'media',
-  enableSorting: false,
-  header: '',
-}, {
+},
+// {
+//   accessorKey: 'media',
+//   enableSorting: false,
+//   header: '',
+// },
+{
   accessorKey: 'name',
   header: 'Название',
 }, {
   accessorKey: 'description',
   header: 'Описание',
 }, {
-  accessorKey: 'variants',
-  header: 'Вариации продукта',
+  accessorKey: 'importantInfo',
+  header: 'Важно',
 }, {
-  accessorKey: 'tags',
-  header: 'Теги',
+  accessorKey: 'technicalInfo',
+  header: 'Техническая информация',
 }, {
   id: 'action',
   enableSorting: false,
   enableHiding: false,
 }])
 
-function getDropdownActions(product: Product): DropdownMenuItem[][] {
+function getDropdownActions(print: Print): DropdownMenuItem[][] {
   return [
     [
       {
         type: 'label',
         label: t('common.actions'),
-      }, {
+      },
+      {
         label: t('common.open-page'),
         type: 'link',
-        to: `/product/${product.id}`,
-        icon: 'i-lucide-cooking-pot',
+        to: `/print/${print.id}`,
+        icon: 'i-lucide-file',
       },
     ],
   ]
@@ -242,6 +229,6 @@ function getDropdownActions(product: Product): DropdownMenuItem[][] {
 const table = useTemplateRef('table')
 
 useHead({
-  title: t('app.menu.products'),
+  title: t('app.menu.prints'),
 })
 </script>

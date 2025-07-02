@@ -81,6 +81,12 @@ const menuItems = computed(() => [
     icon: 'i-lucide-sticker',
     active: route.path.startsWith('/post'),
   },
+  {
+    label: t('app.menu.prints'),
+    to: '/print',
+    icon: 'i-lucide-printer',
+    active: route.path.startsWith('/print'),
+  },
 ])
 
 const linkItems = computed(() => [

@@ -72,26 +72,6 @@ const myLists = computed(() => taskStore.lists.filter((taskList) => taskList.use
 const otherLists = computed(() => taskStore.lists.filter((taskList) => taskList.userId !== userStore.id))
 const otherTasks = computed(() => otherLists.value.flatMap((list) => list.tasks).filter((task) => task.performerId === userStore.id))
 
-let interval: NodeJS.Timeout
-
-onMounted(async () => {
-  await Promise.all([
-    userStore.updateOnline(),
-    userStore.update(),
-  ])
-
-  interval = setInterval(async () => {
-    await Promise.all([
-      userStore.updateOnline(),
-      userStore.update(),
-    ])
-  }, 45000)
-})
-
-onUnmounted(() => {
-  clearInterval(interval)
-})
-
 useHead({
   title: 'Суши Атриум',
   meta: [

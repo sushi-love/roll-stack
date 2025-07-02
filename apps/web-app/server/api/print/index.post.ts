@@ -1,0 +1,26 @@
+import { repository } from '@sushi-atrium/database'
+import { type } from 'arktype'
+import { createPrintSchema } from '~~/shared/services/print'
+
+export default defineEventHandler(async (event) => {
+  try {
+    await hasPermission(event, 'print:edit')
+
+    const body = await readBody(event)
+    const data = createPrintSchema(body)
+    if (data instanceof type.errors) {
+      throw data
+    }
+
+    const print = await repository.print.create({
+      ...data,
+    })
+
+    return {
+      ok: true,
+      result: print,
+    }
+  } catch (error) {
+    throw errorResolver(error)
+  }
+})

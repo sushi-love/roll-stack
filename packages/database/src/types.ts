@@ -60,8 +60,8 @@ export type TaskDraft = InferInsertModel<typeof tables.tasks>
 export type TaskList = InferSelectModel<typeof tables.taskLists>
 export type TaskListDraft = InferInsertModel<typeof tables.taskLists>
 
-export type taskAutoCreator = InferSelectModel<typeof tables.taskAutoCreators>
-export type taskAutoCreatorDraft = InferInsertModel<typeof tables.taskAutoCreators>
+export type TaskAutoCreator = InferSelectModel<typeof tables.taskAutoCreators>
+export type TaskAutoCreatorDraft = InferInsertModel<typeof tables.taskAutoCreators>
 
 export type Notification = InferSelectModel<typeof tables.notifications>
 export type NotificationDraft = InferInsertModel<typeof tables.notifications>
@@ -86,3 +86,18 @@ export type CityDraft = InferInsertModel<typeof tables.cities>
 
 export type Post = InferSelectModel<typeof tables.posts>
 export type PostDraft = InferInsertModel<typeof tables.posts>
+
+export type PostLike = InferSelectModel<typeof tables.postLikes>
+export type PostLikeDraft = InferInsertModel<typeof tables.postLikes>
+
+export type File = InferSelectModel<typeof tables.files>
+export type FileDraft = InferInsertModel<typeof tables.files>
+
+export type Print = InferSelectModel<typeof tables.prints>
+export type PrintDraft = InferInsertModel<typeof tables.prints>
+
+export type PrintOrder = InferSelectModel<typeof tables.printOrders>
+export type PrintOrderDraft = InferInsertModel<typeof tables.printOrders>
+
+export type PrintOrderItem = InferSelectModel<typeof tables.printOrderItems>
+export type PrintOrderItemDraft = InferInsertModel<typeof tables.printOrderItems>

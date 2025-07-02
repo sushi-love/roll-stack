@@ -13,10 +13,14 @@ type PermissionCode = 'product:view'
   | 'post:edit'
   | 'post:delete'
   | 'post:image:edit'
+  | 'print:edit'
+  | 'print:file:edit'
+  | 'print:delete'
 
 type WeightUnit = 'G' | 'KG' | 'ML' | 'L' | 'OZ' | 'LB'
 
 type MediaFormat = 'jpg' | 'webp'
+type FileFormat = 'docx' | 'cdr' | 'zip' | 'pdf'
 
 type NotificationType = 'task_completed'
 
@@ -407,6 +411,58 @@ export const posts = pgTable('posts', {
   mediaId: cuid2('media_id').references(() => media.id),
 })
 
+export const postLikes = pgTable('post_likes', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  postId: cuid2('post_id').notNull().references(() => posts.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  userId: cuid2('user_id').notNull().references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
+export const files = pgTable('files', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  url: varchar('url').notNull(),
+  size: integer('size').notNull(),
+  format: varchar('format').notNull().$type<FileFormat>(),
+})
+
+export const prints = pgTable('prints', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  description: varchar('description'),
+  importantInfo: varchar('important_info'),
+  technicalInfo: varchar('technical_info'),
+  regularAmount: integer('regular_amount').notNull().default(0),
+  mainFileId: cuid2('main_file_id').references(() => files.id),
+  previewFileId: cuid2('preview_file_id').references(() => files.id),
+})
+
+export const printOrders = pgTable('print_orders', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+})
+
+export const printOrderItems = pgTable('print_order_items', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  printOrderId: cuid2('print_order_id').notNull().references(() => printOrders.id),
+  printId: cuid2('print_id').notNull().references(() => prints.id),
+  note: varchar('note'),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
@@ -417,6 +473,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
     fields: [users.focusedTaskId],
     references: [tasks.id],
   }),
+  postLikes: many(postLikes),
 }))
 
 export const chatRelations = relations(chats, ({ many, one }) => ({
@@ -632,9 +689,52 @@ export const paymentMethodsOnKitchenRelations = relations(paymentMethodsOnKitche
   }),
 }))
 
-export const postRelations = relations(posts, ({ one }) => ({
+export const postRelations = relations(posts, ({ one, many }) => ({
   media: one(media, {
     fields: [posts.mediaId],
     references: [media.id],
+  }),
+  likes: many(postLikes),
+}))
+
+export const postLikeRelations = relations(postLikes, ({ one }) => ({
+  post: one(posts, {
+    fields: [postLikes.postId],
+    references: [posts.id],
+  }),
+  user: one(users, {
+    fields: [postLikes.userId],
+    references: [users.id],
+  }),
+}))
+
+export const fileRelations = relations(files, ({ many }) => ({
+  prints: many(prints),
+}))
+
+export const printRelations = relations(prints, ({ many, one }) => ({
+  orders: many(printOrders),
+  mainFile: one(files, {
+    fields: [prints.mainFileId],
+    references: [files.id],
+  }),
+  previewFile: one(files, {
+    fields: [prints.previewFileId],
+    references: [files.id],
+  }),
+}))
+
+export const printOrderRelations = relations(printOrders, ({ many }) => ({
+  items: many(printOrderItems),
+}))
+
+export const printOrderItemRelations = relations(printOrderItems, ({ one }) => ({
+  printOrder: one(printOrders, {
+    fields: [printOrderItems.printOrderId],
+    references: [printOrders.id],
+  }),
+  print: one(prints, {
+    fields: [printOrderItems.printId],
+    references: [prints.id],
   }),
 }))

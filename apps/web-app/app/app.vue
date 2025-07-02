@@ -45,14 +45,39 @@ const chat = useChatStore()
 const task = useTaskStore()
 const notification = useNotificationStore()
 const post = usePostStore()
+const print = usePrintStore()
 
 await Promise.all([
-  user.update(),
+  // user.update(),
+  // task.update(),
   menu.update(),
   product.update(),
   chat.update(),
-  task.update(),
   notification.update(),
   post.update(),
+  print.update(),
 ])
+
+// Auto Update Online
+let interval: NodeJS.Timeout
+
+onMounted(async () => {
+  await Promise.all([
+    user.updateOnline(),
+    user.update(),
+    task.update(),
+  ])
+
+  interval = setInterval(async () => {
+    await Promise.all([
+      user.updateOnline(),
+      user.update(),
+      task.update(),
+    ])
+  }, 30000)
+})
+
+onUnmounted(() => {
+  clearInterval(interval)
+})
 </script>

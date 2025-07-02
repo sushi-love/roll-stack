@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 flex flex-col gap-5 motion-preset-bounce ring ring-default/50 h-full rounded-lg bg-elevated/25">
+  <ActiveCard class="w-full flex flex-col gap-5 motion-preset-bounce">
     <div class="flex flex-row gap-2.5 items-center">
       <UTooltip :text="social.title">
         <UIcon :name="social.icon" class="size-8 text-dimmed/50" />
@@ -12,13 +12,8 @@
       </UTooltip>
     </div>
 
-    <UTooltip :text="$t('app.update.post-photo.button')">
-      <PostImage
-        :media="post?.media"
-        size="lg"
-        class="cursor-pointer"
-        @click="modalUploadPostImage.open({ postId: post?.id })"
-      />
+    <UTooltip v-if="post?.media" text="Фотография">
+      <PostImage :media="post?.media" size="lg" />
     </UTooltip>
 
     <div class="text-base/5 whitespace-pre-wrap">
@@ -30,95 +25,34 @@
     </div>
 
     <div class="flex flex-row justify-between items-center">
-      <div class="flex flex-row gap-2">
-        <UButton
-          variant="soft"
-          color="neutral"
-          size="md"
-          icon="i-lucide-heart"
-          class="text-muted"
-          label="0"
-        />
-
-        <UButton
-          v-if="post?.url"
-          :to="post.url"
-          target="_blank"
-          external
-          variant="soft"
-          color="neutral"
-          size="md"
-          icon="i-lucide-external-link"
-          class="text-muted"
-          label="Открыть"
-        />
-      </div>
-
-      <div class="flex flex-row gap-2 items-center">
-        <div class="text-muted">
-          {{ status }}
+      <div class="flex flex-row gap-4">
+        <div class="flex flex-row gap-1.5 items-center text-muted">
+          <UIcon name="i-lucide-heart" class="size-5" />
+          <p>{{ post?.likes.length }}</p>
         </div>
 
-        <UButton
-          variant="soft"
-          color="neutral"
-          size="md"
-          icon="i-lucide-ellipsis-vertical"
-          class="text-muted"
-          @click="modalUpdatePost.open({ postId: post?.id })"
-        />
+        <div class="flex flex-row gap-1.5 items-center text-muted">
+          <UIcon name="i-lucide-message-circle" class="size-5" />
+          <p>0</p>
+        </div>
+      </div>
+
+      <div class="text-muted">
+        {{ status }}
       </div>
     </div>
-  </div>
+  </ActiveCard>
 </template>
 
 <script setup lang="ts">
-import { ModalUpdatePost, ModalUploadPostImage } from '#components'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 
 const { postId } = defineProps<{ postId: string }>()
 
-const overlay = useOverlay()
-const modalUpdatePost = overlay.create(ModalUpdatePost)
-const modalUploadPostImage = overlay.create(ModalUploadPostImage)
-
 const postStore = usePostStore()
 const post = computed(() => postStore.posts.find((post) => post.id === postId))
 
 const social = computed(() => getSocialInfo(post.value?.type))
-const status = computed(() => getLocalizedStatus(post.value?.status ?? ''))
-
-function getSocialInfo(type: string | undefined) {
-  switch (type) {
-    case 'vk':
-      return {
-        icon: 'i-simple-icons:vk',
-        title: 'ВКонтакте',
-      }
-    case 'telegram':
-      return {
-        icon: 'i-simple-icons:telegram',
-        title: 'Telegram',
-      }
-    default:
-      return {
-        icon: '',
-        title: '',
-      }
-  }
-}
-
-function getLocalizedStatus(status: string) {
-  switch (status) {
-    case 'scheduled':
-      return 'Запланировано'
-    case 'published':
-      return 'Опубликовано'
-    case 'draft':
-      return 'Черновик'
-    default:
-      return ''
-  }
-}
+const status = computed(() => getLocalizedPostStatus(post.value?.status ?? ''))
 </script>

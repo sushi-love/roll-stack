@@ -111,3 +111,39 @@ export function getCategoryIconsForSelect(): { value: string, label: string, ico
     { value: 'fluent-emoji-flat:cooking', icon: 'fluent-emoji-flat:cooking', label: 'Яичница' },
   ]
 }
+
+export function getSocialInfo(type: string | undefined) {
+  switch (type) {
+    case 'vk':
+      return {
+        icon: 'i-simple-icons:vk',
+        color: 'text-[#4d7198]',
+        title: 'ВКонтакте',
+      }
+    case 'telegram':
+      return {
+        icon: 'i-simple-icons:telegram',
+        color: 'text-[#27a7e7]',
+        title: 'Telegram',
+      }
+    default:
+      return {
+        icon: '',
+        color: '',
+        title: '',
+      }
+  }
+}
+
+export function getLocalizedPostStatus(status: string) {
+  switch (status) {
+    case 'scheduled':
+      return 'Запланировано'
+    case 'published':
+      return 'Опубликовано'
+    case 'draft':
+      return 'Черновик'
+    default:
+      return ''
+  }
+}

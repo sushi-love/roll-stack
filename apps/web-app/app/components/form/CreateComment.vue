@@ -5,9 +5,7 @@
     :ui="{ body: '!p-4' }"
   >
     <div v-if="!user.id" class="text-center text-muted">
-      <ULink to="/sign-in">
-        Необходимо авторизоваться
-      </ULink> чтобы оставить комментарий
+      <Loader />
     </div>
     <form
       v-else
@@ -35,7 +33,7 @@
             class="size-8"
           />
           <p class="text-sm font-semibold">
-            {{ user.fullName }}
+            {{ user.name }}
           </p>
         </div>
 
@@ -67,10 +65,10 @@ function onCommentSubmit() {
     text.value = ''
 
     toast.add({
-      title: 'Комментарий добавлен!',
-      description: 'Сейчас он появится на странице.',
-      icon: 'i-lucide-check-circle',
-      color: 'success',
+      title: 'Комментарий... не добавлен',
+      description: 'Скоро будет сделано.',
+      icon: 'i-lucide-ban',
+      color: 'error',
     })
 
     loading.value = false

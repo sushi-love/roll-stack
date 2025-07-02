@@ -6,7 +6,7 @@ const postStatusSchema = type('"draft" | "published" | "scheduled"')
 export const createPostSchema = type({
   type: postTypeSchema.describe('error.length.invalid'),
   description: type('string <= 1000 | undefined').describe('error.length.invalid').optional(),
-  content: type('1 <= string <= 2000').describe('error.length.invalid'),
+  content: type('1 <= string <= 3000 | undefined').describe('error.length.invalid').optional(),
   publishAt: type('string').describe('error.length.invalid'),
   status: postStatusSchema.describe('error.length.invalid'),
 })

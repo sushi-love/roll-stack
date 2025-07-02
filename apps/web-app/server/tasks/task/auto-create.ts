@@ -8,6 +8,9 @@ export default defineTask({
     description: 'Check if it is time to create a task',
   },
   async run() {
+    // Wait 5 seconds
+    await new Promise((resolve) => setTimeout(resolve, 5000))
+
     try {
       const autoCreators = await repository.task.autoCreatorsList()
 

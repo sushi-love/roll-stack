@@ -1,4 +1,4 @@
-import type { Media, MediaItem, Menu, MenuCategory, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
+import type { File, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
 
 export type ProductVariantWithData = ProductVariant & {
   tags: ProductVariantTag[]
@@ -32,3 +32,11 @@ export type PermissionCode = 'product:view'
   | 'post:edit'
   | 'post:delete'
   | 'post:image:edit'
+  | 'print:edit'
+  | 'print:file:edit'
+  | 'print:delete'
+
+export type PrintWithData = Print & {
+  mainFile: File | null
+  previewFile: File | null
+}

@@ -136,12 +136,22 @@ watch(
   },
 )
 
+// Check if code is valid
+watch(
+  () => state.value.code,
+  () => {
+    if (isCodeValid.value) {
+      signIn()
+    }
+  },
+)
+
 function sendCode() {
   state.value.step = 2
   toast.add({
     title: 'Код отправлен',
     description: 'Введите полученный код. Если код не приходит в течении 60 секунд, перезагрузите страницу и попробуйте снова.',
-    duration: 20000,
+    duration: 10000,
   })
 }
 

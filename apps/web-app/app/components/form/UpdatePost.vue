@@ -5,7 +5,11 @@
     class="flex flex-col gap-3"
     @submit="onSubmit"
   >
-    <UFormField label="Статус" name="status">
+    <UFormField
+      label="Статус"
+      name="status"
+      required
+    >
       <USelectMenu
         v-model="selectedStatus"
         :items="statuses"
@@ -15,7 +19,11 @@
       />
     </UFormField>
 
-    <UFormField label="Где размещен" name="type">
+    <UFormField
+      label="Где размещается"
+      name="type"
+      required
+    >
       <USelectMenu
         v-model="selectedType"
         :items="types"
@@ -25,20 +33,13 @@
       />
     </UFormField>
 
-    <UFormField label="Тело поста" name="content">
-      <UTextarea
-        v-model="state.content"
-        placeholder="Тут должен быть текст с мотивацией, но он потерялся"
-        :rows="6"
-        autoresize
-        size="xl"
-        class="w-full items-center justify-center"
-      />
-    </UFormField>
-
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <UPopover>
-        <UFormField label="Дата публикации" name="date">
+        <UFormField
+          label="Дата публикации"
+          name="date"
+          required
+        >
           <UInput
             :value="selectedDate ? df.format(selectedDate.toDate(getLocalTimeZone())) : ''"
             placeholder="Выберите дату"
@@ -53,7 +54,11 @@
         </template>
       </UPopover>
 
-      <UFormField label="Время публикации" name="time">
+      <UFormField
+        label="Время публикации"
+        name="time"
+        required
+      >
         <UInput
           v-model="selectedTime"
           type="time"
@@ -63,20 +68,31 @@
       </UFormField>
     </div>
 
-    <UFormField label="Итоговая ссылка" name="url">
-      <UInput
-        v-model="state.url"
-        size="xl"
-        class="w-full items-center justify-center"
-      />
-    </UFormField>
-
     <UFormField label="Комментарий" name="description">
       <UTextarea
         v-model="state.description"
         placeholder="Для внутреннего использования, не попадет в итоговый материал"
         :rows="3"
         autoresize
+        size="xl"
+        class="w-full items-center justify-center"
+      />
+    </UFormField>
+
+    <UFormField label="Тело поста" name="content">
+      <UTextarea
+        v-model="state.content"
+        placeholder="Тут должен быть текст с мотивацией, но он потерялся"
+        :rows="6"
+        autoresize
+        size="xl"
+        class="w-full items-center justify-center"
+      />
+    </UFormField>
+
+    <UFormField label="Итоговая ссылка" name="url">
+      <UInput
+        v-model="state.url"
         size="xl"
         class="w-full items-center justify-center"
       />
