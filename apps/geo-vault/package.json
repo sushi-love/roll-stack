@@ -13,7 +13,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@sushi-atrium/database": "workspace:*",
+    "@sushi-atrium/geo-database": "workspace:*",
     "arktype": "catalog:",
     "aws4fetch": "catalog:",
     "date-fns": "catalog:",

@@ -20,6 +20,6 @@ declare module 'ru-nalog-fias-gar' {
         (progress: { percentage: number }) => void,
         { time: number },
       ]
-    }): Promise<NodeJS.ReadableStream>
+    }): Promise<Map>
   }
 }
