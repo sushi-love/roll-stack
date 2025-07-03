@@ -19,6 +19,25 @@ export class Task {
   static async findList(id: string) {
     return useDatabase().query.taskLists.findFirst({
       where: (taskLists, { eq, and }) => and(eq(taskLists.id, id), eq(taskLists.isArchived, false)),
+      with: {
+        tasks: {
+          where: (tasks, { or, isNull, gte }) =>
+            or(
+              isNull(tasks.completedAt),
+              gte(tasks.completedAt, sql`now() - interval '12 hour'`),
+            ),
+          orderBy: (tasks, { desc }) => desc(tasks.updatedAt),
+        },
+        chat: {
+          with: {
+            members: {
+              with: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
     })
   }
 
@@ -34,6 +53,15 @@ export class Task {
               gte(tasks.completedAt, sql`now() - interval '12 hour'`),
             ),
           orderBy: (tasks, { desc }) => desc(tasks.updatedAt),
+        },
+        chat: {
+          with: {
+            members: {
+              with: {
+                user: true,
+              },
+            },
+          },
         },
       },
     })

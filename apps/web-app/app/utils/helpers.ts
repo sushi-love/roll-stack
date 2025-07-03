@@ -117,7 +117,7 @@ export function getSocialInfo(type: string | undefined) {
     case 'vk':
       return {
         icon: 'i-simple-icons:vk',
-        color: 'text-[#4d7198]',
+        color: 'text-[#0077FF]',
         title: 'ВКонтакте',
       }
     case 'telegram':

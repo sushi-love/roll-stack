@@ -9,7 +9,7 @@
             size="md"
             icon="i-lucide-plus"
             :label="$t('app.create.task.button')"
-            @click="modalCreateTask.open({ performerId: undefined, listId: list?.id ?? '' })"
+            @click="modalCreateTask.open({ performerId: undefined, listId: listId ?? '' })"
           />
         </div>
 
@@ -43,8 +43,10 @@ import { ModalCreateTask } from '#components'
 const { params } = useRoute('chat-chatId-tasks')
 
 const taskStore = useTaskStore()
-const list = computed(() => taskStore.lists.find((list) => list.chatId === params.chatId))
-const tasks = computed(() => list.value?.tasks)
+const chatStore = useChatStore()
+
+const listId = computed(() => chatStore.chats.find((chat) => chat.id === params.chatId)?.taskListId)
+const tasks = computed(() => taskStore.lists.find((list) => list.id === listId.value)?.tasks)
 
 const overlay = useOverlay()
 const modalCreateTask = overlay.create(ModalCreateTask)

@@ -6,7 +6,7 @@ export type Resolution = typeof resolutionSchema.infer
 export const createTaskSchema = type({
   name: type('2 <= string <= 150').describe('error.length.invalid'),
   description: type('string <= 500 | undefined').describe('error.length.invalid').optional(),
-  performerId: type('string | undefined').describe('error.length.invalid').optional(),
+  performerId: type('string | undefined | null').describe('error.length.invalid').optional(),
   date: type('string | undefined | null').describe('error.length.invalid').optional(),
   listId: type('string').describe('error.length.invalid'),
 })
@@ -29,7 +29,6 @@ export type CompleteTask = typeof completeTaskSchema.infer
 
 export const createTaskListSchema = type({
   name: type('2 <= string <= 150').describe('error.length.invalid'),
-  userId: type('string | undefined').describe('error.length.invalid').optional(),
   chatId: type('string | undefined').describe('error.length.invalid').optional(),
 })
 export type CreateTaskList = typeof createTaskListSchema.infer

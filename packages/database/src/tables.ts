@@ -75,7 +75,9 @@ export const chats = pgTable('chats', {
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   name: varchar('name').notNull(),
   description: varchar('description'),
+  isArchived: boolean('is_archived').notNull().default(false),
   lastMessageId: cuid2('last_message_id'),
+  taskListId: cuid2('task_list_id').references(() => taskLists.id),
 })
 
 export const chatMessages = pgTable('chat_messages', {
@@ -270,8 +272,7 @@ export const taskLists = pgTable('task_lists', {
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   name: varchar('name').notNull(),
   isArchived: boolean('is_archived').notNull().default(false),
-  userId: cuid2('user_id').references(() => users.id),
-  chatId: cuid2('chat_id').references(() => chats.id),
+  chatId: cuid2('chat_id').unique(),
 })
 
 export const taskAutoCreators = pgTable('task_auto_creators', {
@@ -297,7 +298,10 @@ export const notifications = pgTable('notifications', {
     onDelete: 'cascade',
     onUpdate: 'cascade',
   }),
-  taskId: cuid2('task_id').references(() => tasks.id),
+  taskId: cuid2('task_id').references(() => tasks.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
 })
 
 export const checkouts = pgTable('checkouts', {
@@ -425,6 +429,21 @@ export const postLikes = pgTable('post_likes', {
   }),
 })
 
+export const postComments = pgTable('post_comments', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  text: varchar('text').notNull(),
+  postId: cuid2('post_id').notNull().references(() => posts.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+  userId: cuid2('user_id').notNull().references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
 export const files = pgTable('files', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -474,6 +493,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
     references: [tasks.id],
   }),
   postLikes: many(postLikes),
+  postComments: many(postComments),
 }))
 
 export const chatRelations = relations(chats, ({ many, one }) => ({
@@ -483,7 +503,10 @@ export const chatRelations = relations(chats, ({ many, one }) => ({
     fields: [chats.lastMessageId],
     references: [chatMessages.id],
   }),
-  taskLists: many(taskLists),
+  taskList: one(taskLists, {
+    fields: [chats.taskListId],
+    references: [taskLists.id],
+  }),
 }))
 
 export const chatMessageRelations = relations(chatMessages, ({ one }) => ({
@@ -608,10 +631,6 @@ export const taskRelations = relations(tasks, ({ one }) => ({
 
 export const taskListRelations = relations(taskLists, ({ many, one }) => ({
   tasks: many(tasks),
-  user: one(users, {
-    fields: [taskLists.userId],
-    references: [users.id],
-  }),
   chat: one(chats, {
     fields: [taskLists.chatId],
     references: [chats.id],
@@ -695,6 +714,7 @@ export const postRelations = relations(posts, ({ one, many }) => ({
     references: [media.id],
   }),
   likes: many(postLikes),
+  comments: many(postComments),
 }))
 
 export const postLikeRelations = relations(postLikes, ({ one }) => ({
@@ -704,6 +724,17 @@ export const postLikeRelations = relations(postLikes, ({ one }) => ({
   }),
   user: one(users, {
     fields: [postLikes.userId],
+    references: [users.id],
+  }),
+}))
+
+export const postCommentRelations = relations(postComments, ({ one }) => ({
+  post: one(posts, {
+    fields: [postComments.postId],
+    references: [posts.id],
+  }),
+  user: one(users, {
+    fields: [postComments.userId],
     references: [users.id],
   }),
 }))

@@ -23,6 +23,12 @@ export class Chat {
     })
   }
 
+  static async findByTaskList(listId: string) {
+    return useDatabase().query.chats.findFirst({
+      where: (chat, { eq }) => eq(chat.taskListId, listId),
+    })
+  }
+
   static async findNotificationBot(chatId: string) {
     return useDatabase().query.chatMembers.findFirst({
       where: (member, { eq, and }) => and(eq(member.chatId, chatId), eq(member.userId, 'fsti10ba0cb7uxkal4uoja9r')),
@@ -53,7 +59,9 @@ export class Chat {
       },
     })
 
-    return userAsMembers.map(({ chat }) => chat)
+    return userAsMembers
+      .filter((member) => !member.chat.isArchived)
+      .map(({ chat }) => chat)
   }
 
   static async listMessages(chatId: string) {

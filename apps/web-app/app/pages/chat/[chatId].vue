@@ -20,7 +20,7 @@
       >
         <UAvatarGroup
           :max="3"
-          size="lg"
+          size="md"
           :ui="{
             base: '-me-2.5',
           }"
@@ -79,6 +79,7 @@
 <script setup lang="ts">
 const { params } = useRoute('chat-chatId')
 
+const { t } = useI18n()
 const chatStore = useChatStore()
 
 const chat = computed(() => chatStore.chats.find((chat) => chat.id === params.chatId))
@@ -86,7 +87,7 @@ const activeMembers = computed(() => chat.value?.members.filter((member) => memb
 
 const items = ref([
   {
-    label: 'Проект',
+    label: t('app.menu.chat'),
     to: `/chat/${params.chatId}`,
     icon: 'i-lucide-message-square-text',
     exact: true,

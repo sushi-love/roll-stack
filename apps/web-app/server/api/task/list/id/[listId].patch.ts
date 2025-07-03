@@ -12,6 +12,14 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const session = await getUserSession(event)
+    if (!session?.user) {
+      throw createError({
+        statusCode: 401,
+        message: 'Not logged in',
+      })
+    }
+
     const list = await repository.task.findList(listId)
     if (!list) {
       throw createError({
@@ -20,15 +28,9 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Guard: if not this user in session
-    const session = await getUserSession(event)
-    if (!session?.user) {
-      throw createError({
-        statusCode: 401,
-        message: 'Not logged in',
-      })
-    }
-    if (session.user.id !== list.userId) {
+    // Guard: if don't have access
+    const canEdit = list.chat?.members.some((member) => member.userId === session.user?.id)
+    if (!canEdit) {
       throw createError({
         statusCode: 403,
         message: 'Forbidden',

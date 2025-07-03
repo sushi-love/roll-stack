@@ -52,10 +52,10 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const isPrivate = task.performerId === session.user.id && !list.chatId
+    const canEdit = list.chat?.members.some((member) => member.userId === session.user?.id)
 
-    // Guard: If task is private - cannot change performer
-    if (isPrivate && task.performerId !== data.performerId) {
+    // Guard: if don't have access
+    if (!canEdit) {
       throw createError({
         statusCode: 403,
         message: 'Task is private',
@@ -70,20 +70,17 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    let updatedPerformer
-    if (updatedTask.performerId) {
-      updatedPerformer = await repository.user.find(updatedTask.performerId)
-    }
+    const updatedPerformer = updatedTask.performerId ? await repository.user.find(updatedTask.performerId) : undefined
 
     // Bot notification in chat
-    if (list.chatId) {
-      const bot = await repository.chat.findNotificationBot(list.chatId)
+    if (list.chat) {
+      const bot = await repository.chat.findNotificationBot(list.chat.id)
       if (bot) {
         const text = prepareBotMessage(user, task, updatedTask, updatedPerformer)
 
         // Send message as bot
         await repository.chat.createMessage({
-          chatId: list.chatId,
+          chatId: list.chat.id,
           userId: bot.user.id,
           text,
         })

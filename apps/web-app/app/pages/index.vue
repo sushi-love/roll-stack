@@ -29,21 +29,17 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <TaskPerformerList
-          :tasks="otherTasks"
-          :is-private="true"
-        />
         <TaskList
           v-for="taskList in myLists"
           :key="taskList.id"
           :list-id="taskList.id"
-          :is-private="true"
+          :current-user-id="userStore.id"
         />
 
         <CreateCard
           :label="$t('app.create.task-list.button')"
           icon="i-lucide-list-todo"
-          @click="modalCreateTaskList.open({ userId: userStore.id })"
+          @click="modalCreateTaskList.open()"
         />
       </div>
     </template>
@@ -68,9 +64,7 @@ const modalUploadUserAvatar = overlay.create(ModalUploadUserAvatar)
 const userStore = useUserStore()
 const taskStore = useTaskStore()
 
-const myLists = computed(() => taskStore.lists.filter((taskList) => taskList.userId === userStore.id))
-const otherLists = computed(() => taskStore.lists.filter((taskList) => taskList.userId !== userStore.id))
-const otherTasks = computed(() => otherLists.value.flatMap((list) => list.tasks).filter((task) => task.performerId === userStore.id))
+const myLists = computed(() => taskStore.lists.filter((taskList) => taskList.chat?.members.some((member) => member.userId === userStore.id)))
 
 useHead({
   title: 'Суши Атриум',

@@ -48,9 +48,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Create default task list
-    await repository.task.createList({
+    const list = await repository.task.createList({
       name: 'Общий список',
       chatId: chat.id,
+    })
+
+    // Update
+    await repository.chat.update(chat.id, {
+      taskListId: list?.id,
     })
 
     return {

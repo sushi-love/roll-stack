@@ -3,7 +3,6 @@
     <div
       class="p-4 sm:px-6 text-sm cursor-pointer border-l-2 transition-colors group"
       :class="[
-        //chat?.unread ? 'text-highlighted' : 'text-toned',
         selectedChatId === chat?.id ? 'border-secondary bg-elevated' : 'border-transparent hover:border-secondary hover:bg-elevated',
       ]"
     >
@@ -24,18 +23,11 @@
           />
         </UAvatarGroup>
 
-        <div
-          class="w-full flex items-center justify-between"
-          :class="[
-            //chat?.unread && 'font-semibold'
-          ]"
-        >
+        <div class="w-full flex items-center justify-between">
           <div class="flex flex-col gap-1">
             <p class="font-semibold leading-4 line-clamp-2">
               {{ chat?.name }}
             </p>
-
-            <!-- <UChip v-if="chat?.unread" /> -->
 
             <p class="text-dimmed line-clamp-1">
               {{ chat?.lastMessage?.text }}

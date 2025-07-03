@@ -31,10 +31,6 @@
         </UBadge>
       </div>
     </div>
-
-    <div>
-      <FormCreateComment />
-    </div>
   </Content>
 </template>
 

@@ -24,8 +24,8 @@
       <template v-if="staff.focusedTask">
         <TaskPopover :task="staff.focusedTask">
           <div class="flex flex-row items-start gap-2">
-            <UIcon name="i-lucide-goal" class="size-5 text-info shrink-0 motion-preset-pulse motion-duration-2000" />
-            <p class="text-sm/4 text-info line-clamp-3">
+            <UIcon name="i-lucide-goal" class="size-5 text-secondary shrink-0 motion-preset-pulse motion-duration-2000" />
+            <p class="text-sm/4 text-secondary line-clamp-3">
               {{ staff.focusedTask.name }}
             </p>
           </div>

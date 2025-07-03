@@ -2,8 +2,8 @@ import { repository } from '@sushi-atrium/database'
 
 export default defineEventHandler(async (event) => {
   try {
-    const listId = getRouterParam(event, 'listId')
-    if (!listId) {
+    const commentId = getRouterParam(event, 'commentId')
+    if (!commentId) {
       throw createError({
         statusCode: 400,
         message: 'Id is required',
@@ -18,27 +18,22 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const list = await repository.task.findList(listId)
-    if (!list) {
+    // Guard: not this user
+    const commentInDB = await repository.post.findComment(commentId)
+    if (!commentInDB) {
       throw createError({
         statusCode: 404,
-        message: 'Task list not found',
+        message: 'Not found',
       })
     }
-
-    // Guard: if don't have access
-    const canEdit = list.chat?.members.some((member) => member.userId === session.user?.id)
-    if (!canEdit) {
+    if (commentInDB.userId !== session.user.id) {
       throw createError({
-        statusCode: 403,
-        message: 'Forbidden',
+        statusCode: 400,
+        message: 'Not your comment',
       })
     }
 
-    // Archive, not delete
-    await repository.task.updateList(listId, {
-      isArchived: true,
-    })
+    await repository.post.deleteComment(commentInDB.id)
 
     return {
       ok: true,

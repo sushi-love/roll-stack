@@ -1,10 +1,7 @@
 <template>
   <div ref="block" class="flex-1 py-4 sm:p-6 overflow-y-auto scroll-pt-8">
     <div class="w-full mx-auto px-2 sm:px-6 lg:px-8 max-w-2xl">
-      <div
-        class="w-full flex flex-col gap-2 flex-1 px-2.5 [&>article]:last-of-type:min-h-(--last-message-height) last-of-type:mb-20"
-        style="--last-message-height: 0px;"
-      >
+      <div class="w-full flex flex-col gap-2 flex-1 px-2.5 last-of-type:mb-20">
         <div
           v-for="message in chat?.messages"
           :id="message.id"

@@ -1,5 +1,5 @@
 <template>
-  <ActiveCard class="w-full flex flex-col gap-5 motion-preset-bounce">
+  <ActiveCard padding="sm" class="w-full flex flex-col gap-5 motion-preset-bounce">
     <div class="flex flex-row gap-2.5 items-center">
       <UTooltip :text="social.title">
         <UIcon :name="social.icon" class="size-8 text-dimmed/50" />
@@ -33,7 +33,7 @@
 
         <div class="flex flex-row gap-1.5 items-center text-muted">
           <UIcon name="i-lucide-message-circle" class="size-5" />
-          <p>0</p>
+          <p>{{ post?.comments.length }}</p>
         </div>
       </div>
 

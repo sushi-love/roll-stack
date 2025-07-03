@@ -1,11 +1,16 @@
-import type { Task, TaskList } from '@sushi-atrium/database'
+import type { Chat, ChatMember, Task, TaskList, User } from '@sushi-atrium/database'
 
-type TaskListWithTasks = TaskList & {
+type ChatWithData = Chat & {
+  members: (ChatMember & { user: User })[]
+}
+
+type TaskListWithData = TaskList & {
   tasks: Task[]
+  chat: ChatWithData | null
 }
 
 export const useTaskStore = defineStore('task', () => {
-  const lists = ref<TaskListWithTasks[]>([])
+  const lists = ref<TaskListWithData[]>([])
   const isTodayOnly = ref(false)
 
   async function update() {

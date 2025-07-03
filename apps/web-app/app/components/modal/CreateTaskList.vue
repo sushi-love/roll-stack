@@ -2,7 +2,6 @@
   <UModal :title="$t('app.create.task-list.title')">
     <template #body>
       <FormCreateTaskList
-        :user-id="userId"
         :chat-id="chatId"
         @submitted="overlay.closeAll"
         @success="overlay.closeAll"
@@ -13,7 +12,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  userId?: string
   chatId?: string
 }>()
 

@@ -104,6 +104,10 @@ export const useUserStore = defineStore('user', () => {
 
   async function updateOnline() {
     try {
+      if (!id.value) {
+        return
+      }
+
       await $fetch(`/api/user/id/${id.value}/online`, {
         method: 'POST',
         lazy: true,

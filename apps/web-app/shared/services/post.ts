@@ -21,3 +21,8 @@ export const updatePostSchema = type({
   url: type('string | undefined').describe('error.length.invalid').optional(),
 })
 export type UpdatePost = typeof updatePostSchema.infer
+
+export const createPostCommentSchema = type({
+  text: type('1 <= string <= 1000').describe('error.length.invalid'),
+})
+export type CreatePostComment = typeof createPostCommentSchema.infer

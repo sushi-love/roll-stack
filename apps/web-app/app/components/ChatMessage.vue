@@ -17,15 +17,14 @@
       <div
         class="min-h-12 min-w-18 relative bg-elevated/50 px-3.5 py-2 rounded-lg"
         :class="[
-          side === 'left' && 'text-neutral-900 md:max-w-[85%] lg:max-w-[70%] bg-orange-100 dark:bg-orange-200 border-b-2 border-l-2 border-orange-200 dark:border-orange-300',
+          side === 'left' && 'text-neutral-900 md:max-w-[85%] lg:max-w-[70%] bg-orange-50 dark:bg-orange-100 border-b-2 border-orange-200 dark:border-orange-300',
           isBot && '!w-full !text-neutral-900 !max-w-full !bg-transparent !border-transparent !border-0',
         ]"
       >
         <div
           class="text-sm/5 md:text-base/5 font-medium whitespace-break-spaces text-pretty"
           :class="[
-            side === 'left' && 'font-semibold',
-            isBot && '!font-medium !text-muted !text-sm/5',
+            isBot && '!text-muted !text-sm/5',
           ]"
         >
           {{ text }}

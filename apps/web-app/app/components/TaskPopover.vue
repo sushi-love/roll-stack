@@ -11,7 +11,7 @@
 
     <template v-if="task" #content>
       <div class="h-auto w-72 p-4 flex flex-col gap-1.5">
-        <p class="text-sm font-medium text-info leading-4">
+        <p class="text-sm font-medium text-secondary leading-4">
           Задача в фокусе
         </p>
 

@@ -5,9 +5,14 @@
     class="flex flex-col gap-3"
     @submit="onSubmit"
   >
-    <UFormField :label="$t('common.title')" name="name">
+    <UFormField
+      :label="$t('common.title')"
+      name="name"
+      required
+    >
       <UInput
         v-model="state.name"
+        :placeholder="$t('app.task.name-placeholder')"
         size="xl"
         class="w-full items-center justify-center"
       />
@@ -17,6 +22,17 @@
       <UTextarea
         v-model="state.description"
         :rows="4"
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
+    <UFormField label="Исполнитель" name="performerId">
+      <USelectMenu
+        v-model="selectedPerformer"
+        :items="availablePerformersItems"
+        :avatar="selectedPerformer?.avatar"
+        :placeholder="$t('common.select')"
         size="xl"
         class="w-full"
       />
@@ -80,6 +96,26 @@ const { t } = useI18n()
 const actionToast = useActionToast()
 
 const taskStore = useTaskStore()
+const userStore = useUserStore()
+
+const list = computed(() => taskStore.lists.find((list) => list.id === listId))
+
+const availablePerformers = computed(() => userStore.staff.filter((s) => list.value?.chat?.members.some((m) => m.user.id === s.id)))
+const availablePerformersItems = computed(() => [{
+  label: 'Без исполнителя',
+  value: '',
+  avatar: {
+    src: undefined,
+    alt: '',
+  },
+}, ...availablePerformers.value.map((staff) => ({
+  label: `${staff.name} ${staff.surname}`,
+  value: staff.id,
+  avatar: {
+    src: staff.avatarUrl ?? undefined,
+    alt: '',
+  },
+}))])
 
 const state = ref<Partial<CreateTask>>({
   name: undefined,
@@ -87,6 +123,17 @@ const state = ref<Partial<CreateTask>>({
   date: undefined,
   performerId,
   listId,
+})
+
+const selectedPerformer = ref<{ label: string, value: string, avatar: { src: string | undefined, alt: string } } | undefined>(state.value.performerId ? availablePerformersItems.value.find((performer) => performer?.value === state.value.performerId) : undefined)
+
+watch(selectedPerformer, () => {
+  if (selectedPerformer.value?.value === '') {
+    state.value.performerId = null
+    return
+  }
+
+  state.value.performerId = selectedPerformer.value?.value
 })
 
 const df = new DateFormatter('ru-RU', {

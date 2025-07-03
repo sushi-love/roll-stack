@@ -1,7 +1,7 @@
-import type { PostDraft } from '../types'
+import type { PostCommentDraft, PostDraft } from '../types'
 import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { postLikes, posts } from '../tables'
+import { postComments, postLikes, posts } from '../tables'
 
 export class Post {
   static async find(id: string) {
@@ -26,10 +26,21 @@ export class Post {
     })
   }
 
+  static async findComment(id: string) {
+    return useDatabase().query.postComments.findFirst({
+      where: (postComments, { eq }) => eq(postComments.id, id),
+    })
+  }
+
   static async list() {
     return useDatabase().query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.publishAt),
       with: {
+        comments: {
+          with: {
+            user: true,
+          },
+        },
         likes: {
           with: {
             user: true,
@@ -54,6 +65,11 @@ export class Post {
     return like
   }
 
+  static async createComment(data: PostCommentDraft) {
+    const [comment] = await useDatabase().insert(postComments).values(data).returning()
+    return comment
+  }
+
   static async update(id: string, data: Partial<PostDraft>) {
     const [post] = await useDatabase()
       .update(posts)
@@ -72,5 +88,9 @@ export class Post {
 
   static async deleteLike(id: string) {
     return useDatabase().delete(postLikes).where(eq(postLikes.id, id))
+  }
+
+  static async deleteComment(id: string) {
+    return useDatabase().delete(postComments).where(eq(postComments.id, id))
   }
 }

@@ -80,14 +80,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Bot notification in chat
-    if (list.chatId) {
-      const bot = await repository.chat.findNotificationBot(list.chatId)
+    if (list.chat) {
+      const bot = await repository.chat.findNotificationBot(list.chat.id)
       if (bot) {
         const text = prepareBotMessage(user, updatedTask)
 
         // Send message as bot
         await repository.chat.createMessage({
-          chatId: list.chatId,
+          chatId: list.chat.id,
           userId: bot.user.id,
           text,
         })

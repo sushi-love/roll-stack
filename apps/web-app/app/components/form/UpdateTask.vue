@@ -5,7 +5,11 @@
     class="flex flex-col gap-3"
     @submit="onSubmit"
   >
-    <UFormField :label="$t('common.title')" name="name">
+    <UFormField
+      :label="$t('common.title')"
+      name="name"
+      required
+    >
       <UInput
         v-model="state.name"
         size="xl"
@@ -22,18 +26,16 @@
       />
     </UFormField>
 
-    <template v-if="!isPrivate">
-      <UFormField label="Исполнитель" name="performerId">
-        <USelectMenu
-          v-model="selectedPerformer"
-          :items="availablePerformers"
-          :avatar="selectedPerformer?.avatar"
-          :placeholder="$t('common.select')"
-          size="xl"
-          class="w-full"
-        />
-      </UFormField>
-    </template>
+    <UFormField label="Исполнитель" name="performerId">
+      <USelectMenu
+        v-model="selectedPerformer"
+        :items="availablePerformersItems"
+        :avatar="selectedPerformer?.avatar"
+        :placeholder="$t('common.select')"
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
 
     <div class="grid grid-cols-1 md:grid-cols-2">
       <UPopover>
@@ -63,17 +65,15 @@
       </UPopover>
     </div>
 
-    <template v-if="isPrivate">
-      <UFormField label="В списке" name="listId">
-        <USelectMenu
-          v-model="selectedList"
-          :items="availableLists"
-          :placeholder="$t('common.select')"
-          size="xl"
-          class="w-full"
-        />
-      </UFormField>
-    </template>
+    <UFormField label="В проекте" name="listId">
+      <USelectMenu
+        v-model="selectedList"
+        :items="availableLists"
+        :placeholder="$t('common.select')"
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
 
     <div class="mt-3 flex flex-row gap-3">
       <UButton
@@ -116,14 +116,16 @@ const { t } = useI18n()
 const actionToast = useActionToast()
 
 const userStore = useUserStore()
-const availablePerformers = computed(() => [{
+
+const availablePerformers = computed(() => userStore.staff.filter((s) => list.value?.chat?.members.some((m) => m.user.id === s.id)))
+const availablePerformersItems = computed(() => [{
   label: 'Без исполнителя',
   value: '',
   avatar: {
     src: undefined,
     alt: '',
   },
-}, ...userStore.staff.map((staff) => ({
+}, ...availablePerformers.value.map((staff) => ({
   label: `${staff.name} ${staff.surname}`,
   value: staff.id,
   avatar: {
@@ -136,7 +138,7 @@ const taskStore = useTaskStore()
 const list = computed(() => taskStore.lists.find((list) => list.tasks.find((task) => task.id === taskId)))
 const task = computed(() => list.value?.tasks.find((task) => task.id === taskId))
 
-const availableLists = computed(() => taskStore.lists.filter((list) => list.userId === userStore.id).map((list) => ({
+const availableLists = computed(() => taskStore.lists.filter((taskList) => taskList.chat?.members.some((member) => member.userId === userStore.id)).map((list) => ({
   label: list.name,
   value: list.id,
 })))
@@ -147,8 +149,6 @@ watch(selectedList, () => {
   state.value.listId = selectedList.value?.value
 })
 
-const isPrivate = computed(() => task.value?.performerId === userStore.id && !list.value?.chatId)
-
 const state = ref<Partial<UpdateTask>>({
   name: task.value?.name,
   description: task.value?.description ?? undefined,
@@ -157,7 +157,7 @@ const state = ref<Partial<UpdateTask>>({
   listId: task.value?.listId,
 })
 
-const selectedPerformer = ref<{ label: string, value: string, avatar: { src: string | undefined, alt: string } } | undefined>(state.value.performerId ? availablePerformers.value.find((performer) => performer?.value === state.value.performerId) : undefined)
+const selectedPerformer = ref<{ label: string, value: string, avatar: { src: string | undefined, alt: string } } | undefined>(state.value.performerId ? availablePerformersItems.value.find((performer) => performer?.value === state.value.performerId) : undefined)
 
 watch(selectedPerformer, () => {
   if (selectedPerformer.value?.value === '') {

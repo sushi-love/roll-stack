@@ -90,6 +90,9 @@ export type PostDraft = InferInsertModel<typeof tables.posts>
 export type PostLike = InferSelectModel<typeof tables.postLikes>
 export type PostLikeDraft = InferInsertModel<typeof tables.postLikes>
 
+export type PostComment = InferSelectModel<typeof tables.postComments>
+export type PostCommentDraft = InferInsertModel<typeof tables.postComments>
+
 export type File = InferSelectModel<typeof tables.files>
 export type FileDraft = InferInsertModel<typeof tables.files>
 

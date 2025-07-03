@@ -4,7 +4,7 @@
     class="mt-auto bg-elevated/25"
     :ui="{ body: '!p-4' }"
   >
-    <div v-if="!user.id" class="text-center text-muted">
+    <div v-if="!userStore.id" class="text-center text-muted">
       <Loader />
     </div>
     <form
@@ -28,12 +28,12 @@
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <UAvatar
-            :src="user.avatarUrl ?? undefined"
+            :src="userStore.avatarUrl ?? undefined"
             alt=""
             class="size-8"
           />
           <p class="text-sm font-semibold">
-            {{ user.name }}
+            {{ userStore.name }}
           </p>
         </div>
 
@@ -52,26 +52,20 @@
 </template>
 
 <script setup lang="ts">
-const toast = useToast()
-const user = useUserStore()
+const { postId } = defineProps<{ postId: string }>()
+
+const userStore = useUserStore()
+const postStore = usePostStore()
 
 const text = ref('')
 const loading = ref(false)
 
-function onCommentSubmit() {
+async function onCommentSubmit() {
   loading.value = true
 
-  setTimeout(() => {
-    text.value = ''
+  await postStore.addComment(postId, text.value)
 
-    toast.add({
-      title: 'Комментарий... не добавлен',
-      description: 'Скоро будет сделано.',
-      icon: 'i-lucide-ban',
-      color: 'error',
-    })
-
-    loading.value = false
-  }, 1000)
+  text.value = ''
+  loading.value = false
 }
 </script>

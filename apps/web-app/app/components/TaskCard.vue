@@ -1,9 +1,30 @@
 <template>
-  <div class="w-full flex flex-row items-start gap-2">
+  <div class="w-full flex flex-row items-start gap-1">
     <template v-if="isCompleted">
-      <UIcon name="i-lucide-check" class="mt-1.5 size-6 text-secondary" />
+      <UPopover
+        mode="hover"
+        :content="{
+          align: 'center',
+          side: 'bottom',
+          sideOffset: 8,
+        }"
+      >
+        <div>
+          <UIcon name="i-lucide-check" class="mt-1.5 size-5 text-secondary" />
+        </div>
+
+        <template #content>
+          <div class="h-auto w-64 p-4 flex flex-col gap-2 text-sm/4">
+            <h4 v-if="task.resolution" class="text-base/5 font-semibold">
+              {{ getLocalizedResolution(task.resolution) }}
+            </h4>
+
+            {{ task.report }}
+          </div>
+        </template>
+      </UPopover>
     </template>
-    <UTooltip v-else text="Задача выполнена?">
+    <UTooltip v-else-if="canComplete" text="Задача выполнена?">
       <UCheckbox
         v-model="checkbox"
         color="secondary"
@@ -14,6 +35,16 @@
         @change="onStartCompleting"
       />
     </UTooltip>
+    <UCheckbox
+      v-else
+      v-model="checkbox"
+      color="secondary"
+      variant="list"
+      size="xl"
+      icon="i-lucide-check"
+      class="mt-1.5 hover:scale-115 duration-200 motion-preset-bounce"
+      disabled
+    />
 
     <UDropdownMenu
       :items="items"
@@ -29,57 +60,47 @@
         :ui="{
           trailingIcon: [
             'self-start mt-0.5 text-dimmed',
-            isFocused ? 'text-info' : undefined,
+            isFocused ? 'text-secondary' : undefined,
           ],
         }"
         class="group/task duration-200 motion-preset-bounce cursor-pointer"
         :class="{
-          'text-neutral-900 bg-info-100 dark:bg-inverted border-b-2 border-l-2 border-info-200 dark:border-info-300 hover:bg-info-200 dark:hover:bg-info-100': isFocused,
+          'text-neutral-900 bg-secondary-50 dark:bg-secondary-50 border-b-2 border-secondary-400 hover:bg-secondary-100 dark:hover:bg-inverted': isFocused,
         }"
       >
         <div class="flex flex-col gap-2 items-start">
           <div class="flex flex-col gap-1 items-start text-left">
-            <h4 class="text-base/5 font-semibold line-clamp-3">
+            <h4
+              class="text-base/5 font-semibold line-clamp-3"
+              :class="[
+                isFocused ? 'text-secondary-800' : undefined,
+              ]"
+            >
               {{ task.name }}
             </h4>
-            <p v-if="task.description" class="text-sm/4 text-neutral-500 line-clamp-2 group-hover/task:line-clamp-5">
+            <p
+              v-if="task.description"
+              class="text-sm/4 text-neutral-500 line-clamp-2 group-hover/task:line-clamp-5"
+              :class="[
+                isFocused ? 'text-secondary-600' : undefined,
+              ]"
+            >
               {{ task.description }}
             </p>
           </div>
 
-          <div class="flex flex-col gap-y-1 gap-x-2 items-start">
-            <template v-if="!fullInfo && chat?.id">
-              <UBadge
-                color="neutral"
-                variant="outline"
-                icon="i-lucide-messages-square"
-                :ui="{
-                  leadingIcon: 'text-dimmed',
-                }"
+          <div class="flex flex-row gap-y-1 gap-x-2 items-center">
+            <UTooltip v-if="task.performerId" :text="`${performer?.name} ${performer?.surname}`">
+              <UAvatar
+                :src="performer?.avatarUrl ?? ''"
+                size="xs"
                 class="shrink-0"
-              >
-                {{ chat?.name }}
-              </UBadge>
-            </template>
-
-            <template v-if="fullInfo">
-              <UBadge
-                v-if="task.performerId"
-                color="neutral"
-                variant="outline"
-                icon="i-lucide-user"
-                :ui="{
-                  leadingIcon: 'text-dimmed',
-                }"
-                class="shrink-0"
-              >
-                {{ userStore.staff.find((staff) => staff.id === task.performerId)?.name }}
-                {{ userStore.staff.find((staff) => staff.id === task.performerId)?.surname }}
-              </UBadge>
-            </template>
+              />
+            </UTooltip>
 
             <UBadge
               v-if="task?.date"
+              size="md"
               color="neutral"
               variant="outline"
               icon="i-lucide-calendar"
@@ -102,10 +123,10 @@ import type { DropdownMenuItem } from '@nuxt/ui'
 import type { Task } from '@sushi-atrium/database'
 import { ModalCompleteTask, ModalUpdateTask } from '#components'
 import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { getLocalizedResolution } from '~~/shared/utils/helpers'
 
 const { task } = defineProps<{
   task: Task
-  fullInfo?: boolean
 }>()
 
 const { t } = useI18n()
@@ -113,10 +134,8 @@ const toast = useToast()
 const actionToast = useActionToast()
 const taskStore = useTaskStore()
 const userStore = useUserStore()
-const chatStore = useChatStore()
 
 const list = computed(() => taskStore.lists.find((list) => list.id === task.listId))
-const chat = computed(() => chatStore.find(list.value?.chatId ?? ''))
 
 const overlay = useOverlay()
 const modalUpdateTask = overlay.create(ModalUpdateTask)
@@ -127,9 +146,13 @@ const df = new DateFormatter('ru-RU', {
 })
 
 const isCompleted = computed(() => !!task.completedAt)
+const performer = computed(() => userStore.staff.find((staff) => staff.id === task.performerId))
 
+const canEdit = computed(() => list.value?.chat?.members.some((member) => member.userId === userStore.id))
+const canComplete = computed(() => canEdit.value && !isCompleted.value && (task.performerId === userStore.id || !task.performerId))
+const canOpenChat = computed(() => list.value?.chat?.members.some((member) => member.userId === userStore.id))
 const canFocus = computed(() => task.performerId === userStore.id && !isCompleted.value)
-const isFocused = computed(() => task.id === userStore.staff.find((staff) => staff.id === task.performerId)?.focusedTaskId)
+const isFocused = computed(() => task.id === performer.value?.focusedTaskId)
 
 const checkbox = ref(false)
 const toastId = ref(`task-close-${task.id}`)
@@ -137,12 +160,12 @@ const toastId = ref(`task-close-${task.id}`)
 const items = computed<DropdownMenuItem[]>(() => {
   const menuItems: DropdownMenuItem[] = [
     {
-      label: 'Перейти в проект',
+      label: 'Перейти в чат',
       icon: 'i-lucide-messages-square',
       color: 'neutral',
       disabled: false,
       onSelect: goToChat,
-      condition: !!chat.value?.id,
+      condition: canOpenChat.value,
     },
     {
       label: isFocused.value ? 'Убрать фокус' : 'Сфокусироваться',
@@ -157,7 +180,7 @@ const items = computed<DropdownMenuItem[]>(() => {
       icon: 'i-lucide-edit',
       disabled: isCompleted.value,
       onSelect: () => modalUpdateTask.open({ taskId: task.id }),
-      condition: true,
+      condition: canEdit.value,
     },
   ]
 
@@ -165,7 +188,7 @@ const items = computed<DropdownMenuItem[]>(() => {
 })
 
 async function goToChat() {
-  await navigateTo(`/chat/${chat.value?.id}`)
+  await navigateTo(`/chat/${list.value?.chat?.id}`)
 }
 
 async function onFocus() {

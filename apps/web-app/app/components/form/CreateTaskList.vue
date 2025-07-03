@@ -30,8 +30,7 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 import type { CreateTaskList } from '~~/shared/services/task'
 import { createTaskListSchema } from '~~/shared/services/task'
 
-const { userId, chatId } = defineProps<{
-  userId?: string
+const { chatId } = defineProps<{
   chatId?: string
 }>()
 
@@ -44,7 +43,6 @@ const taskStore = useTaskStore()
 
 const state = ref<Partial<CreateTaskList>>({
   name: undefined,
-  userId,
   chatId,
 })
 

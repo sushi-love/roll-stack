@@ -1,12 +1,25 @@
 <template>
   <Header title="Пост">
     <UButton
+      v-if="post?.url"
+      :to="post.url"
+      target="_blank"
+      external
+      variant="subtle"
+      color="neutral"
+      size="lg"
+      icon="i-lucide-external-link"
+      class="text-muted"
+      label="Открыть"
+    />
+
+    <UButton
       size="lg"
       variant="solid"
       color="secondary"
       class="w-full md:w-fit"
       icon="i-lucide-edit-2"
-      label="Редактировать пост"
+      label="Редактировать"
       @click="modalUpdatePost.open({ postId: post?.id })"
     />
   </Header>
@@ -49,28 +62,15 @@
         {{ post.description }}
       </div>
 
-      <UButton
-        v-if="post?.url"
-        :to="post.url"
-        target="_blank"
-        external
-        variant="ghost"
-        color="neutral"
-        size="md"
-        icon="i-lucide-external-link"
-        class="text-muted"
-        label="Открыть"
-      />
-
       <div class="mt-8 flex flex-row justify-between items-center">
         <div class="flex flex-row gap-2.5 items-center">
           <UTooltip v-if="!haveLikeByMe" text="Поставить лайк!">
             <UButton
-              variant="subtle"
-              color="neutral"
+              variant="soft"
+              color="error"
               size="lg"
               icon="i-lucide-heart"
-              class="text-base text-muted"
+              class="text-base"
               @click="postStore.addLike(post?.id ?? '')"
             >
               {{ post?.likes.length }}
@@ -100,7 +100,7 @@
           >
             <UAvatarGroup
               :max="4"
-              size="sm"
+              size="xs"
               :ui="{
                 base: '-me-3',
               }"
@@ -136,13 +136,22 @@
           </UPopover>
         </div>
 
-        <div>
-          Тут комментарии
+        <div v-if="post?.comments && post?.comments.length >= 0" class="text-muted">
+          {{ post.comments.length }} {{ pluralizationRu(post.comments.length, ['комментарий', 'комментария', 'комментариев']) }}
         </div>
       </div>
 
-      <div>
-        <FormCreateComment />
+      <div class="w-full flex flex-col gap-2 flex-1 px-2.5 last-of-type:mb-20">
+        <PostComment
+          v-for="comment in post?.comments"
+          :key="comment.id"
+          :post-id="post?.id ?? ''"
+          :comment-id="comment.id"
+        />
+      </div>
+
+      <div class="mb-32">
+        <FormCreatePostComment :post-id="post?.id ?? ''" />
       </div>
     </div>
   </Content>

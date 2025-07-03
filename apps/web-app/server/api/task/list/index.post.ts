@@ -28,7 +28,6 @@ export default defineEventHandler(async (event) => {
 
     const list = await repository.task.createList({
       name: data.name,
-      userId: data.userId,
       chatId: data.chatId,
     })
     if (!list) {
