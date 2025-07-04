@@ -27,7 +27,7 @@
           </UAvatarGroup>
 
           <template #content>
-            <div class="h-auto w-68 p-2 flex flex-col gap-2">
+            <div class="h-auto w-fit px-1.5 py-2 flex flex-col gap-2">
               <UButtonGroup orientation="vertical">
                 <UButton
                   v-for="member in activeChatMembers"

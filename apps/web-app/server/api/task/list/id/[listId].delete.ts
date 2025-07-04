@@ -40,6 +40,13 @@ export default defineEventHandler(async (event) => {
       isArchived: true,
     })
 
+    // Archive chat
+    if (list.chatId) {
+      await repository.chat.update(list.chatId, {
+        isArchived: true,
+      })
+    }
+
     return {
       ok: true,
     }

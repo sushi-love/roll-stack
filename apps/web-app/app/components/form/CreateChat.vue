@@ -67,14 +67,14 @@ const state = ref<Partial<CreateChat>>({
   usersId: [userStore.id as string],
 })
 
-const availableMembers = computed(() => [...userStore.staff.map((staff) => ({
+const availableMembers = computed(() => userStore.staff.map((staff) => ({
   label: `${staff.name} ${staff.surname}`,
   value: staff.id,
   avatar: {
     src: staff.avatarUrl ?? undefined,
     alt: '',
   },
-}))])
+})))
 const selectedMembers = ref<FormMember[]>([availableMembers.value.find((member) => member.value === userStore.id) as FormMember])
 
 watch(selectedMembers, () => {
@@ -91,9 +91,11 @@ async function onSubmit(event: FormSubmitEvent<CreateChat>) {
       body: event.data,
     })
 
-    await chatStore.update()
-    await userStore.update()
-    await taskStore.update()
+    await Promise.all([
+      chatStore.update(),
+      userStore.update(),
+      taskStore.update(),
+    ])
 
     actionToast.success(toastId, t('toast.chat-created'))
     emit('success')

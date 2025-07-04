@@ -6,25 +6,38 @@ import { users } from '../tables'
 export class User {
   static async find(id: string) {
     return useDatabase().query.users.findFirst({
-      where: (users, { eq }) => eq(users.id, id),
+      where: (users, { eq, and }) => and(
+        eq(users.id, id),
+        eq(users.isActive, true),
+      ),
     })
   }
 
   static async findByEmail(email: string) {
     return useDatabase().query.users.findFirst({
-      where: (users, { eq }) => eq(users.email, email),
+      where: (users, { eq, and }) => and(
+        eq(users.email, email),
+        eq(users.isActive, true),
+      ),
     })
   }
 
   static async findByPhone(phone: string) {
     return useDatabase().query.users.findFirst({
-      where: (users, { eq }) => eq(users.phone, phone),
+      where: (users, { eq, and }) => and(
+        eq(users.phone, phone),
+        eq(users.isActive, true),
+      ),
     })
   }
 
   static async findStaff() {
     return useDatabase().query.users.findMany({
-      where: (users, { eq }) => eq(users.type, 'staff'),
+      where: (users, { eq, and }) => and(
+        eq(users.type, 'staff'),
+        eq(users.isActive, true),
+      ),
+      orderBy: (users, { asc }) => asc(users.name),
       with: {
         focusedTask: true,
       },
@@ -33,7 +46,11 @@ export class User {
 
   static async findPartners() {
     return useDatabase().query.users.findMany({
-      where: (users, { eq }) => eq(users.type, 'partner'),
+      where: (users, { eq, and }) => and(
+        eq(users.type, 'partner'),
+        eq(users.isActive, true),
+      ),
+      orderBy: (users, { asc }) => asc(users.name),
       with: {
         focusedTask: true,
       },

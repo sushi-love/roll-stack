@@ -45,6 +45,40 @@ export default defineEventHandler(async (event) => {
 
     const updatedList = await repository.task.updateList(listId, data)
 
+    // Data in chat
+    if (updatedList?.chatId) {
+      await repository.chat.update(updatedList.chatId, {
+        name: data.name,
+        description: data.description,
+      })
+    }
+
+    // Update members
+    if (list.chat && data.usersId.length > 0) {
+      // Check if have new Id's
+      for (const userId of data.usersId) {
+        const member = list.chat?.members.find((member) => member.userId === userId)
+        if (!member?.id) {
+          await repository.chat.createMember({
+            chatId: list.chat.id,
+            userId,
+          })
+        }
+      }
+
+      // Check if have removed Id's
+      for (const member of list.chat.members) {
+        // Bot?
+        if (member.userId === 'fsti10ba0cb7uxkal4uoja9r') {
+          continue
+        }
+
+        if (!data.usersId.includes(member.userId)) {
+          await repository.chat.deleteMember(member.id)
+        }
+      }
+    }
+
     return {
       ok: true,
       result: updatedList,

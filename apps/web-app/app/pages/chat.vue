@@ -8,7 +8,7 @@
           {{ $t('app.menu.chats') }}
         </h1>
 
-        <UTooltip :text="$t('app.create.chat.button')">
+        <!-- <UTooltip :text="$t('app.create.chat.button')">
           <UButton
             variant="solid"
             color="secondary"
@@ -16,12 +16,12 @@
             icon="i-lucide-plus"
             @click="modalCreateChat.open()"
           />
-        </UTooltip>
+        </UTooltip> -->
       </div>
 
       <div class="overflow-y-auto divide-y divide-default">
         <ChatListItem
-          v-for="chat in chatStore.chats"
+          v-for="chat in sortedChats"
           :key="chat.id"
           :chat-id="chat.id"
         />
@@ -35,13 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { ModalCreateChat } from '#components'
-
 const { t } = useI18n()
 const chatStore = useChatStore()
 
-const overlay = useOverlay()
-const modalCreateChat = overlay.create(ModalCreateChat)
+const sortedChats = computed(() => chatStore.chats.toSorted((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()))
 
 useHead({
   title: t('app.menu.chats'),

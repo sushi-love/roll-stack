@@ -148,7 +148,7 @@ const df = new DateFormatter('ru-RU', {
 const isCompleted = computed(() => !!task.completedAt)
 const performer = computed(() => userStore.staff.find((staff) => staff.id === task.performerId))
 
-const canEdit = computed(() => list.value?.chat?.members.some((member) => member.userId === userStore.id))
+const canEdit = computed(() => list.value?.chat?.members.some((member) => member.userId === userStore.id) && !isCompleted.value)
 const canComplete = computed(() => canEdit.value && !isCompleted.value && (task.performerId === userStore.id || !task.performerId))
 const canOpenChat = computed(() => list.value?.chat?.members.some((member) => member.userId === userStore.id))
 const canFocus = computed(() => task.performerId === userStore.id && !isCompleted.value)

@@ -13,6 +13,27 @@
       />
     </UFormField>
 
+    <UFormField :label="$t('common.short-description')" name="description">
+      <UInput
+        v-model="state.description"
+        placeholder="Для чего создан и что в нем будет"
+        size="xl"
+        class="w-full items-center justify-center"
+      />
+    </UFormField>
+
+    <UFormField label="Участники" name="members">
+      <USelectMenu
+        v-model="selectedMembers"
+        :items="availableMembers"
+        :avatar="selectedMembers[0]?.avatar"
+        :placeholder="$t('common.select')"
+        multiple
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
     <div class="mt-3 flex flex-row gap-3">
       <UButton
         type="submit"
@@ -48,14 +69,38 @@ const { listId } = defineProps<{
 
 const emit = defineEmits(['success', 'submitted'])
 
+type FormMember = { label: string, value: string, avatar: { src: string | undefined, alt: string } }
+
 const { t } = useI18n()
 const actionToast = useActionToast()
 
+const userStore = useUserStore()
+const chatStore = useChatStore()
 const taskStore = useTaskStore()
 const list = computed(() => taskStore.lists.find((list) => list.id === listId))
 
 const state = ref<Partial<UpdateTaskList>>({
   name: list.value?.name,
+  description: list.value?.chat?.description ?? undefined,
+  usersId: list.value?.chat?.members.map((member) => member.userId) ?? [],
+})
+
+const availableMembers = computed(() => userStore.staff.map((staff) => ({
+  label: `${staff.name} ${staff.surname}`,
+  value: staff.id,
+  avatar: {
+    src: staff.avatarUrl ?? undefined,
+    alt: '',
+  },
+})))
+const selectedMembers = ref<FormMember[]>(availableMembers.value.filter((member) => state.value.usersId?.includes(member.value)) ?? [])
+
+watch(selectedMembers, () => {
+  if (!selectedMembers.value) {
+    return
+  }
+
+  state.value.usersId = selectedMembers.value?.map((member) => member?.value)
 })
 
 async function onSubmit(event: FormSubmitEvent<UpdateTaskList>) {
@@ -68,7 +113,10 @@ async function onSubmit(event: FormSubmitEvent<UpdateTaskList>) {
       body: event.data,
     })
 
-    await taskStore.update()
+    await Promise.all([
+      taskStore.update(),
+      chatStore.update(),
+    ])
 
     actionToast.success(toastId, t('toast.task-list-updated'))
     emit('success')
@@ -87,7 +135,10 @@ async function onDelete() {
       method: 'DELETE',
     })
 
-    await taskStore.update()
+    await Promise.all([
+      taskStore.update(),
+      chatStore.update(),
+    ])
 
     actionToast.success(toastId, t('toast.task-list-deleted'))
     emit('success')

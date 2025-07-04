@@ -57,6 +57,7 @@ export const users = pgTable('users', {
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   onlineAt: timestamp('online_at', { precision: 3, withTimezone: true, mode: 'string' }),
   type: varchar('type').notNull().$type<UserType>(),
+  isActive: boolean('is_active').notNull().default(true),
   gender: varchar('gender').notNull().default('unknown').$type<UserGender>(),
   name: varchar('name').notNull(),
   surname: varchar('surname').notNull().default(''),

@@ -13,6 +13,27 @@
       />
     </UFormField>
 
+    <UFormField :label="$t('common.short-description')" name="description">
+      <UInput
+        v-model="state.description"
+        placeholder="Для чего создан и что в нем будет"
+        size="xl"
+        class="w-full items-center justify-center"
+      />
+    </UFormField>
+
+    <UFormField label="Участники" name="members">
+      <USelectMenu
+        v-model="selectedMembers"
+        :items="availableMembers"
+        :avatar="selectedMembers[0]?.avatar"
+        :placeholder="$t('common.select')"
+        multiple
+        size="xl"
+        class="w-full"
+      />
+    </UFormField>
+
     <UButton
       type="submit"
       variant="solid"
@@ -30,20 +51,35 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 import type { CreateTaskList } from '~~/shared/services/task'
 import { createTaskListSchema } from '~~/shared/services/task'
 
-const { chatId } = defineProps<{
-  chatId?: string
-}>()
-
 const emit = defineEmits(['success', 'submitted'])
+
+type FormMember = { label: string, value: string, avatar: { src: string | undefined, alt: string } }
 
 const { t } = useI18n()
 const actionToast = useActionToast()
 
+const userStore = useUserStore()
+const chatStore = useChatStore()
 const taskStore = useTaskStore()
 
 const state = ref<Partial<CreateTaskList>>({
   name: undefined,
-  chatId,
+  description: undefined,
+  usersId: [userStore.id as string],
+})
+
+const availableMembers = computed(() => userStore.staff.map((staff) => ({
+  label: `${staff.name} ${staff.surname}`,
+  value: staff.id,
+  avatar: {
+    src: staff.avatarUrl ?? undefined,
+    alt: '',
+  },
+})))
+const selectedMembers = ref<FormMember[]>([availableMembers.value.find((member) => member.value === userStore.id) as FormMember])
+
+watch(selectedMembers, () => {
+  state.value.usersId = selectedMembers.value.map((member) => member.value)
 })
 
 async function onSubmit(event: FormSubmitEvent<CreateTaskList>) {
@@ -56,7 +92,11 @@ async function onSubmit(event: FormSubmitEvent<CreateTaskList>) {
       body: event.data,
     })
 
-    await taskStore.update()
+    await Promise.all([
+      userStore.update(),
+      taskStore.update(),
+      chatStore.update(),
+    ])
 
     actionToast.success(toastId, t('toast.task-list-created'))
     emit('success')

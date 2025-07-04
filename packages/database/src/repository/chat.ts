@@ -100,4 +100,8 @@ export class Chat {
   static async delete(id: string) {
     return useDatabase().delete(chats).where(eq(chats.id, id))
   }
+
+  static async deleteMember(id: string) {
+    return useDatabase().delete(chatMembers).where(eq(chatMembers.id, id))
+  }
 }

@@ -29,11 +29,14 @@ export type CompleteTask = typeof completeTaskSchema.infer
 
 export const createTaskListSchema = type({
   name: type('2 <= string <= 150').describe('error.length.invalid'),
-  chatId: type('string | undefined').describe('error.length.invalid').optional(),
+  description: type('string <= 100 | undefined').describe('error.length.invalid').optional(),
+  usersId: type('string[]').describe('error.length.invalid'),
 })
 export type CreateTaskList = typeof createTaskListSchema.infer
 
 export const updateTaskListSchema = type({
   name: type('2 <= string <= 150').describe('error.length.invalid').optional(),
+  description: type('string <= 100 | undefined').describe('error.length.invalid').optional(),
+  usersId: type('string[]').describe('error.length.invalid'),
 })
 export type UpdateTaskList = typeof updateTaskListSchema.infer

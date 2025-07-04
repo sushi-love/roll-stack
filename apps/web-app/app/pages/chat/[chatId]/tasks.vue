@@ -2,7 +2,7 @@
   <div class="flex-1 p-4 sm:p-6 overflow-y-auto">
     <UContainer class="max-w-md">
       <template v-if="taskStore.lists.length">
-        <div class="mb-6 flex flex-row gap-2 items-center justify-center">
+        <div class="mb-6 flex items-center justify-center">
           <UButton
             variant="solid"
             color="secondary"

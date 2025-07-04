@@ -8,8 +8,8 @@
     >
       <div class="flex flex-row items-center gap-3">
         <UAvatarGroup
-          :max="3"
-          size="md"
+          :max="2"
+          size="sm"
           :ui="{
             base: '-me-3',
           }"
@@ -61,7 +61,7 @@ const otherUsers = computed(() => chat.value?.members.filter((member) => member.
 
 const lastMessageDate = computed<string>(() => {
   if (!chat.value?.lastMessage?.createdAt) {
-    return 'Пока пусто'
+    return ''
   }
 
   return isToday(new Date(chat.value.lastMessage.createdAt)) ? format(new Date(chat.value.lastMessage.createdAt), 'HH:mm', { locale: ru }) : format(new Date(chat.value.lastMessage.createdAt), 'dd MMM', { locale: ru })
