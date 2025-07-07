@@ -5,7 +5,7 @@
 
   <Content>
     <template v-if="userStore.id">
-      <div class="flex flex-col lg:flex-row gap-2 items-center justify-between">
+      <div class="flex flex-col md:flex-row gap-6 md:gap-2 md:items-center md:justify-between">
         <div class="flex flex-row gap-3.5 items-center">
           <UTooltip :text="$t('app.update.user-photo.button')">
             <UAvatar
@@ -15,20 +15,27 @@
             />
           </UTooltip>
 
-          <div class="flex flex-col gap-0">
-            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-xl/6 md:text-2xl lg:text-3xl font-bold tracking-tight">
               {{ userStore.name }}, привет!
             </h2>
-            <p class="text-lg">
-              Чем займемся сегодня?
+            <p class="text-base/5 md:text-lg/5">
+              <template v-if="myTodayTasks.length">
+                Сегодня по плану {{ myTodayTasks.length }} {{ pluralizationRu(myTodayTasks.length, ['задача', 'задачи', 'задач']) }}.
+              </template>
+              <span>
+                Чем займемся?
+              </span>
             </p>
           </div>
         </div>
 
-        <TasksTodaySwitch />
+        <div class="flex flex-row items-end justify-end">
+          <TasksTodaySwitch />
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         <TaskList
           v-for="taskList in myLists"
           :key="taskList.id"
@@ -52,6 +59,7 @@
 
 <script setup lang="ts">
 import { ModalCreateTaskList, ModalUploadUserAvatar } from '#components'
+import { getLocalTimeZone, isToday, parseDate } from '@internationalized/date'
 
 definePageMeta({
   middleware: ['01-auth-only'],
@@ -65,6 +73,7 @@ const userStore = useUserStore()
 const taskStore = useTaskStore()
 
 const myLists = computed(() => taskStore.lists.filter((taskList) => taskList.chat?.members.some((member) => member.userId === userStore.id)))
+const myTodayTasks = computed(() => myLists.value.flatMap((taskList) => taskList.tasks.filter((task) => !task.completedAt && task.date && isToday(parseDate(task.date), getLocalTimeZone()))))
 
 useHead({
   title: 'Суши Атриум',

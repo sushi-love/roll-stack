@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row gap-1.5">
+  <div class="hidden md:flex flex-row gap-1.5">
     <div
       v-for="user in onlineUsers"
       :key="user.id"
