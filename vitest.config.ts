@@ -2,7 +2,7 @@ import { coverageConfigDefaults, defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    workspace: [
+    projects: [
       {
         extends: true,
         test: {
