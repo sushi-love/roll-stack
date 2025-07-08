@@ -58,6 +58,14 @@ export const useTaskStore = defineStore('task', () => {
     }
   }
 
+  // Reset on page change
+  watch(
+    () => useRoute().fullPath,
+    () => {
+      isTodayOnly.value = false
+    },
+  )
+
   return {
     lists,
     isTodayOnly,

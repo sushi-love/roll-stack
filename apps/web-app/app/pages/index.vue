@@ -84,7 +84,11 @@ const modalUploadUserAvatar = overlay.create(ModalUploadUserAvatar)
 const userStore = useUserStore()
 const taskStore = useTaskStore()
 
-const myLists = computed(() => taskStore.lists.filter((taskList) => taskList.chat?.members.some((member) => member.userId === userStore.id)))
+const myLists = computed(() =>
+  taskStore.lists.filter(
+    (taskList) => taskList.chat?.members.some((member) => member.userId === userStore.id),
+  ).filter((taskList) => taskStore.isTodayOnly ? taskList.tasks.filter((task) => !task.completedAt && task.date && isToday(parseDate(task.date), getLocalTimeZone())).length : true),
+)
 const myTodayTasks = computed(() => myLists.value.flatMap((taskList) => taskList.tasks.filter((task) => !task.completedAt && task.date && isToday(parseDate(task.date), getLocalTimeZone()))))
 
 useHead({
