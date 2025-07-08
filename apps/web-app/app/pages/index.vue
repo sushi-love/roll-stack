@@ -21,7 +21,17 @@
             </h2>
             <p class="text-base/5 md:text-lg/5">
               <template v-if="myTodayTasks.length">
-                Сегодня по плану {{ myTodayTasks.length }} {{ pluralizationRu(myTodayTasks.length, ['задача', 'задачи', 'задач']) }}.
+                Сегодня по плану еще
+                <ULink
+                  as="button"
+                  class="font-semibold underline underline-offset-4 decoration-dashed decoration-1"
+                  :class="[
+                    taskStore.isTodayOnly ? 'text-info' : 'text-secondary',
+                  ]"
+                  @click="taskStore.isTodayOnly = !taskStore.isTodayOnly"
+                >
+                  {{ myTodayTasks.length }} {{ pluralizationRu(myTodayTasks.length, ['задача', 'задачи', 'задач']) }}
+                </ULink>.
               </template>
               <span>
                 Чем займемся?
