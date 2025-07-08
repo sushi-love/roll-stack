@@ -22,16 +22,18 @@
             <p class="text-base/5 md:text-lg/5">
               <template v-if="myTodayTasks.length">
                 Сегодня по плану еще
-                <ULink
-                  as="button"
-                  class="font-semibold underline underline-offset-4 decoration-dashed decoration-1"
-                  :class="[
-                    taskStore.isTodayOnly ? 'text-info' : 'text-secondary',
-                  ]"
-                  @click="taskStore.isTodayOnly = !taskStore.isTodayOnly"
-                >
-                  {{ myTodayTasks.length }} {{ pluralizationRu(myTodayTasks.length, ['задача', 'задачи', 'задач']) }}
-                </ULink>.
+                <UTooltip :text="taskStore.isTodayOnly ? 'Показать все' : 'Показать сегодняшние'">
+                  <ULink
+                    as="button"
+                    class="font-semibold underline underline-offset-4 decoration-dashed decoration-1 cursor-pointer"
+                    :class="[
+                      taskStore.isTodayOnly ? 'text-info' : 'text-secondary',
+                    ]"
+                    @click="taskStore.isTodayOnly = !taskStore.isTodayOnly"
+                  >
+                    {{ myTodayTasks.length }} {{ pluralizationRu(myTodayTasks.length, ['задача', 'задачи', 'задач']) }}
+                  </ULink>
+                </UTooltip>.
               </template>
               <span>
                 Чем займемся?
