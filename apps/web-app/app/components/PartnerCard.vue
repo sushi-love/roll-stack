@@ -8,20 +8,28 @@
     >
 
     <div class="min-h-20 h-full px-2.5 pb-2 flex flex-col gap-2.5">
-      <div class="flex flex-row items-center gap-1.5">
-        <PartnerPrestigeBadge
+      <div class="flex flex-row items-center gap-2">
+        <!-- <PartnerPrestigeBadge
           :prestige="partner.prestige"
           size="sm"
           class="group-hover:scale-125 duration-200"
-        />
+        /> -->
+
+        <UBadge
+          color="neutral"
+          variant="outline"
+          size="xl"
+        >
+          {{ partner.priceLevel }}
+        </UBadge>
 
         <h3 class="text-base/5 font-bold">
           {{ partner.name }} {{ partner.surname }}
         </h3>
       </div>
 
-      <p class="text-sm/4 font-semibold">
-        {{ partner.priceLevel }} уровень цен
+      <p class="text-sm/4 text-muted line-clamp-3">
+        {{ partner.legal }}
       </p>
 
       <p class="text-sm/4 text-muted line-clamp-3">
