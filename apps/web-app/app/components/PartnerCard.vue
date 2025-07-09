@@ -1,5 +1,5 @@
 <template>
-  <ActiveCard padding="xs" class="flex flex-col gap-2 group">
+  <ActiveCard padding="none" class="flex flex-col gap-2.5 group">
     <img
       :src="partner.avatarUrl ?? undefined"
       alt=""
@@ -7,21 +7,27 @@
       :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
     >
 
-    <div class="flex flex-row items-center gap-1.5">
-      <PartnerPrestigeBadge
-        :prestige="partner.prestige"
-        size="sm"
-        class="group-hover:scale-125 duration-200"
-      />
+    <div class="min-h-20 h-full px-2.5 pb-2 flex flex-col gap-2.5">
+      <div class="flex flex-row items-center gap-1.5">
+        <PartnerPrestigeBadge
+          :prestige="partner.prestige"
+          size="sm"
+          class="group-hover:scale-125 duration-200"
+        />
 
-      <h3 class="text-base/5 font-bold">
-        {{ partner.name }} {{ partner.surname }}
-      </h3>
+        <h3 class="text-base/5 font-bold">
+          {{ partner.name }} {{ partner.surname }}
+        </h3>
+      </div>
+
+      <p class="text-sm/4 font-semibold">
+        {{ partner.priceLevel }} уровень цен
+      </p>
+
+      <p class="text-sm/4 text-muted line-clamp-3">
+        {{ partner.city }}
+      </p>
     </div>
-
-    <p class="text-sm text-muted leading-4 line-clamp-3">
-      {{ partner.city }}
-    </p>
   </ActiveCard>
 </template>
 

@@ -5,25 +5,25 @@
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <div class="flex flex-col gap-2.5">
         <img
-          :src="data?.avatarUrl ?? undefined"
+          :src="partner?.avatarUrl ?? undefined"
           alt=""
           class="w-full rounded-lg"
         >
 
-        <UButton
+        <!-- <UButton
           variant="solid"
           color="secondary"
           size="lg"
           label="Написать"
           icon="i-lucide-message-square-text"
           block
-        />
+        /> -->
       </div>
 
       <div class="flex flex-col gap-2.5">
         <div class="flex flex-row items-center gap-1.5">
           <PartnerPrestigeBadge
-            :prestige="0"
+            :prestige="partner?.prestige ?? 0"
             size="lg"
             class="group-hover:scale-125 duration-200"
           />
@@ -39,17 +39,21 @@
 
     <div class="flex flex-col items-start gap-2">
       <h2 class="text-xl md:text-3xl font-bold">
-        {{ data?.name }} {{ data?.surname }}
+        {{ partner?.name }} {{ partner?.surname }}
       </h2>
 
+      <p class="text-lg">
+        {{ partner?.legal }}
+      </p>
+
       <p class="text-base">
-        {{ data?.caption }}
+        {{ partner?.priceLevel }} уровень цен
+      </p>
+
+      <p class="text-base">
+        {{ partner?.city }}
       </p>
     </div>
-
-    <p class="text-sm text-muted">
-      Описание, контакты, успехи, провалы, трофеи...
-    </p>
   </Content>
 </template>
 
@@ -57,10 +61,8 @@
 const { t } = useI18n()
 const { params } = useRoute('partner-id')
 
-const { data, error } = await useFetch(`/api/user/id/${params.id}`)
-if (error.value) {
-  await navigateTo('/')
-}
+const partnerStore = usePartnerStore()
+const partner = computed(() => partnerStore.partners.find((partner) => partner.id === params.id))
 
 useHead({
   title: t('common.partner'),
