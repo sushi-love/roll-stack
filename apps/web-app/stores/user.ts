@@ -13,7 +13,6 @@ export const useUserStore = defineStore('user', () => {
   const email = ref<string | null>(null)
   const phone = ref<string | null>(null)
   const avatarUrl = ref<string | null>(null)
-  const prestige = ref<number | null>(null)
   const focusedTaskId = ref<string | null>(null)
 
   const fullName = computed(() => {
@@ -21,7 +20,6 @@ export const useUserStore = defineStore('user', () => {
   })
 
   const staff = ref<UserWithData[]>([])
-  const partners = ref<UserWithData[]>([])
 
   async function update() {
     try {
@@ -43,7 +41,6 @@ export const useUserStore = defineStore('user', () => {
       email.value = data.email
       phone.value = data.phone
       avatarUrl.value = data.avatarUrl
-      prestige.value = data.prestige
       focusedTaskId.value = data.focusedTaskId
 
       // Updating all data
@@ -80,26 +77,6 @@ export const useUserStore = defineStore('user', () => {
         }
       }
     }
-
-    try {
-      const data = await $fetch('/api/user/list/partner', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
-      if (!data) {
-        return
-      }
-
-      partners.value = data
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes('404')) {
-          // Not found
-        }
-      }
-    }
   }
 
   async function updateOnline() {
@@ -128,12 +105,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function find(userId: string): UserWithData | undefined {
-    const user = staff.value.find((user) => user.id === userId)
-    if (user) {
-      return user
-    }
-
-    return partners.value.find((user) => user.id === userId)
+    return staff.value.find((user) => user.id === userId)
   }
 
   return {
@@ -148,7 +120,6 @@ export const useUserStore = defineStore('user', () => {
     fullName,
 
     staff,
-    partners,
 
     update,
     updateOnline,

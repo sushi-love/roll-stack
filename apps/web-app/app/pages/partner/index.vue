@@ -24,7 +24,7 @@
             :key="partner.id"
             :to="`/partner/${partner.id}`"
           >
-            <PartnerCard :user="partner" />
+            <PartnerCard :partner="partner" />
           </NuxtLink>
         </template>
 
@@ -34,7 +34,7 @@
             :key="partner.id"
             :to="`/partner/${partner.id}`"
           >
-            <PartnerCard :user="partner" />
+            <PartnerCard :partner="partner" />
           </NuxtLink>
         </template>
       </div>
@@ -66,9 +66,10 @@ const sorting = ref<TabsItem[]>([
 const activeSorting = ref<'name' | 'rating'>('name')
 
 const user = useUserStore()
+const partnerStore = usePartnerStore()
 
-const partnersSortedByName = computed(() => user.partners.toSorted((a, b) => a.name.localeCompare(b.name)))
-const partnersSortedByPrestige = computed(() => user.partners.toSorted((a, b) => b.prestige - a.prestige))
+const partnersSortedByName = computed(() => partnerStore.partners.toSorted((a, b) => a.name.localeCompare(b.name)))
+const partnersSortedByPrestige = computed(() => partnerStore.partners.toSorted((a, b) => b.prestige - a.prestige))
 
 useHead({
   title: t('app.menu.our-partners'),

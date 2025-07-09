@@ -9,6 +9,9 @@ export type PermissionDraft = InferInsertModel<typeof tables.permissions>
 export type User = InferSelectModel<typeof tables.users>
 export type UserDraft = InferInsertModel<typeof tables.users>
 
+export type Partner = InferSelectModel<typeof tables.partners>
+export type PartnerDraft = InferInsertModel<typeof tables.partners>
+
 export type Chat = InferSelectModel<typeof tables.chats>
 export type ChatDraft = InferInsertModel<typeof tables.chats>
 

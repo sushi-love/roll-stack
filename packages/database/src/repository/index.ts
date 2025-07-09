@@ -8,6 +8,7 @@ import { Kitchen } from './kitchen'
 import { Media } from './media'
 import { Menu } from './menu'
 import { Notification } from './notification'
+import { Partner } from './partner'
 import { Payment } from './payment'
 import { Permission } from './permission'
 import { Post } from './post'
@@ -26,6 +27,7 @@ class Repository {
   readonly media = Media
   readonly menu = Menu
   readonly notification = Notification
+  readonly partner = Partner
   readonly payment = Payment
   readonly permission = Permission
   readonly post = Post

@@ -2,7 +2,7 @@ import { cuid2 } from 'drizzle-cuid2/postgres'
 import { relations } from 'drizzle-orm'
 import { boolean, date, integer, jsonb, numeric, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 
-type UserType = 'staff' | 'head' | 'partner' | 'guest' | 'bot' | 'bot_agent'
+type UserType = 'staff' | 'head' | 'partner' | 'guest' | 'bot'
 type UserGender = 'male' | 'female' | 'unknown'
 
 type PermissionCode = 'product:view'
@@ -65,9 +65,23 @@ export const users = pgTable('users', {
   email: varchar('email').unique(),
   phone: varchar('phone').unique(),
   avatarUrl: varchar('avatar_url'),
-  prestige: integer('prestige').notNull().default(0),
   focusedTaskId: cuid2('focused_task_id'),
   permissions: jsonb('permissions').notNull().default([]).$type<PermissionCode[]>(),
+})
+
+export const partners = pgTable('partners', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  priceLevel: integer('price_level').notNull().default(0),
+  prestige: integer('prestige').notNull().default(0),
+  isActive: boolean('is_active').notNull().default(true),
+  gender: varchar('gender').notNull().default('unknown').$type<UserGender>(),
+  name: varchar('name').notNull(),
+  surname: varchar('surname').notNull().default(''),
+  avatarUrl: varchar('avatar_url'),
+  legal: varchar('legal'),
+  city: varchar('city'),
 })
 
 export const chats = pgTable('chats', {

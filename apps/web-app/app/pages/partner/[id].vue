@@ -23,7 +23,7 @@
       <div class="flex flex-col gap-2.5">
         <div class="flex flex-row items-center gap-1.5">
           <PartnerPrestigeBadge
-            :prestige="data?.prestige ?? 0"
+            :prestige="0"
             size="lg"
             class="group-hover:scale-125 duration-200"
           />

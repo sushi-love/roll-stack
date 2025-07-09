@@ -1,0 +1,33 @@
+import type { Partner } from '@sushi-atrium/database'
+
+export const usePartnerStore = defineStore('partner', () => {
+  const partners = ref<Partner[]>([])
+
+  async function update() {
+    try {
+      const data = await $fetch('/api/partner/list', {
+        lazy: true,
+        server: true,
+        cache: 'no-cache',
+        getCachedData: undefined,
+      })
+      if (!data) {
+        return
+      }
+
+      partners.value = data
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('404')) {
+          // Not found
+        }
+      }
+    }
+  }
+
+  return {
+    partners,
+
+    update,
+  }
+})
