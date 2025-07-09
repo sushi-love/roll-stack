@@ -21,9 +21,10 @@
 const { t } = useI18n()
 const route = useRoute()
 
-const menu = useMenuStore()
+const menuStore = useMenuStore()
+const partnerStore = usePartnerStore()
 
-const menus = computed(() => menu.menus.map((menu) => ({
+const menus = computed(() => menuStore.menus.map((menu) => ({
   label: menu.name,
   to: `/menu/${menu.id}`,
 })))
@@ -68,6 +69,7 @@ const menuItems = computed(() => [
     to: '/partner',
     icon: 'i-lucide-handshake',
     active: route.path.startsWith('/partner'),
+    badge: partnerStore.partners.length,
   },
   {
     label: t('app.menu.our-staff'),
