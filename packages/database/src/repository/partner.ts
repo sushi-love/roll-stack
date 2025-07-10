@@ -7,12 +7,18 @@ export class Partner {
   static async find(id: string) {
     return useDatabase().query.partners.findFirst({
       where: (partners, { eq }) => eq(partners.id, id),
+      with: {
+        kitchens: true,
+      },
     })
   }
 
   static async list() {
     return useDatabase().query.partners.findMany({
       where: (partners, { eq }) => eq(partners.isActive, true),
+      with: {
+        kitchens: true,
+      },
     })
   }
 

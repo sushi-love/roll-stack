@@ -1,7 +1,11 @@
-import type { Partner } from '@sushi-atrium/database'
+import type { Kitchen, Partner } from '@sushi-atrium/database'
+
+type PartnerWithData = Partner & {
+  kitchens: Kitchen[]
+}
 
 export const usePartnerStore = defineStore('partner', () => {
-  const partners = ref<Partner[]>([])
+  const partners = ref<PartnerWithData[]>([])
 
   async function update() {
     try {

@@ -369,6 +369,7 @@ export const kitchens = pgTable('kitchens', {
   minAmountForDelivery: numeric('min_amount_for_delivery', { mode: 'number' }),
   isDeliveryAvailable: boolean('is_delivery_available').notNull().default(true),
   isPickupAvailable: boolean('is_pickup_available').notNull().default(true),
+  partnerId: cuid2('partner_id').references(() => partners.id),
 })
 
 export const channels = pgTable('channels', {
@@ -509,6 +510,10 @@ export const userRelations = relations(users, ({ many, one }) => ({
   }),
   postLikes: many(postLikes),
   postComments: many(postComments),
+}))
+
+export const partnerRelations = relations(partners, ({ many }) => ({
+  kitchens: many(kitchens),
 }))
 
 export const chatRelations = relations(chats, ({ many, one }) => ({
@@ -686,10 +691,14 @@ export const checkoutItemRelations = relations(checkoutItems, ({ one }) => ({
   }),
 }))
 
-export const kitchenRelations = relations(kitchens, ({ many }) => ({
+export const kitchenRelations = relations(kitchens, ({ many, one }) => ({
   channels: many(channelKitchens),
   checkouts: many(checkouts),
   paymentMethods: many(paymentMethodsOnKitchens),
+  partner: one(partners, {
+    fields: [kitchens.partnerId],
+    references: [partners.id],
+  }),
 }))
 
 export const channelRelations = relations(channels, ({ many }) => ({
