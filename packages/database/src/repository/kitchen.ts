@@ -11,7 +11,12 @@ export class Kitchen {
   }
 
   static async list() {
-    return useDatabase().query.kitchens.findMany()
+    return useDatabase().query.kitchens.findMany({
+      orderBy: (kitchens, { asc }) => asc(kitchens.createdAt),
+      with: {
+        feedbackPoints: true,
+      },
+    })
   }
 
   static async create(data: KitchenDraft) {

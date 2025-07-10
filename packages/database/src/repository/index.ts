@@ -3,6 +3,7 @@ import { Channel } from './channel'
 import { Chat } from './chat'
 import { Checkout } from './checkout'
 import { City } from './city'
+import { Feedback } from './feedback'
 import { File } from './file'
 import { Kitchen } from './kitchen'
 import { Media } from './media'
@@ -22,6 +23,7 @@ class Repository {
   readonly chat = Chat
   readonly checkout = Checkout
   readonly city = City
+  readonly feedback = Feedback
   readonly file = File
   readonly kitchen = Kitchen
   readonly media = Media

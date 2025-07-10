@@ -43,6 +43,8 @@ type ChannelType = 'website'
 
 type PaymentMethodType = 'card' | 'cash' | 'online'
 
+type FeedbackPointType = 'yandex_map'
+
 export const permissions = pgTable('permissions', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -498,6 +500,16 @@ export const printOrderItems = pgTable('print_order_items', {
   note: varchar('note'),
 })
 
+export const feedbackPoints = pgTable('feedback_points', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  type: varchar('type').notNull().$type<FeedbackPointType>(),
+  rating: numeric('rating', { mode: 'number' }),
+  url: varchar('url'),
+  kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
@@ -695,6 +707,7 @@ export const kitchenRelations = relations(kitchens, ({ many, one }) => ({
   channels: many(channelKitchens),
   checkouts: many(checkouts),
   paymentMethods: many(paymentMethodsOnKitchens),
+  feedbackPoints: many(feedbackPoints),
   partner: one(partners, {
     fields: [kitchens.partnerId],
     references: [partners.id],
@@ -791,5 +804,12 @@ export const printOrderItemRelations = relations(printOrderItems, ({ one }) => (
   print: one(prints, {
     fields: [printOrderItems.printId],
     references: [prints.id],
+  }),
+}))
+
+export const feedbackPointRelations = relations(feedbackPoints, ({ one }) => ({
+  kitchen: one(kitchens, {
+    fields: [feedbackPoints.kitchenId],
+    references: [kitchens.id],
   }),
 }))

@@ -1,4 +1,4 @@
-import type { File, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
+import type { FeedbackPoint, File, Kitchen, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
 
 export type ProductVariantWithData = ProductVariant & {
   tags: ProductVariantTag[]
@@ -39,4 +39,8 @@ export type PermissionCode = 'product:view'
 export type PrintWithData = Print & {
   mainFile: File | null
   previewFile: File | null
+}
+
+export type KitchenWithData = Kitchen & {
+  feedbackPoints: FeedbackPoint[]
 }

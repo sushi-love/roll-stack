@@ -1,7 +1,7 @@
-import type { Kitchen } from '@sushi-atrium/database'
+import type { KitchenWithData } from '~~/types'
 
 export const useKitchenStore = defineStore('kitchen', () => {
-  const kitchens = ref<Kitchen[]>([])
+  const kitchens = ref<KitchenWithData[]>([])
 
   async function update() {
     try {
