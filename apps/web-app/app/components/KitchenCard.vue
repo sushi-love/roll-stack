@@ -5,7 +5,7 @@
         {{ kitchen.address }}
       </h3>
 
-      <h3 class="text-base text-muted">
+      <h3 class="text-base/5 text-muted">
         {{ kitchen.city }}
       </h3>
     </div>

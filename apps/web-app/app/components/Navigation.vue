@@ -23,6 +23,7 @@ const route = useRoute()
 
 const menuStore = useMenuStore()
 const partnerStore = usePartnerStore()
+const kitchenStore = useKitchenStore()
 
 const menus = computed(() => menuStore.menus.map((menu) => ({
   label: menu.name,
@@ -37,11 +38,30 @@ const menuItems = computed(() => [
     exact: true,
   },
   {
+    label: t('app.menu.our-staff'),
+    to: '/staff',
+    icon: 'i-lucide-contact-round',
+    active: route.path.startsWith('/staff'),
+  },
+  {
     label: t('app.menu.chats'),
     to: '/chat',
     icon: 'i-lucide-messages-square',
     active: route.path.startsWith('/chat'),
-    // badge: 12,
+  },
+  {
+    label: t('app.menu.kitchens'),
+    to: '/kitchen',
+    icon: 'i-lucide-map-pinned',
+    active: route.path.startsWith('/kitchen'),
+    badge: kitchenStore.kitchens.length,
+  },
+  {
+    label: t('app.menu.our-partners'),
+    to: '/partner',
+    icon: 'i-lucide-handshake',
+    active: route.path.startsWith('/partner'),
+    badge: partnerStore.partners.length,
   },
   {
     label: t('app.menu.products'),
@@ -64,31 +84,6 @@ const menuItems = computed(() => [
       // },
     ],
   },
-  {
-    label: t('app.menu.our-partners'),
-    to: '/partner',
-    icon: 'i-lucide-handshake',
-    active: route.path.startsWith('/partner'),
-    badge: partnerStore.partners.length,
-  },
-  {
-    label: t('app.menu.our-staff'),
-    to: '/staff',
-    icon: 'i-lucide-contact-round',
-    active: route.path.startsWith('/staff'),
-  },
-  {
-    label: 'SMM',
-    to: '/post',
-    icon: 'i-lucide-sticker',
-    active: route.path.startsWith('/post'),
-  },
-  {
-    label: t('app.menu.prints'),
-    to: '/print',
-    icon: 'i-lucide-printer',
-    active: route.path.startsWith('/print'),
-  },
 ])
 
 const linkItems = computed(() => [
@@ -108,6 +103,18 @@ const linkItems = computed(() => [
     to: '/head/task',
     icon: 'i-lucide-list-checks',
     active: route.path.startsWith('/head/task'),
+  },
+  {
+    label: 'SMM',
+    to: '/post',
+    icon: 'i-lucide-sticker',
+    active: route.path.startsWith('/post'),
+  },
+  {
+    label: t('app.menu.prints'),
+    to: '/print',
+    icon: 'i-lucide-printer',
+    active: route.path.startsWith('/print'),
   },
   {
     label: t('app.menu.suggest-idea'),
