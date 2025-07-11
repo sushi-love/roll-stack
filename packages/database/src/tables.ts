@@ -506,7 +506,8 @@ export const feedbackPoints = pgTable('feedback_points', {
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   type: varchar('type').notNull().$type<FeedbackPointType>(),
-  rating: numeric('rating', { mode: 'number' }),
+  rating: numeric('rating', { mode: 'number' }).notNull().default(0),
+  reviews: integer('reviews').notNull().default(0),
   url: varchar('url'),
   kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
 })

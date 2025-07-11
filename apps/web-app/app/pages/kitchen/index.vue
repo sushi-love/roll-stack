@@ -76,7 +76,7 @@
           <FeedbackRating :rating="row.getValue('rating')" />
 
           <template #content>
-            <div class="h-auto w-64 p-4 flex flex-col gap-2">
+            <div class="h-auto w-58 p-4 flex flex-col gap-2">
               <FeedbackPointsBlock :points="row.getValue('feedbackPoints')" />
             </div>
           </template>
