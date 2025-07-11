@@ -64,8 +64,26 @@
       <template #id-cell="{ row }">
         {{ row.getValue('id') }}
       </template>
-      <template #feedbackPoints-cell="{ row }">
-        <FeedbackPointsBlock :points="row.getValue('feedbackPoints')" />
+      <template #rating-cell="{ row }">
+        <UPopover
+          mode="hover"
+          :content="{
+            align: 'center',
+            side: 'bottom',
+            sideOffset: 8,
+          }"
+        >
+          <FeedbackRating :rating="row.getValue('rating')" />
+
+          <template #content>
+            <div class="h-auto w-56 p-4 flex flex-col gap-2">
+              <FeedbackPointsBlock :points="row.getValue('feedbackPoints')" />
+            </div>
+          </template>
+        </UPopover>
+      </template>
+      <template #feedbackPoints-cell="">
+        -
       </template>
       <template #name-cell="{ row }">
         <ULink :to="`/kitchen/${row.getValue('id')}`" class="font-medium text-highlighted">
@@ -140,6 +158,7 @@ const data = computed<KitchenWithData[]>(() => {
 
 const columnVisibility = ref({
   id: false,
+  feedbackPoints: false,
 })
 const rowSelection = ref()
 const pagination = ref({
@@ -151,8 +170,12 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
   accessorKey: 'id',
   header: 'Id',
 }, {
+  accessorKey: 'rating',
+  header: 'Рейтинг',
+  enableSorting: true,
+}, {
   accessorKey: 'feedbackPoints',
-  header: 'Рейтинги',
+  header: 'Отзывы',
 }, {
   accessorKey: 'name',
   header: 'Название',

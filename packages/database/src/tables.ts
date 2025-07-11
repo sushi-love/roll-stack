@@ -371,6 +371,7 @@ export const kitchens = pgTable('kitchens', {
   minAmountForDelivery: numeric('min_amount_for_delivery', { mode: 'number' }),
   isDeliveryAvailable: boolean('is_delivery_available').notNull().default(true),
   isPickupAvailable: boolean('is_pickup_available').notNull().default(true),
+  rating: numeric('rating', { mode: 'number' }).notNull().default(0),
   partnerId: cuid2('partner_id').references(() => partners.id),
 })
 

@@ -20,11 +20,11 @@
         <p
           :class="[
             point.rating >= 4 && 'text-neutral',
-            point.rating < 4 && point.rating >= 3 && 'text-amber-500',
+            point.rating < 4 && point.rating >= 3 && 'text-orange-500',
             point.rating < 3 && 'text-red-500',
           ]"
         >
-          {{ point.rating }}
+          {{ point.rating.toFixed(1) }}
         </p>
       </UButton>
     </UTooltip>

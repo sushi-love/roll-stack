@@ -104,7 +104,7 @@
       class="shrink-0"
       :ui="{
         base: 'table-fixed border-separate border-spacing-0',
-        thead: '[&>tr]:after:content-none',
+        thead: '[&>tr]:bg-default [&>tr]:after:content-none',
         tbody: '[&>tr]:last:[&>td]:border-b-0',
         th: 'py-1 bg-elevated/50 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
         td: 'border-b border-default [&:has([data-media=true]))]:px-0 [&:has([data-media=true]))]:max-w-10 [&:has([data-action=true]))]:pr-0',
@@ -173,21 +173,6 @@
           {{ row.getValue('report') }}
         </div>
       </template>
-      <!-- <template #action-cell="{ row }">
-        <div class="flex items-end" data-action="true">
-          <UDropdownMenu
-            :items="getDropdownActions(row.original as Task)"
-            :content="{ align: 'end' }"
-            class="ml-auto"
-          >
-            <UButton
-              icon="i-lucide-ellipsis-vertical"
-              color="neutral"
-              variant="outline"
-            />
-          </UDropdownMenu>
-        </div>
-      </template> -->
     </UTable>
 
     <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
@@ -356,23 +341,6 @@ const columns: Ref<TableColumn<Task>[]> = ref([{
   enableSorting: false,
   enableHiding: false,
 }])
-
-// function getDropdownActions(_: Task): DropdownMenuItem[][] {
-//   return [
-//     [
-//       {
-//         type: 'label',
-//         label: t('common.actions'),
-//       },
-//       // {
-//       //   label: t('common.open-page'),
-//       //   type: 'link',
-//       //   to: `/menu/${category.menuId}/category/${category.id}`,
-//       //   icon: 'i-lucide-notebook-text',
-//       // },
-//     ],
-//   ]
-// }
 
 const table = useTemplateRef('table')
 

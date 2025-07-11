@@ -12,7 +12,7 @@ export class Kitchen {
 
   static async list() {
     return useDatabase().query.kitchens.findMany({
-      orderBy: (kitchens, { asc }) => asc(kitchens.createdAt),
+      orderBy: (kitchens, { asc }) => asc(kitchens.name),
       with: {
         feedbackPoints: true,
       },
