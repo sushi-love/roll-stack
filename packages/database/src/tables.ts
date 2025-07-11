@@ -43,7 +43,7 @@ type ChannelType = 'website'
 
 type PaymentMethodType = 'card' | 'cash' | 'online'
 
-type FeedbackPointType = 'yandex_map'
+type FeedbackPointType = 'yandex_map' | '2gis_map' | 'vk_group'
 
 export const permissions = pgTable('permissions', {
   id: cuid2('id').defaultRandom().primaryKey(),

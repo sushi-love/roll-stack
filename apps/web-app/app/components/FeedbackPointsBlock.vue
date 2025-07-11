@@ -1,5 +1,15 @@
 <template>
-  <div class="flex flex-row gap-1.5 items-center">
+  <div class="flex flex-col gap-1">
+    <h4 class="text-lg font-medium leading-5">
+      Оценки на внешних ресурсах
+    </h4>
+
+    <p class="text-sm text-muted leading-4">
+      Можно нажать - ресурс откроется в новом окне
+    </p>
+  </div>
+
+  <div class="mt-2 flex flex-row gap-1.5 items-center">
     <UTooltip
       v-for="point in points"
       :key="point.id"
@@ -17,15 +27,7 @@
           base: 'font-semibold',
         }"
       >
-        <p
-          :class="[
-            point.rating >= 4 && 'text-neutral',
-            point.rating < 4 && point.rating >= 3 && 'text-orange-500',
-            point.rating < 3 && 'text-red-500',
-          ]"
-        >
-          {{ point.rating.toFixed(1) }}
-        </p>
+        {{ point.rating.toFixed(1) }}
       </UButton>
     </UTooltip>
   </div>
@@ -41,7 +43,21 @@ function getDataByType(type: string) {
     return {
       icon: 'i-lucide-map-pin',
       color: 'text-[#f43]',
-      tooltip: 'Рейтинг на Яндекс Карте',
+      tooltip: 'Оценка на Яндекс Карте',
+    }
+  }
+  if (type === '2gis_map') {
+    return {
+      icon: 'i-lucide-map-pin',
+      color: 'text-[#19aa1e]',
+      tooltip: 'Оценка 2GIS',
+    }
+  }
+  if (type === 'vk_group') {
+    return {
+      icon: 'simple-icons-vk',
+      color: 'text-[#0077FF]',
+      tooltip: 'Оценка ВКонтакте',
     }
   }
 
