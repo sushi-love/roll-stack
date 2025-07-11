@@ -23,11 +23,11 @@
         leadingIcon: getDataByType(point.type)?.color,
       }"
     >
-      <div v-if="point.rating" class="w-full flex flex-row justify-between items-center">
+      <div class="w-full flex flex-row justify-between items-center">
         <h4>{{ getDataByType(point.type)?.tooltip }}</h4>
 
         <div class="shrink-0 w-fit flex flex-col items-end">
-          <h4 class="text-base/5">
+          <h4 class="text-base/4">
             {{ point.rating.toFixed(1) }}
           </h4>
           <p class="text-xs text-muted">

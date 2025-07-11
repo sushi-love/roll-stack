@@ -90,10 +90,13 @@
           {{ row.getValue('name') }}
         </ULink>
       </template>
-      <template #city-cell="{ row }">
-        <div class="text-sm/4 whitespace-pre-wrap max-w-64">
-          {{ row.getValue('city') }}
+      <template #address-cell="{ row }">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-60">
+          {{ row.getValue('address') }}, {{ row.getValue('city') }}
         </div>
+      </template>
+      <template #no-cell="">
+        <div>??? руб</div>
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-end" data-action="true">
@@ -159,6 +162,7 @@ const data = computed<KitchenWithData[]>(() => {
 const columnVisibility = ref({
   id: false,
   feedbackPoints: false,
+  city: false,
 })
 const rowSelection = ref()
 const pagination = ref({
@@ -185,6 +189,9 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
 }, {
   accessorKey: 'city',
   header: 'Населенный пункт',
+}, {
+  accessorKey: 'no',
+  header: 'Выручка',
 }, {
   id: 'action',
   enableSorting: false,
