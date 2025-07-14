@@ -3,7 +3,7 @@
     <p
       class="font-semibold text-base/5 text-amber-500"
       :class="[
-        rating <= 2 && 'text-red-500',
+        rating <= 2.5 && 'text-red-500',
       ]"
     >
       {{ rating?.toFixed(1) }}
@@ -21,7 +21,7 @@
           name="fluent:star-32-filled"
           class="size-4 text-amber-400"
           :class="[
-            rating <= 2 && 'text-red-400',
+            rating <= 2.5 && 'text-red-400',
           ]"
         />
       </template>

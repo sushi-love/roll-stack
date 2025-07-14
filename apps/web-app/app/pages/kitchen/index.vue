@@ -47,6 +47,7 @@
       v-model:column-visibility="columnVisibility"
       v-model:row-selection="rowSelection"
       v-model:pagination="pagination"
+      v-model:sorting="sorting"
       :data="data"
       :columns="columns"
       :pagination-options="{
@@ -91,7 +92,7 @@
         </ULink>
       </template>
       <template #address-cell="{ row }">
-        <div class="text-sm/4 whitespace-pre-wrap max-w-60">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-56">
           {{ row.getValue('address') }}, {{ row.getValue('city') }}
         </div>
       </template>
@@ -143,6 +144,8 @@ import type { KitchenWithData } from '~~/types'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 
+const UButton = resolveComponent('UButton')
+
 const { t } = useI18n()
 
 const kitchenStore = useKitchenStore()
@@ -169,20 +172,50 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 50,
 })
+const sorting = ref([
+  {
+    id: 'rating',
+    desc: true,
+  },
+])
 
 const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
   accessorKey: 'id',
   header: 'Id',
 }, {
   accessorKey: 'rating',
-  header: 'Рейтинг',
   enableSorting: true,
+  header: ({ column }) => {
+    const isSorted = column.getIsSorted()
+    const icon = isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow'
+
+    return h(UButton, {
+      color: 'neutral',
+      variant: 'ghost',
+      label: 'Рейтинг',
+      icon: isSorted ? icon : 'i-lucide-arrow-up-down',
+      class: '-mx-2.5',
+      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    })
+  },
 }, {
   accessorKey: 'feedbackPoints',
   header: 'Отзывы',
 }, {
   accessorKey: 'name',
-  header: 'Название',
+  header: ({ column }) => {
+    const isSorted = column.getIsSorted()
+    const icon = isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow'
+
+    return h(UButton, {
+      color: 'neutral',
+      variant: 'ghost',
+      label: 'Название',
+      icon: isSorted ? icon : 'i-lucide-arrow-up-down',
+      class: '-mx-2.5',
+      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    })
+  },
 }, {
   accessorKey: 'address',
   header: 'Адрес',

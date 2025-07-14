@@ -32,6 +32,10 @@
             color="neutral"
             variant="outline"
             icon="i-lucide-calendar"
+            class="w-full lg:w-48"
+            :class="[
+              selectedDates.start && 'lg:w-fit',
+            ]"
             :ui="{
               leadingIcon: 'text-dimmed',
             }"
@@ -46,7 +50,9 @@
               </template>
             </template>
             <template v-else>
-              Выберите даты
+              <div class="text-dimmed font-normal">
+                Выберите даты
+              </div>
             </template>
           </UButton>
 
@@ -123,7 +129,7 @@
         </div>
       </template>
       <template #name-cell="{ row }">
-        <h4 class="text-default font-medium text-sm/4 whitespace-pre-wrap max-w-64">
+        <h4 class="text-default font-medium text-sm/4 whitespace-pre-wrap max-w-56">
           {{ row.getValue('name') }}
         </h4>
       </template>
@@ -300,10 +306,10 @@ const columnFilters = ref([{
 }])
 const columnVisibility = ref({
   id: false,
-  report: false,
-  resolution: true,
+  report: true,
+  resolution: false,
   performerId: true,
-  updatedAt: true,
+  updatedAt: false,
 })
 const pagination = ref({
   pageIndex: 0,
@@ -348,12 +354,7 @@ const df = new DateFormatter('ru-RU', {
   dateStyle: 'long',
 })
 
-// Get state from URL
-onMounted(() => {
-  if (!route.query) {
-    return
-  }
-
+function setFilters() {
   selectedPerformer.value = availablePerformers.value.find((performer) => performer?.value === route.query.performer)
   selectedResolution.value = availableResolutions.value.find((resolution) => resolution?.value === route.query.resolution)
   filterValue.value = route.query.name?.toString() ?? ''
@@ -374,10 +375,28 @@ onMounted(() => {
       updatedAt: false,
     }
   }
+}
+
+// Get state from URL
+onMounted(() => {
+  if (!route.query) {
+    return
+  }
+
+  setFilters()
+})
+
+// Reset filters on available performers change
+watch(availablePerformers, () => {
+  setFilters()
 })
 
 // Save state in URL on every filter change
 watch([selectedPerformer, selectedResolution, filterValue, selectedDates], () => {
+  if (!selectedPerformer.value) {
+    return
+  }
+
   router.push({
     query: {
       performer: selectedPerformer.value?.value,
