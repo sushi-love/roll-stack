@@ -147,3 +147,33 @@ export function getLocalizedPostStatus(status: string) {
       return ''
   }
 }
+
+export function getFeedbackPointDataByType(type: string) {
+  if (type === 'yandex_map') {
+    return {
+      icon: 'i-lucide-map-pin',
+      color: 'text-[#f43]',
+      tooltip: 'Яндекс',
+    }
+  }
+  if (type === '2gis_map') {
+    return {
+      icon: 'i-lucide-map-pin',
+      color: 'text-[#19aa1e]',
+      tooltip: '2ГИС',
+    }
+  }
+  if (type === 'vk_group') {
+    return {
+      icon: 'simple-icons-vk',
+      color: 'text-[#0077FF]',
+      tooltip: 'ВКонтакте',
+    }
+  }
+
+  return {
+    icon: 'i-lucide-message-circle',
+    color: 'primary',
+    tooltip: 'Отзывы',
+  }
+}

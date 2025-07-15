@@ -1,13 +1,15 @@
 <template>
   <Content>
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <KitchenCard
+      <NuxtLink
         v-for="kitchen in partner?.kitchens"
         :key="kitchen.id"
-        :kitchen="kitchen"
+        :to="`/kitchen/${kitchen.id}`"
       >
-        {{ kitchen }}
-      </KitchenCard>
+        <KitchenCard :kitchen="kitchen">
+          {{ kitchen }}
+        </KitchenCard>
+      </NuxtLink>
     </div>
   </Content>
 </template>

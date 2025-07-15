@@ -18,13 +18,13 @@
       size="md"
       :to="point.url ?? '#'"
       target="_blank"
-      :icon="getDataByType(point.type)?.icon"
+      :icon="getFeedbackPointDataByType(point.type)?.icon"
       :ui="{
-        leadingIcon: getDataByType(point.type)?.color,
+        leadingIcon: getFeedbackPointDataByType(point.type)?.color,
       }"
     >
       <div class="w-full flex flex-row justify-between items-center">
-        <h4>{{ getDataByType(point.type)?.tooltip }}</h4>
+        <h4>{{ getFeedbackPointDataByType(point.type)?.tooltip }}</h4>
 
         <div class="shrink-0 w-fit flex flex-col items-end">
           <h4 class="text-base/4">
@@ -43,34 +43,4 @@
 import type { FeedbackPoint } from '@sushi-atrium/database'
 
 defineProps<{ points: FeedbackPoint[] }>()
-
-function getDataByType(type: string) {
-  if (type === 'yandex_map') {
-    return {
-      icon: 'i-lucide-map-pin',
-      color: 'text-[#f43]',
-      tooltip: 'Яндекс',
-    }
-  }
-  if (type === '2gis_map') {
-    return {
-      icon: 'i-lucide-map-pin',
-      color: 'text-[#19aa1e]',
-      tooltip: '2ГИС',
-    }
-  }
-  if (type === 'vk_group') {
-    return {
-      icon: 'simple-icons-vk',
-      color: 'text-[#0077FF]',
-      tooltip: 'ВКонтакте',
-    }
-  }
-
-  return {
-    icon: 'i-lucide-message-circle',
-    color: 'primary',
-    tooltip: 'Отзывы',
-  }
-}
 </script>
