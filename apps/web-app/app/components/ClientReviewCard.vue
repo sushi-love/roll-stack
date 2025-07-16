@@ -3,11 +3,11 @@
     <div class="flex flex-col gap-3">
       <div class="flex flex-row gap-3 items-center">
         <img
-          :src="`/api/avatar/${review.id}.svg?emotion=8`"
+          :src="`/api/avatar/${review.id}.svg?emotion=${emotion}`"
           width="40"
           height="40"
           alt=""
-          class="size-12 rounded-full"
+          class="size-14 rounded-full"
         >
         <div class="flex flex-col gap-0.5">
           <h3 class="text-lg/6 font-semibold">
@@ -71,4 +71,6 @@ const { review } = defineProps<{
 const kitchenStore = useKitchenStore()
 const feedbackPoints = computed(() => kitchenStore.kitchens.find((k) => k.id === review.kitchenId)?.feedbackPoints)
 const feedbackPoint = computed(() => feedbackPoints.value?.find((p) => p.id === review.feedbackPointId))
+
+const emotion = computed(() => getRandInteger(review.rating === 1 ? 1 : review.rating - 1, review.rating === 10 ? 10 : review.rating + 1))
 </script>
