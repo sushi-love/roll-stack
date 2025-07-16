@@ -1,8 +1,15 @@
 <template>
   <Content>
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <UCard variant="outline">
-        <FeedbackRating :rating="kitchen?.rating ?? 0" class="ml-6 w-fit scale-150" />
+      <UCard
+        variant="outline"
+        :ui="{
+          body: 'h-full',
+        }"
+      >
+        <div class="h-full flex flex-col items-center justify-center">
+          <FeedbackRating :rating="kitchen?.rating ?? 0" class="w-fit scale-150" />
+        </div>
       </UCard>
       <UCard variant="soft">
         <div class="text-sm/4">
@@ -27,11 +34,14 @@
             </div>
 
             <div class="shrink-0 w-fit flex flex-col items-end">
-              <h4 class="text-lg/4">
+              <h4 class="text-xl/5 font-semibold">
                 {{ point.rating.toFixed(1) }}
               </h4>
-              <p class="text-sm text-muted">
-                {{ point.reviews }} {{ pluralizationRu(point.reviews, ['оценка', 'оценки', 'оценок']) }}
+              <p class="text-sm/4 text-muted">
+                {{ point.ratings }} {{ pluralizationRu(point.ratings, ['оценка', 'оценки', 'оценок']) }}
+              </p>
+              <p class="text-sm/4 text-muted">
+                {{ point.reviews }} {{ pluralizationRu(point.reviews, ['отзыв', 'отзыва', 'отзывов']) }}
               </p>
             </div>
           </div>
@@ -48,6 +58,18 @@
           />
         </div>
       </UCard>
+    </div>
+
+    <h3 class="mt-6 text-lg md:text-xl font-medium">
+      Отзывы
+    </h3>
+
+    <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+      <ClientReviewCard
+        v-for="review in kitchen?.reviews"
+        :key="review.id"
+        :review="review"
+      />
     </div>
   </Content>
 </template>

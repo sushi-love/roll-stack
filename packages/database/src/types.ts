@@ -110,3 +110,6 @@ export type PrintOrderItemDraft = InferInsertModel<typeof tables.printOrderItems
 
 export type FeedbackPoint = InferSelectModel<typeof tables.feedbackPoints>
 export type FeedbackPointDraft = InferInsertModel<typeof tables.feedbackPoints>
+
+export type ClientReview = InferSelectModel<typeof tables.clientReviews>
+export type ClientReviewDraft = InferInsertModel<typeof tables.clientReviews>

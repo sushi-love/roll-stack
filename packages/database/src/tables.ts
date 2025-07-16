@@ -507,9 +507,22 @@ export const feedbackPoints = pgTable('feedback_points', {
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   type: varchar('type').notNull().$type<FeedbackPointType>(),
   rating: numeric('rating', { mode: 'number' }).notNull().default(0),
+  ratings: integer('ratings').notNull().default(0),
   reviews: integer('reviews').notNull().default(0),
   url: varchar('url'),
   kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
+})
+
+export const clientReviews = pgTable('client_reviews', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  text: varchar('text').notNull(),
+  rating: numeric('rating', { mode: 'number' }).notNull().default(0),
+  url: varchar('url'),
+  kitchenId: cuid2('kitchen_id').references(() => kitchens.id),
+  feedbackPointId: cuid2('feedback_point_id').references(() => feedbackPoints.id),
 })
 
 export const userRelations = relations(users, ({ many, one }) => ({
@@ -710,6 +723,7 @@ export const kitchenRelations = relations(kitchens, ({ many, one }) => ({
   checkouts: many(checkouts),
   paymentMethods: many(paymentMethodsOnKitchens),
   feedbackPoints: many(feedbackPoints),
+  reviews: many(clientReviews),
   partner: one(partners, {
     fields: [kitchens.partnerId],
     references: [partners.id],
@@ -809,9 +823,21 @@ export const printOrderItemRelations = relations(printOrderItems, ({ one }) => (
   }),
 }))
 
-export const feedbackPointRelations = relations(feedbackPoints, ({ one }) => ({
+export const feedbackPointRelations = relations(feedbackPoints, ({ one, many }) => ({
   kitchen: one(kitchens, {
     fields: [feedbackPoints.kitchenId],
+    references: [kitchens.id],
+  }),
+  reviews: many(clientReviews),
+}))
+
+export const clientReviewRelations = relations(clientReviews, ({ one }) => ({
+  feedbackPoint: one(feedbackPoints, {
+    fields: [clientReviews.feedbackPointId],
+    references: [feedbackPoints.id],
+  }),
+  kitchen: one(kitchens, {
+    fields: [clientReviews.kitchenId],
     references: [kitchens.id],
   }),
 }))

@@ -31,7 +31,7 @@
             {{ point.rating.toFixed(1) }}
           </h4>
           <p class="text-xs text-muted">
-            {{ point.reviews }} {{ pluralizationRu(point.reviews, ['оценка', 'оценки', 'оценок']) }}
+            {{ point.ratings }} {{ pluralizationRu(point.ratings, ['оценка', 'оценки', 'оценок']) }}
           </p>
         </div>
       </div>

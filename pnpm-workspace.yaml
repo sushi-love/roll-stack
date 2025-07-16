@@ -45,6 +45,7 @@ catalog:
   ioredis: ^5.6.1
   libphonenumber-js: ^1.12.9
   lint-staged: ^16.1.2
+  nitropack: latest
   nuxt: ^3.17.6
   nuxt-auth-utils: ^0.5.20
   nuxt-tiptap-editor: ^2.3.1
@@ -52,6 +53,7 @@ catalog:
   pg: ^8.16.3
   pinia: ^3.0.3
   playwright: ^1.53.2
+  puppeteer: ^24.13.0
   ru-nalog-fias-gar: ^1.0.4
   sharp: ^0.34.2
   sortablejs: ^1.15.6
@@ -72,6 +74,7 @@ ignoredBuiltDependencies:
   - vue-demi
 
 onlyBuiltDependencies:
+  - puppeteer
   - sharp
 
 supportedArchitectures:
