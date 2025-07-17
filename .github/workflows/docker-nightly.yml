@@ -76,7 +76,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build ${{ matrix.package }}
+      - name: Build ${{ env.APP_NAME }}
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -84,4 +84,4 @@ jobs:
           push: true
           build-args: |
             APP_VERSION=${{ env.APP_VERSION }}
-          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
+          tags: ${{ secrets.DOCKER_REGISTRY }}/roll-stack/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
