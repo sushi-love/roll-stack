@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
-import { repository } from '@sushi-atrium/geo-database'
+import { repository } from '@roll-stack/geo-database'
 
 type Address = {
   id: string

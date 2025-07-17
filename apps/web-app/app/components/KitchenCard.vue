@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Kitchen } from '@sushi-atrium/database'
+import type { Kitchen } from '@roll-stack/database'
 
 defineProps<{ kitchen: Kitchen }>()
 </script>

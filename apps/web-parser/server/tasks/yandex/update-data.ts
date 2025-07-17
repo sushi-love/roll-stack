@@ -1,5 +1,5 @@
 import type { Browser } from 'puppeteer'
-import { repository } from '@sushi-atrium/database'
+import { repository } from '@roll-stack/database'
 import puppeteer from 'puppeteer'
 
 const logger = useLogger('yandex:update-data')

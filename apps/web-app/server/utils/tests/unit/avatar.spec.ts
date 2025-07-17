@@ -5,6 +5,6 @@ describe('getPossibleSkinColors', () => {
   it('should return correct skin colors', () => {
     const res = getPossibleSkinColors()
 
-    expect(res).toMatchInlineSnapshot(['fce5d3'])
+    expect(res).toEqual(['fce5d3'])
   })
 })

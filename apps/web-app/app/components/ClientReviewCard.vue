@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ClientReview } from '@sushi-atrium/database'
+import type { ClientReview } from '@roll-stack/database'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 

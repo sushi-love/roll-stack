@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Checkout } from '@sushi-atrium/database'
+import type { Checkout } from '@roll-stack/database'
 
 const { t } = useI18n()
 const checkout = useCheckoutStore()

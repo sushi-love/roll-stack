@@ -1,5 +1,5 @@
 {
-  "name": "@sushi-atrium/web-parser",
+  "name": "@roll-stack/web-parser",
   "private": true,
   "scripts": {
     "build": "nitro build",
@@ -9,7 +9,7 @@
     "postinstall": "puppeteer browsers install chrome"
   },
   "dependencies": {
-    "@sushi-atrium/database": "workspace:*",
+    "@roll-stack/database": "workspace:*",
     "puppeteer": "catalog:"
   },
   "devDependencies": {

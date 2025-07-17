@@ -1,6 +1,6 @@
-import type { Checkout } from '@sushi-atrium/database'
+import type { Checkout } from '@roll-stack/database'
 import type { H3Event } from 'h3'
-import { repository } from '@sushi-atrium/database'
+import { repository } from '@roll-stack/database'
 
 const MAX_LINES_PER_CHECKOUT = 20
 

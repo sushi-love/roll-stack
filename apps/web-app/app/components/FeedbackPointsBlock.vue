@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FeedbackPoint } from '@sushi-atrium/database'
+import type { FeedbackPoint } from '@roll-stack/database'
 
 defineProps<{ points: FeedbackPoint[] }>()
 </script>

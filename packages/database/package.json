@@ -1,5 +1,5 @@
 {
-  "name": "@sushi-atrium/database",
+  "name": "@roll-stack/database",
   "type": "module",
   "version": "0.0.0",
   "private": true,

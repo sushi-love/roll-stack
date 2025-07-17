@@ -1,4 +1,4 @@
-import type { Kitchen, Partner } from '@sushi-atrium/database'
+import type { Kitchen, Partner } from '@roll-stack/database'
 
 type PartnerWithData = Partner & {
   kitchens: Kitchen[]

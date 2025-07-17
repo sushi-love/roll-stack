@@ -1,5 +1,5 @@
 {
-  "name": "@sushi-atrium/geo-vault",
+  "name": "@roll-stack/geo-vault",
   "type": "module",
   "version": "0.0.0",
   "private": true,
@@ -13,7 +13,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@sushi-atrium/geo-database": "workspace:*",
+    "@roll-stack/geo-database": "workspace:*",
     "arktype": "catalog:",
     "aws4fetch": "catalog:",
     "date-fns": "catalog:",

@@ -92,7 +92,7 @@
 import type { CreatePost } from '#shared/services/post'
 import type { CalendarDate } from '@internationalized/date'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { Post } from '@sushi-atrium/database'
+import type { Post } from '@roll-stack/database'
 import { createPostSchema } from '#shared/services/post'
 import { DateFormatter, getLocalTimeZone } from '@internationalized/date'
 

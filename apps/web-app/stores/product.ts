@@ -1,4 +1,4 @@
-import type { ProductTag, ProductVariantTag } from '@sushi-atrium/database'
+import type { ProductTag, ProductVariantTag } from '@roll-stack/database'
 import type { ProductWithData } from '~~/types'
 
 export const useProductStore = defineStore('product', () => {

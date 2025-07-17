@@ -1,5 +1,5 @@
 import process from 'node:process'
-import { useCreateDatabase } from '@sushi-atrium/geo-database'
+import { useCreateDatabase } from '@roll-stack/geo-database'
 
 /**
  * DB init

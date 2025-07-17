@@ -120,7 +120,7 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
-import type { Task } from '@sushi-atrium/database'
+import type { Task } from '@roll-stack/database'
 import { ModalCompleteTask, ModalUpdateTask } from '#components'
 import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { getLocalizedResolution } from '~~/shared/utils/helpers'

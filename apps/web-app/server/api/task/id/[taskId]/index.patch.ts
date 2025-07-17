@@ -1,5 +1,5 @@
-import type { Task, User } from '@sushi-atrium/database'
-import { repository } from '@sushi-atrium/database'
+import type { Task, User } from '@roll-stack/database'
+import { repository } from '@roll-stack/database'
 import { type } from 'arktype'
 import { updateTaskSchema } from '~~/shared/services/task'
 import { suffixByGender } from '~~/shared/utils/gender'

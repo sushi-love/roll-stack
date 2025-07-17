@@ -1,4 +1,4 @@
-import type { Checkout, CheckoutItem, Kitchen, PaymentMethod, Product, ProductVariant } from '@sushi-atrium/database'
+import type { Checkout, CheckoutItem, Kitchen, PaymentMethod, Product, ProductVariant } from '@roll-stack/database'
 
 type CheckoutWithData = Checkout & {
   items: (CheckoutItem & {

@@ -1,4 +1,4 @@
-import type { MenuCategory, Product } from '@sushi-atrium/database'
+import type { MenuCategory, Product } from '@roll-stack/database'
 import type { MenuWithData } from '~~/types'
 
 type ProductWithCategory = Product & { category: MenuCategory }

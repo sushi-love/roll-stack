@@ -1,6 +1,6 @@
 import type { H3Event } from 'h3'
 import type { PermissionCode } from '~~/types'
-import { repository } from '@sushi-atrium/database'
+import { repository } from '@roll-stack/database'
 
 export async function hasPermission(event: H3Event, permission: PermissionCode) {
   const session = await getUserSession(event)

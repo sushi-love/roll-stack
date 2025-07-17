@@ -1,4 +1,4 @@
-import { repository } from '@sushi-atrium/database'
+import { repository } from '@roll-stack/database'
 import { type } from 'arktype'
 import { createTaskSchema } from '~~/shared/services/task'
 import { suffixByGender } from '~~/shared/utils/gender'

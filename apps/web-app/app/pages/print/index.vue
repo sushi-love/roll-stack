@@ -148,7 +148,7 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { Print } from '@sushi-atrium/database'
+import type { Print } from '@roll-stack/database'
 import type { PrintWithData } from '~~/types'
 import { ModalCreatePrint } from '#components'
 import { getPaginationRowModel } from '@tanstack/table-core'

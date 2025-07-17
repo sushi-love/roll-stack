@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Task, User } from '@sushi-atrium/database'
+import type { Task, User } from '@roll-stack/database'
 
 type UserWithData = User & {
   focusedTask: Task | null

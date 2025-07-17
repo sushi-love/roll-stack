@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
-import { repository } from '@sushi-atrium/database'
+import { repository } from '@roll-stack/database'
 import { type } from 'arktype'
 import { createProductSchema } from '~~/shared/services/product'
 
