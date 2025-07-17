@@ -9,12 +9,6 @@
 
     <div class="min-h-20 h-full px-2.5 pb-2 flex flex-col gap-2.5">
       <div class="flex flex-row items-center gap-2">
-        <!-- <PartnerPrestigeBadge
-          :prestige="partner.prestige"
-          size="sm"
-          class="group-hover:scale-125 duration-200"
-        /> -->
-
         <UBadge
           color="neutral"
           variant="outline"
