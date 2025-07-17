@@ -4,7 +4,6 @@ import { repository } from '@roll-stack/database'
 import sharp from 'sharp'
 
 const POSTS_DIRECTORY = 'posts'
-
 const IMAGE_SIZES = [600, 1200]
 const IMAGE_FORMATS = ['jpg', 'webp'] as const
 const ACCEPTED_IMAGE_FORMATS = ['jpeg', 'jpg', 'png', 'webp']
@@ -41,27 +40,7 @@ export default defineEventHandler(async (event) => {
     sharpStream = sharp(file.data.buffer as ArrayBuffer)
 
     const metadata = await sharpStream.clone().metadata()
-
-    if (!metadata?.format || !ACCEPTED_IMAGE_FORMATS.includes(metadata?.format) || !metadata?.width || !metadata?.height) {
-      throw createError({
-        statusCode: 400,
-        message: 'Invalid file type',
-      })
-    }
-
-    if (metadata.width > 8000 || metadata.height > 8000) {
-      throw createError({
-        statusCode: 400,
-        message: 'Image has too big dimensions',
-      })
-    }
-
-    if (metadata.width < 600 || metadata.height < 600) {
-      throw createError({
-        statusCode: 400,
-        message: 'Image has too small dimensions',
-      })
-    }
+    validateMetadata(metadata, 8000, 600)
 
     const mediaId = createId()
     const items: MediaItemDraft[] = []
@@ -123,3 +102,26 @@ export default defineEventHandler(async (event) => {
     sharpStream?.destroy()
   }
 })
+
+function validateMetadata(metadata: sharp.Metadata, maxSize: number, minSize: number) {
+  if (!metadata?.format || !ACCEPTED_IMAGE_FORMATS.includes(metadata.format) || !metadata.width || !metadata.height) {
+    throw createError({
+      statusCode: 400,
+      message: 'Invalid file type',
+    })
+  }
+
+  if (metadata.width > maxSize || metadata.height > maxSize) {
+    throw createError({
+      statusCode: 400,
+      message: 'Image has too big dimensions',
+    })
+  }
+
+  if (metadata.width < minSize || metadata.height < minSize) {
+    throw createError({
+      statusCode: 400,
+      message: 'Image has too small dimensions',
+    })
+  }
+}
