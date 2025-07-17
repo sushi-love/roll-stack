@@ -1,0 +1,18 @@
+{
+  "name": "@sushi-atrium/web-parser",
+  "private": true,
+  "scripts": {
+    "build": "nitro build",
+    "dev": "nitro dev",
+    "prepare": "nitro prepare",
+    "preview": "node .output/server/index.mjs",
+    "postinstall": "puppeteer browsers install chrome"
+  },
+  "dependencies": {
+    "@sushi-atrium/database": "workspace:*",
+    "puppeteer": "catalog:"
+  },
+  "devDependencies": {
+    "nitropack": "catalog:"
+  }
+}

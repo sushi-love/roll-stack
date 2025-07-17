@@ -1,9 +1,9 @@
 {
-  "name": "sushi-atrium",
+  "name": "roll-stack",
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@10.12.1",
-  "description": "Open space for our business in online.",
+  "description": "The technological heart of our sushi delivery network.",
   "author": "Nick Kosarev <hmbanan666@hotmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/hmbanan666/sushi-atrium",
