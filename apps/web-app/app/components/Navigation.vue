@@ -15,15 +15,33 @@
   <div class="shrink-0 flex items-center gap-1.5 px-4 py-2 lg:border-t lg:border-default">
     <UserMenu />
   </div>
+
+  <UDrawer v-model:open="openDrawer" direction="right">
+    <template #content>
+      <div class="p-4 max-w-120 min-h-96 size-full overflow-auto">
+        <div class="flex flex-col gap-2.5">
+          <ClientReviewCard
+            v-for="review in clientStore.reviews.slice(0, 100)"
+            :key="review.id"
+            :review="review"
+            class="shrink-0 border-0 ring-0"
+          />
+        </div>
+      </div>
+    </template>
+  </UDrawer>
 </template>
 
 <script setup lang="ts">
 const { t } = useI18n()
 const route = useRoute()
 
+const openDrawer = ref(false)
+
 const menuStore = useMenuStore()
 const partnerStore = usePartnerStore()
 const kitchenStore = useKitchenStore()
+const clientStore = useClientStore()
 
 const menus = computed(() => menuStore.menus.map((menu) => ({
   label: menu.name,
@@ -55,6 +73,14 @@ const menuItems = computed(() => [
     icon: 'i-lucide-map-pinned',
     active: route.path.startsWith('/kitchen'),
     badge: kitchenStore.kitchens.length,
+  },
+  {
+    label: 'Отзывы клиентов',
+    icon: 'i-lucide-star',
+    onSelect: () => {
+      openDrawer.value = true
+    },
+    badge: 'Нисушка себе!',
   },
   {
     label: t('app.menu.our-partners'),

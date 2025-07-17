@@ -20,6 +20,13 @@ export class Client {
     })
   }
 
+  static async listReviews() {
+    return useDatabase().query.clientReviews.findMany({
+      orderBy: (reviews, { desc }) => desc(reviews.createdAt),
+      limit: 1000,
+    })
+  }
+
   static async listReviewsOfKitchen(kitchenId: string) {
     return useDatabase().query.clientReviews.findMany({
       where: (reviews, { eq }) => eq(reviews.kitchenId, kitchenId),

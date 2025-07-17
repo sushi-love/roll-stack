@@ -1,4 +1,4 @@
-import type { ClientReview, FeedbackPoint, File, Kitchen, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
+import type { FeedbackPoint, File, Kitchen, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
 
 export type ProductVariantWithData = ProductVariant & {
   tags: ProductVariantTag[]
@@ -43,5 +43,4 @@ export type PrintWithData = Print & {
 
 export type KitchenWithData = Kitchen & {
   feedbackPoints: FeedbackPoint[]
-  reviews: ClientReview[]
 }

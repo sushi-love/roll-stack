@@ -60,13 +60,13 @@
       </UCard>
     </div>
 
-    <h3 class="mt-6 text-lg md:text-xl font-medium">
-      Отзывы
+    <h3 class="mt-6 text-lg md:text-2xl font-medium">
+      Последние отзывы
     </h3>
 
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
       <ClientReviewCard
-        v-for="review in kitchen?.reviews"
+        v-for="review in reviews"
         :key="review.id"
         :review="review"
       />
@@ -77,8 +77,10 @@
 <script setup lang="ts">
 const { params } = useRoute('kitchen-id')
 
+const clientStore = useClientStore()
 const kitchenStore = useKitchenStore()
 const kitchen = computed(() => kitchenStore.kitchens.find((k) => k.id === params.id))
+const reviews = computed(() => clientStore.reviews.filter((r) => r.kitchenId === params.id))
 
 useHead({
   title: 'Рейтинг кухни',

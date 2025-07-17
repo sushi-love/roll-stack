@@ -15,9 +15,6 @@ export class Kitchen {
       orderBy: (kitchens, { asc }) => asc(kitchens.name),
       with: {
         feedbackPoints: true,
-        reviews: {
-          orderBy: (reviews, { desc }) => desc(reviews.createdAt),
-        },
       },
     })
   }

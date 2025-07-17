@@ -40,6 +40,7 @@ watch(colorMode, () => {
 // Init Stores
 const user = useUserStore()
 const partner = usePartnerStore()
+const client = useClientStore()
 const kitchen = useKitchenStore()
 const menu = useMenuStore()
 const product = useProductStore()
@@ -50,6 +51,7 @@ const post = usePostStore()
 const print = usePrintStore()
 
 await Promise.all([
+  client.update(),
   partner.update(),
   kitchen.update(),
   menu.update(),
