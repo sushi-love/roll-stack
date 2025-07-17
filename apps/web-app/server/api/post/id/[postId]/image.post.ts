@@ -1,6 +1,6 @@
-import type { MediaItemDraft } from '@sushi-atrium/database'
+import type { MediaItemDraft } from '@roll-stack/database'
 import { createId } from '@paralleldrive/cuid2'
-import { repository } from '@sushi-atrium/database'
+import { repository } from '@roll-stack/database'
 import sharp from 'sharp'
 
 const POSTS_DIRECTORY = 'posts'

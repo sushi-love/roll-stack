@@ -139,7 +139,7 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { Kitchen } from '@sushi-atrium/database'
+import type { Kitchen } from '@roll-stack/database'
 import type { KitchenWithData } from '~~/types'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'

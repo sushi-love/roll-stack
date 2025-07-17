@@ -1,4 +1,4 @@
-import type { Checkout, CheckoutDraft, CheckoutItem, ProductVariant } from '@sushi-atrium/database'
+import type { Checkout, CheckoutDraft, CheckoutItem, ProductVariant } from '@roll-stack/database'
 
 type CheckoutItemWithProduct = CheckoutItem & { productVariant: ProductVariant }
 

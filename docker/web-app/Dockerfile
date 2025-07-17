@@ -1,4 +1,4 @@
-FROM node:22.16.0-alpine AS base
+FROM node:22.17.1-alpine AS base
 ENV NODE_OPTIONS="--max_old_space_size=4096"
 
 # Builder stage
@@ -9,7 +9,7 @@ COPY packages ./packages
 COPY apps/web-app ./apps/web-app
 RUN npm install --ignore-scripts -g pnpm && \
   pnpm i --frozen-lockfile && \
-  pnpm build --filter @sushi-atrium/web-app
+  pnpm build --filter @roll-stack/web-app
 
 # Production stage
 FROM base AS production

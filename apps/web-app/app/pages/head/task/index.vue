@@ -206,7 +206,7 @@
 <script setup lang="ts">
 import type { CalendarDate } from '@internationalized/date'
 import type { TableColumn } from '@nuxt/ui'
-import type { Task } from '@sushi-atrium/database'
+import type { Task } from '@roll-stack/database'
 import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'

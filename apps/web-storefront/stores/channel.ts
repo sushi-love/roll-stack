@@ -1,4 +1,4 @@
-import type { Kitchen, PaymentMethod } from '@sushi-atrium/database'
+import type { Kitchen, PaymentMethod } from '@roll-stack/database'
 
 type KitchenWithData = Kitchen & {
   paymentMethods: PaymentMethod[]

@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CheckoutItem, Product, ProductVariant } from '@sushi-atrium/database'
+import type { CheckoutItem, Product, ProductVariant } from '@roll-stack/database'
 
 const { item } = defineProps<{
   item: CheckoutItem & {

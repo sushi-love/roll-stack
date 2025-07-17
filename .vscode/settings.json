@@ -65,5 +65,9 @@
   },
   "tailwindCSS.experimental.classRegex": [
     ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ]
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "sushi-love",
+    "projectKey": "sushi-love_roll-stack"
+  }
 }

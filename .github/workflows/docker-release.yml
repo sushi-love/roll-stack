@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'ex: @sushi-atrium/web-app-v1.0.0'
+        description: 'ex: @roll-stack/web-app-v1.0.0'
         type: string
         required: true
       ref:
@@ -28,7 +28,7 @@ jobs:
         id: regex-match
         with:
           text: ${{ github.event.inputs.release || github.ref_name }}
-          regex: '@sushi-atrium\/([a-z-]+)-(v[0-9]+.[0-9]+.[0-9]+)'
+          regex: '@roll-stack\/([a-z-]+)-(v[0-9]+.[0-9]+.[0-9]+)'
 
       - name: Set package in env
         id: set-package

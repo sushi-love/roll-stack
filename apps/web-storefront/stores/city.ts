@@ -1,4 +1,4 @@
-import type { City } from '@sushi-atrium/database'
+import type { City } from '@roll-stack/database'
 
 export const useCityStore = defineStore('city', () => {
   const cities = ref<City[]>([])

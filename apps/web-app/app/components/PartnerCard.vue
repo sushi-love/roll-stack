@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Partner } from '@sushi-atrium/database'
+import type { Partner } from '@roll-stack/database'
 
 defineProps<{
   partner: Partner

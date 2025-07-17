@@ -1,5 +1,5 @@
 import { resolve } from 'node:path'
-import { repository } from '@sushi-atrium/geo-database'
+import { repository } from '@roll-stack/geo-database'
 import { GarXmlZip } from 'ru-nalog-fias-gar'
 
 const objects = {

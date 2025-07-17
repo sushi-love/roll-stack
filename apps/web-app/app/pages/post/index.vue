@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Post } from '@sushi-atrium/database'
+import type { Post } from '@roll-stack/database'
 import { ModalCreatePost } from '#components'
 
 const { t } = useI18n()

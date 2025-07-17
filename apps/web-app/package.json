@@ -1,5 +1,5 @@
 {
-  "name": "@sushi-atrium/web-app",
+  "name": "@roll-stack/web-app",
   "type": "module",
   "version": "0.0.0",
   "private": true,
@@ -17,8 +17,8 @@
     "@dicebear/core": "catalog:",
     "@neoconfetti/vue": "catalog:",
     "@pinia/nuxt": "catalog:",
-    "@sushi-atrium/database": "workspace:*",
-    "@sushi-atrium/ui": "workspace:*",
+    "@roll-stack/database": "workspace:*",
+    "@roll-stack/ui": "workspace:*",
     "arktype": "catalog:",
     "aws4fetch": "catalog:",
     "date-fns": "catalog:",

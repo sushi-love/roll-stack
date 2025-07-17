@@ -1,4 +1,4 @@
-import type { Chat, ChatMember, Task, TaskList, User } from '@sushi-atrium/database'
+import type { Chat, ChatMember, Task, TaskList, User } from '@roll-stack/database'
 
 type ChatWithData = Chat & {
   members: (ChatMember & { user: User })[]

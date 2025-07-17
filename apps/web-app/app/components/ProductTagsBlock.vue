@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductTag } from '@sushi-atrium/database'
+import type { ProductTag } from '@roll-stack/database'
 
 defineProps<{ tags: ProductTag[] }>()
 </script>

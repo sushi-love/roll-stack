@@ -110,7 +110,7 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { MenuCategory } from '@sushi-atrium/database'
+import type { MenuCategory } from '@roll-stack/database'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 

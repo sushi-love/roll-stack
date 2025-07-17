@@ -163,7 +163,7 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { Product } from '@sushi-atrium/database'
+import type { Product } from '@roll-stack/database'
 import type { ProductVariantWithData, ProductWithData } from '~~/types'
 import { ModalCreateProduct } from '#components'
 import { getPaginationRowModel } from '@tanstack/table-core'

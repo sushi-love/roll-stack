@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Task } from '@sushi-atrium/database'
+import type { Task } from '@roll-stack/database'
 
 defineProps<{ task?: Task }>()
 </script>

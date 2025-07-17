@@ -1,4 +1,4 @@
-import type { ClientReview } from '@sushi-atrium/database'
+import type { ClientReview } from '@roll-stack/database'
 
 export const useClientStore = defineStore('client', () => {
   const reviews = ref<ClientReview[]>([])

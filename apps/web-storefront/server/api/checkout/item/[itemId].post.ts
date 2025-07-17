@@ -1,4 +1,4 @@
-import { repository } from '@sushi-atrium/database'
+import { repository } from '@roll-stack/database'
 
 const MAX_QUANTITY_PER_LINE = 99
 

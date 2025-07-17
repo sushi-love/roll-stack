@@ -1,4 +1,4 @@
-import type { FeedbackPoint, File, Kitchen, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
+import type { FeedbackPoint, File, Kitchen, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@roll-stack/database'
 
 export type ProductVariantWithData = ProductVariant & {
   tags: ProductVariantTag[]

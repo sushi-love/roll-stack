@@ -1,4 +1,4 @@
-import type { Media, MediaItem, Menu, MenuCategory, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@sushi-atrium/database'
+import type { Media, MediaItem, Menu, MenuCategory, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@roll-stack/database'
 
 export type ProductVariantWithData = ProductVariant & {
   tags: ProductVariantTag[]

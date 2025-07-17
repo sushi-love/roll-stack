@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CheckoutItem, ProductVariant } from '@sushi-atrium/database'
+import type { CheckoutItem, ProductVariant } from '@roll-stack/database'
 
 type CheckoutItemWithProduct = CheckoutItem & { productVariant: ProductVariant }
 

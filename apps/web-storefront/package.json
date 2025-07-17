@@ -1,5 +1,5 @@
 {
-  "name": "@sushi-atrium/web-storefront",
+  "name": "@roll-stack/web-storefront",
   "type": "module",
   "version": "0.0.0",
   "private": true,
@@ -15,8 +15,8 @@
   "dependencies": {
     "@neoconfetti/vue": "catalog:",
     "@pinia/nuxt": "catalog:",
-    "@sushi-atrium/database": "workspace:*",
-    "@sushi-atrium/ui": "workspace:*",
+    "@roll-stack/database": "workspace:*",
+    "@roll-stack/ui": "workspace:*",
     "arktype": "catalog:",
     "date-fns": "catalog:",
     "libphonenumber-js": "catalog:",

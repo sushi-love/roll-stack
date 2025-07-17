@@ -1,4 +1,4 @@
-import type { Notification, Task, User } from '@sushi-atrium/database'
+import type { Notification, Task, User } from '@roll-stack/database'
 
 type NotificationWithEntities = Notification & {
   task: Task | null
