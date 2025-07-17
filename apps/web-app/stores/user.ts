@@ -23,12 +23,7 @@ export const useUserStore = defineStore('user', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/auth/me', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/auth/me')
       if (!data) {
         return
       }
@@ -59,12 +54,7 @@ export const useUserStore = defineStore('user', () => {
 
   async function updateUsers() {
     try {
-      const data = await $fetch('/api/user/list/staff', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/user/list/staff')
       if (!data) {
         return
       }
@@ -87,10 +77,6 @@ export const useUserStore = defineStore('user', () => {
 
       await $fetch(`/api/user/id/${id.value}/online`, {
         method: 'POST',
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
       })
     } catch (error) {
       if (error instanceof Error) {

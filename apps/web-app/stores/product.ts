@@ -8,12 +8,7 @@ export const useProductStore = defineStore('product', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/product/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/product/list')
       if (!data) {
         return
       }
@@ -38,12 +33,7 @@ export const useProductStore = defineStore('product', () => {
 
   async function updateTags() {
     try {
-      const data = await $fetch('/api/product/tag/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/product/tag/list')
       if (!data) {
         return
       }
@@ -63,12 +53,7 @@ export const useProductStore = defineStore('product', () => {
 
   async function updateVariantTags() {
     try {
-      const data = await $fetch('/api/product/variant/tag/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/product/variant/tag/list')
       if (!data) {
         return
       }

@@ -5,12 +5,7 @@ export const useKitchenStore = defineStore('kitchen', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/kitchen/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/kitchen/list')
       if (!data) {
         return
       }

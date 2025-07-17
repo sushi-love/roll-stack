@@ -18,12 +18,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/notification/my', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/notification/my')
       if (!data) {
         return
       }

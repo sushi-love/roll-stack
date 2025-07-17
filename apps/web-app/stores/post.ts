@@ -20,12 +20,7 @@ export const usePostStore = defineStore('post', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/post/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/post/list')
       if (!data) {
         return
       }
