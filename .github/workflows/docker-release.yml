@@ -87,7 +87,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build ${{ matrix.package }}
+      - name: Build ${{ env.APP_NAME }}
         uses: docker/build-push-action@v6
         with:
           context: .
