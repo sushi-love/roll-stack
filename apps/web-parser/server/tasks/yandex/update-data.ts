@@ -1,6 +1,6 @@
-import type { Browser } from 'puppeteer'
+import type { Browser } from 'playwright'
 import { repository } from '@roll-stack/database'
-import puppeteer from 'puppeteer'
+import { chromium } from 'playwright'
 
 const logger = useLogger('yandex:update-data')
 
@@ -13,7 +13,7 @@ export default defineTask({
     // Wait 10 seconds
     await new Promise((resolve) => setTimeout(resolve, 10000))
 
-    const browser = await puppeteer.launch()
+    const browser = await chromium.launch()
 
     let points = await repository.feedback.listFeedbackPointsToUpdate()
 
@@ -74,19 +74,18 @@ export default defineTask({
 async function getDataFromYandex(browser: Browser, url: string) {
   const page = await browser.newPage()
 
-  await page.setViewport({ width: 450, height: 600 })
+  await page.setViewportSize({ width: 450, height: 600 })
   await page.goto(url)
 
   // Wait full page load
-  await page.waitForNetworkIdle()
+  await page.waitForLoadState('networkidle')
   await new Promise((resolve) => setTimeout(resolve, 4000))
 
   // Click on button with class "rating-ranking-view"
   await page.locator('.rating-ranking-view').click()
   await new Promise((resolve) => setTimeout(resolve, 1000))
   // Click on second button in class "rating-ranking-view__popup"
-  const buttons = await page.$$('.rating-ranking-view__popup-line')
-  await buttons[1]?.click()
+  await page.locator('.rating-ranking-view__popup-line', { hasText: 'По новизне' }).click()
 
   // Wait
   await new Promise((resolve) => setTimeout(resolve, 1000))

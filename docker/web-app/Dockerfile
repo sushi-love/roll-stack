@@ -41,7 +41,7 @@ EXPOSE 3000
 
 # Health check using exec form
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s \
-  CMD ["health-check.sh"]
+  CMD ["/app/health-check.sh"]
 
 # Run the application
 ENTRYPOINT ["node"]

@@ -8,8 +8,9 @@
     "preview": "node .output/server/index.mjs"
   },
   "dependencies": {
+    "@playwright/browser-chromium": "catalog:",
     "@roll-stack/database": "workspace:*",
-    "puppeteer": "catalog:"
+    "playwright": "catalog:"
   },
   "devDependencies": {
     "nitropack": "catalog:"
