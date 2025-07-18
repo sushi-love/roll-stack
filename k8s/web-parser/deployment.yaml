@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-parser
+  namespace: sushi
+spec:
+  selector:
+    matchLabels:
+      app: web-parser
+  replicas: 1
+  revisionHistoryLimit: 1
+  minReadySeconds: 20
+  template:
+    metadata:
+      labels:
+        app: web-parser
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 1001
+        fsGroup: 1001
+      imagePullSecrets:
+        - name: registry-secret
+      containers:
+        - name: web-parser
+          image: sushi-love.registry.twcstorage.ru/roll-stack/web-parser:nightly
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: web-parser
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+              ephemeral-storage: 2Gi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+              ephemeral-storage: 1Gi
+          livenessProbe:
+            httpGet:
+              port: 3000
+              path: /api/health
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
