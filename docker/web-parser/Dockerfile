@@ -11,6 +11,8 @@ RUN npm install --ignore-scripts -g pnpm && \
   pnpm i --frozen-lockfile && \
   pnpm build --filter @roll-stack/web-parser
 
+RUN pnpm dlx playwright install --with-deps --only-shell
+
 # Production stage
 FROM base AS production
 RUN apk add --no-cache curl

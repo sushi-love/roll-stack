@@ -22,7 +22,6 @@ catalog:
   '@nuxtjs/i18n': ^10.0.0
   '@paralleldrive/cuid2': ^2.2.2
   '@pinia/nuxt': ^0.11.1
-  '@playwright/browser-chromium': ^1.54.1
   '@tailwindcss/typography': ^0.5.16
   '@types/node': ^24.0.14
   '@types/pg': ^8.15.4
@@ -74,7 +73,6 @@ ignoredBuiltDependencies:
   - vue-demi
 
 onlyBuiltDependencies:
-  - '@playwright/browser-chromium'
   - sharp
 
 supportedArchitectures:
