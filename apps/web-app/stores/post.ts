@@ -1,5 +1,4 @@
 import type { Post, PostComment, PostLike, User } from '@roll-stack/database'
-import type { MediaWithItems } from '~~/types'
 
 type PostLikeWithUser = PostLike & {
   user: User

@@ -1,5 +1,3 @@
-import type { PrintWithData } from '~~/types'
-
 export const usePrintStore = defineStore('print', () => {
   const prints = ref<PrintWithData[]>([])
 

@@ -1,5 +1,3 @@
-import type { KitchenWithData } from '~~/types'
-
 export const useKitchenStore = defineStore('kitchen', () => {
   const kitchens = ref<KitchenWithData[]>([])
 

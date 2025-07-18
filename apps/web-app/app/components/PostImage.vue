@@ -23,7 +23,6 @@
 
 <script setup lang="ts">
 import type { MediaItem } from '@roll-stack/database'
-import type { MediaWithItems } from '~~/types'
 
 const { media, lazy = true, size = 'md' } = defineProps<{
   media?: MediaWithItems | null
