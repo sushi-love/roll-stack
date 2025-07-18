@@ -19,7 +19,6 @@ WORKDIR /app
 COPY --from=builder /app/apps/web-parser/.output .
 
 COPY --from=builder /root/.cache/ms-playwright /opt/ms-playwright
-RUN chown -R appuser:appgroup /opt/ms-playwright
 ENV PLAYWRIGHT_BROWSERS_PATH=/opt/ms-playwright
 
 COPY docker/web-parser/health-check.sh ./
