@@ -15,7 +15,6 @@
     "@vueuse/integrations": "catalog:",
     "@vueuse/nuxt": "catalog:",
     "arktype": "catalog:",
-    "nuxt-zod-i18n": "catalog:",
     "sortablejs": "catalog:",
     "zod": "catalog:"
   },
