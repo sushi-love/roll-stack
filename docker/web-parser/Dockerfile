@@ -17,8 +17,11 @@ WORKDIR /app
 
 # Copy built artifacts from builder
 COPY --from=builder /app/apps/web-parser/.output .
-COPY --from=builder --chmod=755 /root/.cache/ms-playwright /home/appuser/.cache/ms-playwright
-COPY --from=builder --chmod=755 /root/.cache/ms-playwright /.cache/ms-playwright
+
+COPY --from=builder /root/.cache/ms-playwright /opt/ms-playwright
+RUN chown -R appuser:appgroup /opt/ms-playwright
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/ms-playwright
+
 COPY docker/web-parser/health-check.sh ./
 
 # Running as non-root is a security best practice
