@@ -8,7 +8,6 @@
     "preview": "node .output/server/index.mjs"
   },
   "dependencies": {
-    "@playwright/browser-chromium": "catalog:",
     "@roll-stack/database": "workspace:*",
     "playwright": "catalog:"
   },
