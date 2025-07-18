@@ -40,7 +40,7 @@ ENV VERSION=${VERSION} \
 EXPOSE 3000
 
 # Health check using exec form
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
   CMD ["/app/health-check.sh"]
 
 # Run the application
