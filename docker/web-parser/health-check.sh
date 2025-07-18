@@ -1,2 +1,2 @@
 #!/bin/sh
-curl -f http://localhost:3000/health || exit 1
+curl -f http://localhost:3000/api/health || exit 1

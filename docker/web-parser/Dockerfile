@@ -1,4 +1,5 @@
 FROM node:22.17.1-alpine AS base
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/ms-playwright
 
 # Builder stage
 FROM base AS builder
@@ -17,10 +18,7 @@ WORKDIR /app
 
 # Copy built artifacts from builder
 COPY --from=builder /app/apps/web-parser/.output .
-
-COPY --from=builder /root/.cache/ms-playwright /opt/ms-playwright
-ENV PLAYWRIGHT_BROWSERS_PATH=/opt/ms-playwright
-
+COPY --from=builder /opt/ms-playwright /opt/ms-playwright
 COPY docker/web-parser/health-check.sh ./
 
 # Running as non-root is a security best practice
