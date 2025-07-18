@@ -1,4 +1,5 @@
 FROM node:22.17.1-alpine AS base
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV PLAYWRIGHT_BROWSERS_PATH=/opt/ms-playwright
 
 # Builder stage
