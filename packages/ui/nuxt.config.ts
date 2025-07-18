@@ -10,20 +10,12 @@ function resolvePath(path: string) {
 export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
-    'nuxt-zod-i18n', // must be before i18n
     '@nuxtjs/i18n',
     '@nuxt/image',
     '@vueuse/nuxt',
   ],
   experimental: {
     typedPages: true,
-  },
-  zodI18n: {
-    localeCodesMapping: {
-      'en-GB': 'en',
-      'en-US': 'en',
-      'ru-RU': 'ru',
-    },
   },
   i18n: {
     langDir: 'locales',

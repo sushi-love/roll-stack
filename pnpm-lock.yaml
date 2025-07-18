@@ -138,9 +138,6 @@ catalogs:
     nuxt-tiptap-editor:
       specifier: ^2.3.1
       version: 2.3.1
-    nuxt-zod-i18n:
-      specifier: ^1.12.0
-      version: 1.12.0
     pg:
       specifier: ^8.16.3
       version: 8.16.3
@@ -479,9 +476,6 @@ importers:
       arktype:
         specifier: 'catalog:'
         version: 2.1.20
-      nuxt-zod-i18n:
-        specifier: 'catalog:'
-        version: 1.12.0(magicast@0.3.5)(typescript@5.8.3)
       sortablejs:
         specifier: 'catalog:'
         version: 1.15.6
@@ -4190,10 +4184,6 @@ packages:
     resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
     engines: {node: '>=10'}
 
-  dedupe@4.0.3:
-    resolution: {integrity: sha512-WMo1AIq5MSstJ5DhVVccdue22MEpaxzf0tdznjXgWrfei9F3aNYP7xhbKgi1U8JlvTU4RyhUSLI63jt7PUipBQ==}
-    engines: {node: '>=4.0'}
-
   deep-eql@5.0.2:
     resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
@@ -6180,9 +6170,6 @@ packages:
 
   nuxt-tiptap-editor@2.3.1:
     resolution: {integrity: sha512-gIaniQ+aYy13XcUr5cLokoAjnC7vnUxb6Yti/trHvjDNbSLpJENfRMT6sdBxVtmdMTNUzUdFOLzmZ61JrqNopQ==}
-
-  nuxt-zod-i18n@1.12.0:
-    resolution: {integrity: sha512-oUPfjwDUuSrvhDd6SPGSR4THTwGk0OXJ+BCpt12RtwFMRU/rpi2zwBizs/LvuVrf/EpgKmQLVnGuPM/cUyEufQ==}
 
   nuxt@4.0.0:
     resolution: {integrity: sha512-HMhAEW59Ws3ty8SUZ0icOPoqP5xMaThZA5h7A7pz1Gl/feW1FwtJZnqjZ/aO/Xv2TlTIbkil2OOolDpJOAQjUg==}
@@ -12074,8 +12061,6 @@ snapshots:
       mimic-response: 3.1.0
     optional: true
 
-  dedupe@4.0.3: {}
-
   deep-eql@5.0.2: {}
 
   deep-extend@0.6.0:
@@ -14419,18 +14404,6 @@ snapshots:
       - highlight.js
       - magicast
       - vue
-
-  nuxt-zod-i18n@1.12.0(magicast@0.3.5)(typescript@5.8.3):
-    dependencies:
-      '@intlify/shared': 11.1.3
-      '@nuxt/kit': 3.17.6(magicast@0.3.5)
-      dedupe: 4.0.3
-      defu: 6.1.4
-      vue-tsc: 2.2.12(typescript@5.8.3)
-      zod: 3.25.73
-    transitivePeerDependencies:
-      - magicast
-      - typescript
 
   nuxt@4.0.0(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.1)(@types/node@24.0.14)(@vue/compiler-sfc@3.5.17)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.44.3(@types/pg@8.15.4)(pg@8.16.3)))(drizzle-orm@0.44.3(@types/pg@8.15.4)(pg@8.16.3))(eslint@9.31.0(jiti@2.4.2))(ioredis@5.6.1)(lightningcss@1.30.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.45.1)(terser@5.39.1)(typescript@5.8.3)(vite@7.0.5(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.39.1)(yaml@2.8.0))(vue-tsc@2.2.12(typescript@5.8.3))(yaml@2.8.0):
     dependencies:
