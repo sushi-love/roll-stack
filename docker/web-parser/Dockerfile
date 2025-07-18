@@ -1,15 +1,17 @@
 FROM node:22.17.1-alpine AS base
-ENV NODE_OPTIONS="--max_old_space_size=4096"
 
 # Builder stage
 FROM base AS builder
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
-COPY packages ./packages
+COPY packages/database ./packages/database
+COPY apps/web-parser/.puppeteerrc.cjs ./
 COPY apps/web-parser ./apps/web-parser
 RUN npm install --ignore-scripts -g pnpm && \
   pnpm i --frozen-lockfile && \
   pnpm build --filter @roll-stack/web-parser
+
+RUN pnpm dlx puppeteer browsers install chrome
 
 # Production stage
 FROM base AS production
@@ -18,6 +20,7 @@ WORKDIR /app
 
 # Copy built artifacts from builder
 COPY --from=builder /app/apps/web-parser/.output .
+COPY --from=builder /root/.cache/puppeteer /home/appuser/.cache/puppeteer
 COPY docker/web-parser/health-check.sh ./
 
 # Running as non-root is a security best practice
