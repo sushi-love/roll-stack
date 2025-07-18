@@ -1,5 +1,4 @@
 import type { MenuCategory, Product } from '@roll-stack/database'
-import type { MenuWithData } from '~~/types'
 
 type ProductWithCategory = Product & { category: MenuCategory }
 
@@ -11,12 +10,7 @@ export const useMenuStore = defineStore('menu', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/menu/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/menu/list')
       if (!data) {
         return
       }

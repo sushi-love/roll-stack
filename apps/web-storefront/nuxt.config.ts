@@ -1,9 +1,6 @@
 export default defineNuxtConfig({
   extends: ['@roll-stack/ui'],
   modules: ['nuxt-auth-utils', '@pinia/nuxt'],
-  future: {
-    compatibilityVersion: 4,
-  },
   devtools: {
     componentInspector: false,
   },

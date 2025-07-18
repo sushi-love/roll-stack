@@ -86,9 +86,6 @@
 <script setup lang="ts">
 const { params } = useRoute('print-printId')
 
-// const overlay = useOverlay()
-// const modalUploadProductImage = overlay.create(ModalUploadProductImage)
-
 const printStore = usePrintStore()
 const print = computed(() => printStore.prints.find((p) => p.id === params.printId))
 if (!print.value) {

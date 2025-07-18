@@ -1,16 +1,9 @@
-import type { KitchenWithData } from '~~/types'
-
 export const useKitchenStore = defineStore('kitchen', () => {
   const kitchens = ref<KitchenWithData[]>([])
 
   async function update() {
     try {
-      const data = await $fetch('/api/kitchen/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/kitchen/list')
       if (!data) {
         return
       }

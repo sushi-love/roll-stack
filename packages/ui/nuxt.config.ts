@@ -29,9 +29,6 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'ru',
     vueI18n: resolvePath('./i18n/vue-i18n.options.ts'),
-    experimental: {
-      autoImportTranslationFunctions: true,
-    },
     detectBrowserLanguage: {
       useCookie: true,
       alwaysRedirect: true,
@@ -39,9 +36,6 @@ export default defineNuxtConfig({
     locales: [
       { code: 'ru', language: 'ru-RU', name: 'Русский', file: 'ru-RU.json' },
     ],
-    bundle: {
-      optimizeTranslationDirective: false,
-    },
   },
   css: [resolvePath('./app/assets/css/main.css')],
   ui: {
@@ -85,8 +79,5 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: true },
-  future: {
-    compatibilityVersion: 4,
-  },
   compatibilityDate: '2024-11-01',
 })

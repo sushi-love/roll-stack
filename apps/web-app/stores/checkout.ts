@@ -15,12 +15,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/checkout/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/checkout/list')
       if (!data) {
         return
       }
@@ -40,12 +35,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
   async function updateKitchens() {
     try {
-      const data = await $fetch('/api/kitchen/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/kitchen/list')
       if (!data) {
         return
       }
@@ -65,12 +55,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
   async function updatePaymentMethods() {
     try {
-      const data = await $fetch('/api/payment/method/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/payment/method/list')
       if (!data) {
         return
       }

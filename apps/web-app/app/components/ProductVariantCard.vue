@@ -41,7 +41,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductVariantWithData } from '~~/types'
 import { UBadge } from '#components'
 
 defineProps<{ variant: ProductVariantWithData }>()

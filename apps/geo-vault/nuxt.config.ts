@@ -1,8 +1,5 @@
 export default defineNuxtConfig({
   modules: ['nuxt-auth-utils'],
-  future: {
-    compatibilityVersion: 4,
-  },
   devtools: {
     componentInspector: false,
   },

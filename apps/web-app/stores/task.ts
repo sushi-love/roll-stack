@@ -15,12 +15,7 @@ export const useTaskStore = defineStore('task', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/task/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/task/list')
       if (!data) {
         return
       }

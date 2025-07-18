@@ -9,12 +9,7 @@ export const usePartnerStore = defineStore('partner', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/partner/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/partner/list')
       if (!data) {
         return
       }

@@ -75,19 +75,19 @@ const menuItems = computed(() => [
     badge: kitchenStore.kitchens.length,
   },
   {
+    label: t('app.menu.our-partners'),
+    to: '/partner',
+    icon: 'i-lucide-handshake',
+    active: route.path.startsWith('/partner'),
+    badge: partnerStore.partners.length,
+  },
+  {
     label: 'Отзывы клиентов',
     icon: 'i-lucide-star',
     onSelect: () => {
       openDrawer.value = true
     },
     badge: 'Нисушка себе!',
-  },
-  {
-    label: t('app.menu.our-partners'),
-    to: '/partner',
-    icon: 'i-lucide-handshake',
-    active: route.path.startsWith('/partner'),
-    badge: partnerStore.partners.length,
   },
   {
     label: t('app.menu.products'),

@@ -1,16 +1,9 @@
-import type { PrintWithData } from '~~/types'
-
 export const usePrintStore = defineStore('print', () => {
   const prints = ref<PrintWithData[]>([])
 
   async function update() {
     try {
-      const data = await $fetch('/api/print/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/print/list')
       if (!data) {
         return
       }

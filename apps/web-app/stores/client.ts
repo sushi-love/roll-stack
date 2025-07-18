@@ -5,12 +5,7 @@ export const useClientStore = defineStore('client', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/client/review/list', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/client/review/list')
       if (!data) {
         return
       }

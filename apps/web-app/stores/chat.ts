@@ -15,12 +15,7 @@ export const useChatStore = defineStore('chat', () => {
 
   async function update() {
     try {
-      const data = await $fetch('/api/chat/my', {
-        lazy: true,
-        server: true,
-        cache: 'no-cache',
-        getCachedData: undefined,
-      })
+      const data = await $fetch('/api/chat/my')
       if (!data) {
         return
       }
