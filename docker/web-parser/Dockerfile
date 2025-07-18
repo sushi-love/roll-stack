@@ -1,4 +1,4 @@
-FROM node:22.17.1-alpine AS base
+FROM node:22.17.1-slim AS base
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV PLAYWRIGHT_BROWSERS_PATH=/opt/ms-playwright
 
@@ -12,22 +12,20 @@ RUN npm install --ignore-scripts -g pnpm && \
   pnpm i --frozen-lockfile && \
   pnpm build --filter @roll-stack/web-parser
 
-RUN pnpm dlx playwright install --with-deps --only-shell
-
 # Production stage
 FROM base AS production
-RUN apk add --no-cache curl
 WORKDIR /app
+
+RUN npx playwright install chromium --with-deps --only-shell
 
 # Copy built artifacts from builder
 COPY --from=builder /app/apps/web-parser/.output .
-COPY --from=builder /opt/ms-playwright /opt/ms-playwright
 COPY docker/web-parser/health-check.sh ./
 
 # Running as non-root is a security best practice
 # Make the Health check script executable
-RUN addgroup -S appgroup && \
-  adduser -S appuser -G appgroup && \
+RUN groupadd -r appgroup && \
+  useradd -r -g appgroup appuser && \
   chmod +x ./health-check.sh
 USER appuser
 

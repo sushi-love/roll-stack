@@ -85,7 +85,8 @@ async function getDataFromYandex(browser: Browser, url: string) {
   await page.locator('.rating-ranking-view').click()
   await new Promise((resolve) => setTimeout(resolve, 1000))
   // Click on second button in class "rating-ranking-view__popup"
-  await page.locator('.rating-ranking-view__popup-line', { hasText: 'По новизне' }).click()
+  const buttons = await page.$$('.rating-ranking-view__popup-line')
+  await buttons[1]?.click()
 
   // Wait
   await new Promise((resolve) => setTimeout(resolve, 1000))
