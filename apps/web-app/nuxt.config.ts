@@ -12,6 +12,12 @@ export default defineNuxtConfig({
       accessKeyId: '',
       secretAccessKey: '',
     },
+    ai: {
+      model: '',
+      baseUrl: '',
+      apiKey: '',
+      serviceToken: '',
+    },
     public: {
       mediaUrl: '',
     },

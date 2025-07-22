@@ -1,0 +1,50 @@
+import { Agent, OpenAIChatCompletionsModel, run } from '@openai/agents'
+import OpenAI from 'openai'
+import { getPartnersByCityTool, getPartnersTool } from '~~/server/services/tools'
+
+export default defineEventHandler(async (event) => {
+  try {
+    const { ai } = useRuntimeConfig()
+
+    // Requires bearer token
+    const bearer = getHeader(event, 'authorization')
+    if (!bearer || bearer !== `Bearer ${ai.serviceToken}`) {
+      throw createError({
+        statusCode: 401,
+        message: 'Unauthorized',
+      })
+    }
+
+    const body = await readBody(event)
+    if (!body?.message) {
+      throw createError({
+        statusCode: 400,
+        message: 'Message is required',
+      })
+    }
+
+    const client = new OpenAI({
+      apiKey: ai.apiKey,
+      baseURL: ai.baseUrl,
+    })
+
+    const agent = new Agent({
+      name: 'Дата агент сети доставок "Суши Love"',
+      instructions: 'У тебя есть доступ к данным партнеров сети. Отвечай всегда на русском в мужском роде.',
+      model: new OpenAIChatCompletionsModel(client, ai.model),
+      tools: [
+        getPartnersTool,
+        getPartnersByCityTool,
+      ],
+    })
+
+    const result = await run(agent, body.message)
+
+    return {
+      ok: true,
+      message: result.finalOutput,
+    }
+  } catch (error) {
+    throw errorResolver(error)
+  }
+})
