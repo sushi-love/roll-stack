@@ -2,7 +2,7 @@ import { Buffer } from 'node:buffer'
 import { timingSafeEqual } from 'node:crypto'
 import { Agent, OpenAIChatCompletionsModel, run } from '@openai/agents'
 import OpenAI from 'openai'
-import { getPartnersByCityTool, getPartnersTool } from '~~/server/services/tools'
+import { getPartnersByCityTool, getPartnersBySurnameTool, getPartnersCountTool } from '~~/server/services/tools'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -43,8 +43,9 @@ export default defineEventHandler(async (event) => {
       instructions: 'У тебя есть доступ к данным партнеров сети. Отвечай всегда на русском в мужском роде.',
       model: new OpenAIChatCompletionsModel(client, ai.model),
       tools: [
-        getPartnersTool,
         getPartnersByCityTool,
+        getPartnersBySurnameTool,
+        getPartnersCountTool,
       ],
     })
 

@@ -1,5 +1,5 @@
 import { repository } from '@roll-stack/database'
 
 export default defineEventHandler(async () => {
-  return repository.partner.list()
+  return repository.partner.listWithData()
 })
