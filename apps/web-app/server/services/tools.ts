@@ -2,13 +2,14 @@ import { tool } from '@openai/agents'
 import { repository } from '@roll-stack/database'
 import { z } from 'zod'
 
-export const getPartnersTool = tool({
-  name: 'get_all_partners',
-  description: 'Get all partners',
+export const getPartnersCountTool = tool({
+  name: 'get_partners_count',
+  description: 'Get the number of partners',
   needsApproval: false,
   parameters: z.object({}),
   execute: async () => {
-    return repository.partner.list()
+    const partners = await repository.partner.list()
+    return partners.length
   },
 })
 
@@ -21,7 +22,19 @@ export const getPartnersByCityTool = tool({
   }),
   execute: async ({ city }) => {
     const partners = await repository.partner.list()
-
     return partners.filter((partner) => partner.city?.toLowerCase().includes(city.toLowerCase()))
+  },
+})
+
+export const getPartnersBySurnameTool = tool({
+  name: 'get_partners_by_surname',
+  description: 'Get partners filtered by surname using case-insensitive partial matching',
+  needsApproval: false,
+  parameters: z.object({
+    surname: z.string(),
+  }),
+  execute: async ({ surname }) => {
+    const partners = await repository.partner.list()
+    return partners.filter((partner) => partner.surname?.toLowerCase().includes(surname.toLowerCase()))
   },
 })

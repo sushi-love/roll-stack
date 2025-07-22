@@ -16,6 +16,12 @@ export class Partner {
   static async list() {
     return useDatabase().query.partners.findMany({
       where: (partners, { eq }) => eq(partners.isActive, true),
+    })
+  }
+
+  static async listWithData() {
+    return useDatabase().query.partners.findMany({
+      where: (partners, { eq }) => eq(partners.isActive, true),
       with: {
         kitchens: true,
       },
