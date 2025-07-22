@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer'
+import { timingSafeEqual } from 'node:crypto'
 import { Agent, OpenAIChatCompletionsModel, run } from '@openai/agents'
 import OpenAI from 'openai'
 import { getPartnersByCityTool, getPartnersTool } from '~~/server/services/tools'
@@ -8,7 +10,15 @@ export default defineEventHandler(async (event) => {
 
     // Requires bearer token
     const bearer = getHeader(event, 'authorization')
-    if (!bearer || bearer !== `Bearer ${ai.serviceToken}`) {
+    if (!bearer?.startsWith('Bearer ')) {
+      throw createError({
+        statusCode: 401,
+        message: 'Unauthorized',
+      })
+    }
+
+    const token = bearer.slice(7) // Remove 'Bearer ' prefix
+    if (!ai.serviceToken || !timingSafeEqual(Buffer.from(token), Buffer.from(ai.serviceToken))) {
       throw createError({
         statusCode: 401,
         message: 'Unauthorized',

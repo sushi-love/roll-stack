@@ -14,7 +14,7 @@ export const getPartnersTool = tool({
 
 export const getPartnersByCityTool = tool({
   name: 'get_partners_by_city',
-  description: 'Get partners by provided city name. The list returned may be longer than needed, requires rechecking',
+  description: 'Get partners filtered by city name using case-insensitive partial matching',
   needsApproval: false,
   parameters: z.object({
     city: z.string(),
