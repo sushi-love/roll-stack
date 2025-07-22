@@ -20,6 +20,7 @@ catalog:
   '@nuxt/image': ^1.10.0
   '@nuxt/ui': ^3.2.0
   '@nuxtjs/i18n': ^10.0.0
+  '@openai/agents': ^0.0.12
   '@paralleldrive/cuid2': ^2.2.2
   '@pinia/nuxt': ^0.11.1
   '@tailwindcss/typography': ^0.5.16
@@ -50,6 +51,7 @@ catalog:
   nuxt-auth-utils: ^0.5.20
   nuxt-tiptap-editor: ^2.3.1
   nuxt-zod-i18n: ^1.12.0
+  openai: ^5.10.1
   pg: ^8.16.3
   pinia: ^3.0.3
   playwright: ^1.54.1
@@ -64,7 +66,7 @@ catalog:
   vitest: ^3.2.4
   vitest-browser-vue: ^1.0.0
   vue-tsc: ^2.2.12
-  zod: ^4.0.5
+  zod: 3.25.67
 
 ignoredBuiltDependencies:
   - '@parcel/watcher'

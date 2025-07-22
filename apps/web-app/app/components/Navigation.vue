@@ -87,7 +87,6 @@ const menuItems = computed(() => [
     onSelect: () => {
       openDrawer.value = true
     },
-    badge: 'Нисушка себе!',
   },
   {
     label: t('app.menu.products'),
