@@ -82,8 +82,36 @@ export const partners = pgTable('partners', {
   name: varchar('name').notNull(),
   surname: varchar('surname').notNull().default(''),
   avatarUrl: varchar('avatar_url'),
-  legal: varchar('legal'),
   city: varchar('city'),
+  legal: varchar('legal'),
+  legalEntityId: cuid2('legal_entity_id').references(() => partnerLegalEntities.id),
+  activeAgreementId: cuid2('active_agreement_id').references(() => partnerAgreements.id),
+})
+
+export const partnerLegalEntities = pgTable('partner_legal_entities', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  inn: varchar('inn').notNull(),
+  ogrnip: varchar('ogrnip'),
+  comment: varchar('comment'),
+})
+
+export const partnerAgreements = pgTable('partner_agreements', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  concludedAt: timestamp('concluded_at', { precision: 3, withTimezone: true, mode: 'string' }),
+  willEndAt: timestamp('will_end_at', { precision: 3, withTimezone: true, mode: 'string' }),
+  internalId: varchar('internal_id').notNull(),
+  royalty: numeric('royalty', { mode: 'number' }).notNull().default(0),
+  minRoyaltyPerMonth: numeric('min_royalty_per_month', { mode: 'number' }).notNull().default(0),
+  marketingFee: numeric('marketing_fee', { mode: 'number' }).notNull().default(0),
+  minMarketingFeePerMonth: numeric('min_marketing_fee_per_month', { mode: 'number' }).notNull().default(0),
+  lumpSumPayment: numeric('lump_sum_payment', { mode: 'number' }).notNull().default(0),
+  comment: varchar('comment'),
+  legalEntityId: cuid2('legal_entity_id').references(() => partnerLegalEntities.id),
 })
 
 export const chats = pgTable('chats', {
@@ -539,8 +567,29 @@ export const userRelations = relations(users, ({ many, one }) => ({
   postComments: many(postComments),
 }))
 
-export const partnerRelations = relations(partners, ({ many }) => ({
+export const partnerRelations = relations(partners, ({ many, one }) => ({
   kitchens: many(kitchens),
+  legalEntity: one(partnerLegalEntities, {
+    fields: [partners.legalEntityId],
+    references: [partnerLegalEntities.id],
+  }),
+  activeAgreement: one(partnerAgreements, {
+    fields: [partners.activeAgreementId],
+    references: [partnerAgreements.id],
+  }),
+}))
+
+export const partnerLegalEntityRelations = relations(partnerLegalEntities, ({ many }) => ({
+  partners: many(partners),
+  agreements: many(partnerAgreements),
+}))
+
+export const partnerAgreementRelations = relations(partnerAgreements, ({ one, many }) => ({
+  legalEntity: one(partnerLegalEntities, {
+    fields: [partnerAgreements.legalEntityId],
+    references: [partnerLegalEntities.id],
+  }),
+  partners: many(partners),
 }))
 
 export const chatRelations = relations(chats, ({ many, one }) => ({

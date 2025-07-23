@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
   },
   pinia: {
-    storesDirs: ['./stores/**'],
+    storesDirs: ['./app/stores/**'],
   },
   nitro: {
     experimental: {

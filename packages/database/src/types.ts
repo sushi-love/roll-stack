@@ -12,6 +12,12 @@ export type UserDraft = InferInsertModel<typeof tables.users>
 export type Partner = InferSelectModel<typeof tables.partners>
 export type PartnerDraft = InferInsertModel<typeof tables.partners>
 
+export type PartnerLegalEntity = InferSelectModel<typeof tables.partnerLegalEntities>
+export type PartnerLegalEntityDraft = InferInsertModel<typeof tables.partnerLegalEntities>
+
+export type PartnerAgreement = InferSelectModel<typeof tables.partnerAgreements>
+export type PartnerAgreementDraft = InferInsertModel<typeof tables.partnerAgreements>
+
 export type Chat = InferSelectModel<typeof tables.chats>
 export type ChatDraft = InferInsertModel<typeof tables.chats>
 
