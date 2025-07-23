@@ -8,7 +8,7 @@
         :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
       >
 
-      <div class="absolute top-2 left-0 right-0 w-full">
+      <div class="absolute top-2 left-0 right-0 w-full opacity-0 group-hover:opacity-100 duration-200">
         <div class="mx-2 px-2 py-1 bg-default/97 rounded-lg flex flex-row items-center gap-1.5">
           <UIcon name="i-lucide-scroll-text" class="shrink-0 size-5 text-secondary" />
 

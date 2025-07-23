@@ -27,6 +27,7 @@
     "hello": "Привет",
     "select": "Выберите",
     "optional": "Опционально",
+    "comment": "Комментарий",
     "sign-in": "Войти",
     "sign-out": "Выйти",
     "login": "Логин",
@@ -350,6 +351,12 @@
     "post-deleted": "Пост удален",
     "print-created": "Материал создан",
     "print-updated": "Материал обновлен",
-    "print-deleted": "Материал удален"
+    "print-deleted": "Материал удален",
+    "partner-legal-entity-created": "Юридическое лицо создано",
+    "partner-legal-entity-updated": "Юридическое лицо обновлено",
+    "partner-legal-entity-deleted": "Юридическое лицо удалено",
+    "partner-agreement-created": "Договор создан",
+    "partner-agreement-updated": "Договор обновлен",
+    "partner-agreement-deleted": "Договор удален"
   }
 }
