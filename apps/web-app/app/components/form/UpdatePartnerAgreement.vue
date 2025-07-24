@@ -28,6 +28,7 @@
       <UInputNumber
         v-model="state.marketingFee"
         orientation="vertical"
+        :step="0.1"
         size="xl"
         class="w-full items-center justify-center"
       />
@@ -87,8 +88,8 @@ const { t } = useI18n()
 const actionToast = useActionToast()
 
 const partnerStore = usePartnerStore()
-const partner = computed(() => partnerStore.partners.find((partner) => partner.activeAgreementId === agreementId))
-const agreement = computed(() => partner.value?.activeAgreement)
+const partner = computed(() => partnerStore.partners.find((partner) => partner.legalEntity?.agreements.some((agreement) => agreement.id === agreementId)))
+const agreement = computed(() => partner.value?.legalEntity?.agreements.find((agreement) => agreement.id === agreementId))
 
 const state = ref<Partial<UpdatePartnerAgreement>>({
   royalty: agreement.value?.royalty,

@@ -1,8 +1,12 @@
 <template>
   <Content>
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <div v-if="partner?.activeAgreement" class="lg:col-span-2">
-        <PartnerAgreementCard :agreement="partner.activeAgreement" />
+      <div
+        v-for="agreement in partner?.legalEntity?.agreements"
+        :key="agreement.id"
+        class="lg:col-span-2"
+      >
+        <PartnerAgreementCard :agreement="agreement" />
       </div>
 
       <div>

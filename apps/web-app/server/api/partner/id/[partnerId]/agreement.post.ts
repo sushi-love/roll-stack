@@ -28,11 +28,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Update
-    await repository.partner.update(partnerId, {
-      activeAgreementId: agreement.id,
-    })
-
     return {
       ok: true,
       result: agreement,

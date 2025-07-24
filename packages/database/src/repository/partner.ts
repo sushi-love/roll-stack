@@ -30,8 +30,11 @@ export class Partner {
       where: (partners, { eq }) => eq(partners.isActive, true),
       with: {
         kitchens: true,
-        legalEntity: true,
-        activeAgreement: true,
+        legalEntity: {
+          with: {
+            agreements: true,
+          },
+        },
       },
     })
   }

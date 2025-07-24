@@ -85,7 +85,6 @@ export const partners = pgTable('partners', {
   city: varchar('city'),
   legal: varchar('legal'),
   legalEntityId: cuid2('legal_entity_id').references(() => partnerLegalEntities.id),
-  activeAgreementId: cuid2('active_agreement_id').references(() => partnerAgreements.id),
 })
 
 export const partnerLegalEntities = pgTable('partner_legal_entities', {
@@ -572,10 +571,6 @@ export const partnerRelations = relations(partners, ({ many, one }) => ({
   legalEntity: one(partnerLegalEntities, {
     fields: [partners.legalEntityId],
     references: [partnerLegalEntities.id],
-  }),
-  activeAgreement: one(partnerAgreements, {
-    fields: [partners.activeAgreementId],
-    references: [partnerAgreements.id],
   }),
 }))
 
