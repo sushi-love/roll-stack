@@ -13,6 +13,12 @@ export class Partner {
     })
   }
 
+  static async findAgreement(id: string) {
+    return useDatabase().query.partnerAgreements.findFirst({
+      where: (agreements, { eq }) => eq(agreements.id, id),
+    })
+  }
+
   static async list() {
     return useDatabase().query.partners.findMany({
       where: (partners, { eq }) => eq(partners.isActive, true),
@@ -52,6 +58,15 @@ export class Partner {
       .where(eq(partners.id, id))
       .returning()
     return partner
+  }
+
+  static async updateAgreement(id: string, data: Partial<PartnerAgreementDraft>) {
+    const [agreement] = await useDatabase()
+      .update(partnerAgreements)
+      .set(data)
+      .where(eq(partnerAgreements.id, id))
+      .returning()
+    return agreement
   }
 
   static async delete(id: string) {

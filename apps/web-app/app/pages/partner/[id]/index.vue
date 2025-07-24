@@ -46,12 +46,8 @@
         <PartnerLegalEntityCard :partner-id="partner?.id ?? ''" :entity="partner?.legalEntity" />
       </div>
 
-      <div class="lg:col-span-2">
-        <PartnerAgreementCard
-          :partner-id="partner?.id ?? ''"
-          :legal-entity-id="partner?.legalEntity?.id ?? ''"
-          :agreement="partner?.activeAgreement"
-        />
+      <div v-if="partner?.activeAgreement" class="lg:col-span-2">
+        <PartnerAgreementCard :agreement="partner.activeAgreement" />
       </div>
     </div>
   </Content>

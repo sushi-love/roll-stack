@@ -139,6 +139,12 @@
       "name-placeholder": "Начните с глагола. Например: Создать, Позвонить, и т.д."
     },
     "welcome-message": "Мы вас заждались!",
+    "partner-agreement": {
+      "title": "Договор коммерческой концессии"
+    },
+    "partner-legal-entity": {
+      "title": "Юридическое лицо"
+    },
     "create": {
       "idea": {
         "button": "Предложить свою идею",

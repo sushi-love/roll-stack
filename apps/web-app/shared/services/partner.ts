@@ -34,6 +34,8 @@ export const updatePartnerAgreementSchema = type({
   internalId: type('string | undefined').describe('error.length.invalid').optional(),
   royalty: type('number >= 0 | undefined').describe('error.length.invalid').optional(),
   minRoyaltyPerMonth: type('number >= 0 | undefined').describe('error.length.invalid').optional(),
+  marketingFee: type('number >= 0 | undefined').describe('error.length.invalid').optional(),
+  minMarketingFeePerMonth: type('number >= 0 | undefined').describe('error.length.invalid').optional(),
   lumpSumPayment: type('number >= 0 | undefined').describe('error.length.invalid').optional(),
   legalEntityId: type('string | undefined').describe('error.length.invalid').optional(),
   comment: type('string | undefined').describe('error.length.invalid').optional(),
