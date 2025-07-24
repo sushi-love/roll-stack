@@ -49,7 +49,7 @@
         {{ partner?.legal }}
       </p>
 
-      <p class="text-sm/4 text-muted line-clamp-3">
+      <p class="text-sm/4 text-muted line-clamp-4">
         {{ partner.city }}
       </p>
     </div>
@@ -57,25 +57,27 @@
 </template>
 
 <script setup lang="ts">
-import type { Partner, PartnerAgreement, PartnerLegalEntity } from '@roll-stack/database'
+import type { Partner } from '@roll-stack/database'
+import type { PartnerLegalEntityWithData } from '~/stores/partner'
 
 const { partner } = defineProps<{
   partner: Partner & {
-    legalEntity: PartnerLegalEntity | null
-    activeAgreement: PartnerAgreement | null
+    legalEntity: PartnerLegalEntityWithData | null
   }
 }>()
 
 const { imagesMode } = useApp()
 
+const minimalAgreement = computed(() => partner.legalEntity?.agreements.toSorted((a, b) => new Date(a.willEndAt ?? '').getTime() - new Date(b.willEndAt ?? '').getTime())[0])
+
 const agreementProgress = computed(() => {
-  if (!partner?.activeAgreement?.willEndAt || !partner?.activeAgreement?.concludedAt) {
+  if (!minimalAgreement.value?.willEndAt || !minimalAgreement.value?.concludedAt) {
     return 0
   }
 
   const now = new Date()
-  const concludedAt = new Date(partner.activeAgreement.concludedAt)
-  const willEndAt = new Date(partner.activeAgreement.willEndAt)
+  const concludedAt = new Date(minimalAgreement.value.concludedAt)
+  const willEndAt = new Date(minimalAgreement.value.willEndAt)
 
   const res = Math.floor(100 - ((now.getTime() - concludedAt.getTime()) / (willEndAt.getTime() - concludedAt.getTime())) * 100)
 

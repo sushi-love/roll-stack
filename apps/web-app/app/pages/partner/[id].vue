@@ -23,22 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { format } from 'date-fns'
-import { ru } from 'date-fns/locale/ru'
-
 const { t } = useI18n()
 const { params } = useRoute('partner-id')
 
 const partnerStore = usePartnerStore()
 const partner = computed(() => partnerStore.partners.find((partner) => partner.id === params.id))
-
-const activeAgreementTo = computed(() => {
-  if (!partner.value?.activeAgreement?.willEndAt) {
-    return 'отсутствует'
-  }
-
-  return `до ${format(new Date(partner.value?.activeAgreement?.willEndAt), 'd MMMM yyyy', { locale: ru })}`
-})
 
 const submenuItems = computed(() => [
   {
@@ -54,10 +43,10 @@ const submenuItems = computed(() => [
     badge: partner.value?.kitchens.length,
   },
   {
-    label: 'Договор',
+    label: 'Договора',
     to: `/partner/${partner.value?.id}/agreement`,
     icon: 'i-lucide-scroll-text',
-    badge: activeAgreementTo.value,
+    badge: partner.value?.legalEntity?.agreements.length,
   },
   {
     label: 'Юр. лицо',

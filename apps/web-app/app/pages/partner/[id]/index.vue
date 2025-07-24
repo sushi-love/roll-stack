@@ -18,7 +18,7 @@
             {{ partner?.priceLevel }} уровень цен
           </p>
 
-          <p class="text-base">
+          <p class="text-base/5">
             {{ partner?.city }}
           </p>
         </div>
@@ -36,7 +36,7 @@
               Престиж
             </h3>
           </div>
-          <p class="text-muted leading-5">
+          <p class="text-base/5">
             Престиж не является статичным - он может как укрепляться, так и утрачиваться в зависимости от действий Партнера, его достижений и общественного восприятия.
           </p>
         </div>
@@ -46,8 +46,12 @@
         <PartnerLegalEntityCard :partner-id="partner?.id ?? ''" :entity="partner?.legalEntity" />
       </div>
 
-      <div v-if="partner?.activeAgreement" class="lg:col-span-2">
-        <PartnerAgreementCard :agreement="partner.activeAgreement" />
+      <div
+        v-for="agreement in partner?.legalEntity?.agreements"
+        :key="agreement.id"
+        class="lg:col-span-2"
+      >
+        <PartnerAgreementCard :agreement="agreement" />
       </div>
     </div>
   </Content>
