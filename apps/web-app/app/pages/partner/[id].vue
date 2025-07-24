@@ -32,6 +32,14 @@ const { params } = useRoute('partner-id')
 const partnerStore = usePartnerStore()
 const partner = computed(() => partnerStore.partners.find((partner) => partner.id === params.id))
 
+const activeAgreementTo = computed(() => {
+  if (!partner.value?.activeAgreement?.willEndAt) {
+    return 'отсутствует'
+  }
+
+  return `до ${format(new Date(partner.value?.activeAgreement?.willEndAt), 'd MMMM yyyy', { locale: ru })}`
+})
+
 const submenuItems = computed(() => [
   {
     label: t('common.partner'),
@@ -57,14 +65,6 @@ const submenuItems = computed(() => [
     icon: 'i-lucide-scale',
   },
 ])
-
-const activeAgreementTo = computed(() => {
-  if (!partner.value?.activeAgreement?.willEndAt) {
-    return 'отсутствует'
-  }
-
-  return `до ${format(new Date(partner.value?.activeAgreement?.willEndAt), 'd MMMM yyyy', { locale: ru })}`
-})
 
 useHead({
   title: t('common.partner'),
