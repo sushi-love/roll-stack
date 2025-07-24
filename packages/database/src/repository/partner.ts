@@ -1,7 +1,7 @@
-import type { PartnerDraft } from '../types'
+import type { PartnerAgreementDraft, PartnerDraft, PartnerLegalEntityDraft } from '../types'
 import { eq } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { partners } from '../tables'
+import { partnerAgreements, partnerLegalEntities, partners } from '../tables'
 
 export class Partner {
   static async find(id: string) {
@@ -33,6 +33,16 @@ export class Partner {
   static async create(data: PartnerDraft) {
     const [partner] = await useDatabase().insert(partners).values(data).returning()
     return partner
+  }
+
+  static async createLegalEntity(data: PartnerLegalEntityDraft) {
+    const [legalEntity] = await useDatabase().insert(partnerLegalEntities).values(data).returning()
+    return legalEntity
+  }
+
+  static async createAgreement(data: PartnerAgreementDraft) {
+    const [agreement] = await useDatabase().insert(partnerAgreements).values(data).returning()
+    return agreement
   }
 
   static async update(id: string, data: Partial<PartnerDraft>) {
