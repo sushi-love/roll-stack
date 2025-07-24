@@ -1,9 +1,5 @@
 <template>
-  <UCard
-    v-if="agreement"
-    variant="subtle"
-    class="h-full"
-  >
+  <UCard class="h-full" @click="modalUpdatePartnerAgreement.open({ agreementId: agreement.id })">
     <div class="flex flex-col gap-3">
       <div class="flex flex-row items-start gap-3.5">
         <UIcon name="i-lucide-scroll-text" class="shrink-0 size-16 text-secondary" />
@@ -45,24 +41,18 @@
       </p>
     </div>
   </UCard>
-  <CreateCard
-    v-else
-    label="Добавить договор"
-    icon="i-lucide-scroll-text"
-    @click="modalCreatePartnerAgreement.open({ partnerId, legalEntityId })"
-  />
 </template>
 
 <script setup lang="ts">
 import type { PartnerAgreement } from '@roll-stack/database'
-import { ModalCreatePartnerAgreement } from '#components'
+import { ModalUpdatePartnerAgreement } from '#components'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 
-const { agreement } = defineProps<{ partnerId: string, legalEntityId: string, agreement: PartnerAgreement | null | undefined }>()
+const { agreement } = defineProps<{ agreement: PartnerAgreement }>()
 
 const overlay = useOverlay()
-const modalCreatePartnerAgreement = overlay.create(ModalCreatePartnerAgreement)
+const modalUpdatePartnerAgreement = overlay.create(ModalUpdatePartnerAgreement)
 
 const agreementProgress = computed(() => {
   if (!agreement?.willEndAt || !agreement?.concludedAt) {
@@ -73,6 +63,8 @@ const agreementProgress = computed(() => {
   const concludedAt = new Date(agreement.concludedAt)
   const willEndAt = new Date(agreement.willEndAt)
 
-  return Math.floor(100 - ((now.getTime() - concludedAt.getTime()) / (willEndAt.getTime() - concludedAt.getTime())) * 100)
+  const res = Math.floor(100 - ((now.getTime() - concludedAt.getTime()) / (willEndAt.getTime() - concludedAt.getTime())) * 100)
+
+  return res > 0 ? res : 0
 })
 </script>

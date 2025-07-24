@@ -77,6 +77,8 @@ const agreementProgress = computed(() => {
   const concludedAt = new Date(partner.activeAgreement.concludedAt)
   const willEndAt = new Date(partner.activeAgreement.willEndAt)
 
-  return Math.floor(100 - ((now.getTime() - concludedAt.getTime()) / (willEndAt.getTime() - concludedAt.getTime())) * 100)
+  const res = Math.floor(100 - ((now.getTime() - concludedAt.getTime()) / (willEndAt.getTime() - concludedAt.getTime())) * 100)
+
+  return res > 0 ? res : 0
 })
 </script>

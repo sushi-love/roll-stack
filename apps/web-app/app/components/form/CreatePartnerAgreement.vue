@@ -1,5 +1,6 @@
 <template>
   <UForm
+    ref="form"
     :validate="createValidator(createPartnerAgreementSchema)"
     :state="state"
     class="flex flex-col gap-3"
@@ -29,7 +30,6 @@
       <UFormField
         label="Дата окончания"
         name="willEndAt"
-        required
       >
         <UInput
           :value="selectedWillEndAt ? df.format(selectedWillEndAt.toDate(getLocalTimeZone())) : ''"
@@ -45,7 +45,11 @@
       </template>
     </UPopover>
 
-    <UFormField label="Номер договора (внутренний)" name="internalId">
+    <UFormField
+      label="Номер договора (внутренний)"
+      name="internalId"
+      required
+    >
       <UInput
         v-model="state.internalId"
         size="xl"
@@ -53,7 +57,11 @@
       />
     </UFormField>
 
-    <UFormField label="Роялти, %" name="royalty">
+    <UFormField
+      label="Роялти, %"
+      name="royalty"
+      required
+    >
       <UInputNumber
         v-model="state.royalty"
         orientation="vertical"
@@ -63,7 +71,11 @@
       />
     </UFormField>
 
-    <UFormField label="Мин. роялти, руб" name="minRoyaltyPerMonth">
+    <UFormField
+      label="Мин. роялти, руб"
+      name="minRoyaltyPerMonth"
+      required
+    >
       <UInputNumber
         v-model="state.minRoyaltyPerMonth"
         orientation="vertical"
@@ -72,7 +84,11 @@
       />
     </UFormField>
 
-    <UFormField label="Паушальный взнос, руб" name="lumpSumPayment">
+    <UFormField
+      label="Паушальный взнос, руб"
+      name="lumpSumPayment"
+      required
+    >
       <UInputNumber
         v-model="state.lumpSumPayment"
         orientation="vertical"
@@ -117,6 +133,8 @@ const actionToast = useActionToast()
 
 const partnerStore = usePartnerStore()
 
+const form = useTemplateRef('form')
+
 const state = ref<Partial<CreatePartnerAgreement>>({
   concludedAt: undefined,
   willEndAt: undefined,
@@ -139,11 +157,15 @@ watch(selectedConcludedAt, () => {
   state.value.concludedAt = new Date(
     `${selectedConcludedAt.value?.toString()} 12:00:00`,
   ).toISOString()
+
+  form.value?.clear()
 })
 watch(selectedWillEndAt, () => {
   state.value.willEndAt = new Date(
     `${selectedWillEndAt.value?.toString()} 12:00:00`,
   ).toISOString()
+
+  form.value?.clear()
 })
 
 async function onSubmit(event: FormSubmitEvent<CreatePartnerAgreement>) {
