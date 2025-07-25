@@ -18,6 +18,9 @@ export type PartnerLegalEntityDraft = InferInsertModel<typeof tables.partnerLega
 export type PartnerAgreement = InferSelectModel<typeof tables.partnerAgreements>
 export type PartnerAgreementDraft = InferInsertModel<typeof tables.partnerAgreements>
 
+export type PartnerAgreementFile = InferSelectModel<typeof tables.partnerAgreementFiles>
+export type PartnerAgreementFileDraft = InferInsertModel<typeof tables.partnerAgreementFiles>
+
 export type Chat = InferSelectModel<typeof tables.chats>
 export type ChatDraft = InferInsertModel<typeof tables.chats>
 

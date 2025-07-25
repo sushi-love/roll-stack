@@ -1,7 +1,11 @@
-import type { Kitchen, Partner, PartnerAgreement, PartnerLegalEntity } from '@roll-stack/database'
+import type { Kitchen, Partner, PartnerAgreement, PartnerAgreementFile, PartnerLegalEntity } from '@roll-stack/database'
+
+type PartnerAgreementWithData = PartnerAgreement & {
+  files: PartnerAgreementFile[]
+}
 
 export type PartnerLegalEntityWithData = PartnerLegalEntity & {
-  agreements: PartnerAgreement[]
+  agreements: PartnerAgreementWithData[]
 }
 
 type PartnerWithData = Partner & {

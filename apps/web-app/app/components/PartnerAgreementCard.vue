@@ -1,8 +1,17 @@
 <template>
-  <UCard class="h-full" @click="modalUpdatePartnerAgreement.open({ agreementId: agreement.id })">
+  <UCard
+    class="h-full"
+    :class="[
+      !agreement.isActive && 'opacity-75 grayscale-100',
+    ]"
+  >
     <div class="flex flex-col gap-3">
       <div class="flex flex-row items-start gap-3.5">
-        <UIcon name="i-lucide-scroll-text" class="shrink-0 size-16 text-secondary" />
+        <UIcon
+          name="i-lucide-scroll-text"
+          class="shrink-0 size-16 text-secondary"
+          @click="modalUpdatePartnerAgreement.open({ agreementId: agreement.id })"
+        />
 
         <UProgress
           v-model="agreementProgress"
@@ -39,17 +48,33 @@
       <p class="text-muted">
         {{ agreement.comment }}
       </p>
+
+      <div class="flex flex-col gap-1.5">
+        <UButton
+          v-for="file in agreement.files"
+          :key="file.id"
+          :to="file.url"
+          external
+          target="_blank"
+          size="lg"
+          variant="subtle"
+          color="neutral"
+          icon="i-lucide-file-symlink"
+        >
+          {{ file.name }}
+        </UButton>
+      </div>
     </div>
   </UCard>
 </template>
 
 <script setup lang="ts">
-import type { PartnerAgreement } from '@roll-stack/database'
+import type { PartnerAgreement, PartnerAgreementFile } from '@roll-stack/database'
 import { ModalUpdatePartnerAgreement } from '#components'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 
-const { agreement } = defineProps<{ agreement: PartnerAgreement }>()
+const { agreement } = defineProps<{ agreement: PartnerAgreement & { files: PartnerAgreementFile[] } }>()
 
 const overlay = useOverlay()
 const modalUpdatePartnerAgreement = overlay.create(ModalUpdatePartnerAgreement)

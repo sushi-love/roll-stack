@@ -32,7 +32,11 @@ export class Partner {
         kitchens: true,
         legalEntity: {
           with: {
-            agreements: true,
+            agreements: {
+              with: {
+                files: true,
+              },
+            },
           },
         },
       },
