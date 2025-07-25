@@ -68,7 +68,7 @@ const { partner } = defineProps<{
 
 const { imagesMode } = useApp()
 
-const minimalAgreement = computed(() => partner.legalEntity?.agreements.toSorted((a, b) => new Date(a.willEndAt ?? '').getTime() - new Date(b.willEndAt ?? '').getTime())[0])
+const minimalAgreement = computed(() => partner.legalEntity?.agreements.filter((agreement) => agreement.isActive).toSorted((a, b) => new Date(a.willEndAt ?? '').getTime() - new Date(b.willEndAt ?? '').getTime())[0])
 
 const agreementProgress = computed(() => {
   if (!minimalAgreement.value?.willEndAt || !minimalAgreement.value?.concludedAt) {

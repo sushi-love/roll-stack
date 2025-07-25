@@ -103,6 +103,7 @@ export const partnerAgreements = pgTable('partner_agreements', {
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   concludedAt: timestamp('concluded_at', { precision: 3, withTimezone: true, mode: 'string' }),
   willEndAt: timestamp('will_end_at', { precision: 3, withTimezone: true, mode: 'string' }),
+  isActive: boolean('is_active').notNull().default(true),
   internalId: varchar('internal_id').notNull(),
   royalty: numeric('royalty', { mode: 'number' }).notNull().default(0),
   minRoyaltyPerMonth: numeric('min_royalty_per_month', { mode: 'number' }).notNull().default(0),
@@ -111,6 +112,15 @@ export const partnerAgreements = pgTable('partner_agreements', {
   lumpSumPayment: numeric('lump_sum_payment', { mode: 'number' }).notNull().default(0),
   comment: varchar('comment'),
   legalEntityId: cuid2('legal_entity_id').references(() => partnerLegalEntities.id),
+})
+
+export const partnerAgreementFiles = pgTable('partner_agreement_files', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  name: varchar('name').notNull(),
+  url: varchar('url').notNull(),
+  agreementId: cuid2('agreement_id').notNull().references(() => partnerAgreements.id),
 })
 
 export const chats = pgTable('chats', {
@@ -585,6 +595,14 @@ export const partnerAgreementRelations = relations(partnerAgreements, ({ one, ma
     references: [partnerLegalEntities.id],
   }),
   partners: many(partners),
+  files: many(partnerAgreementFiles),
+}))
+
+export const partnerAgreementFileRelations = relations(partnerAgreementFiles, ({ one }) => ({
+  agreement: one(partnerAgreements, {
+    fields: [partnerAgreementFiles.agreementId],
+    references: [partnerAgreements.id],
+  }),
 }))
 
 export const chatRelations = relations(chats, ({ many, one }) => ({
