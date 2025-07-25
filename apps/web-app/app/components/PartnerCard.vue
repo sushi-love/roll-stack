@@ -15,12 +15,21 @@
         ]"
       >
         <div class="mx-2 px-2 py-1 bg-default/97 rounded-lg flex flex-row items-center gap-1.5">
-          <UIcon name="i-lucide-scroll-text" class="shrink-0 size-5 text-secondary" />
+          <UIcon
+            name="i-lucide-scroll-text"
+            class="shrink-0 size-5 text-secondary"
+            :class="[
+              agreementProgress <= 15 && '!text-error animate-pulse',
+            ]"
+          />
 
           <UProgress
             v-model="agreementProgress"
             size="md"
             color="secondary"
+            :ui="{
+              indicator: agreementProgress <= 15 && '!bg-error',
+            }"
           />
         </div>
       </div>
@@ -43,10 +52,6 @@
 
       <p class="text-sm/4 text-muted line-clamp-3">
         {{ partner.legalEntity?.name }}
-      </p>
-
-      <p class="text-sm/4 text-error line-clamp-3">
-        {{ partner?.legal }}
       </p>
 
       <p class="text-sm/4 text-muted line-clamp-4">
