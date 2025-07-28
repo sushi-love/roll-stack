@@ -409,7 +409,18 @@ export const kitchens = pgTable('kitchens', {
   isDeliveryAvailable: boolean('is_delivery_available').notNull().default(true),
   isPickupAvailable: boolean('is_pickup_available').notNull().default(true),
   rating: numeric('rating', { mode: 'number' }).notNull().default(0),
+  revenueForThisWeek: numeric('revenue_for_this_week', { mode: 'number' }).notNull().default(0),
+  iikoAlias: varchar('iiko_alias').unique(),
   partnerId: cuid2('partner_id').references(() => partners.id),
+})
+
+export const kitchenRevenues = pgTable('kitchen_revenues', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  date: date('date', { mode: 'string' }).notNull(),
+  total: numeric('total', { mode: 'number' }).notNull().default(0),
+  kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
 })
 
 export const channels = pgTable('channels', {
@@ -789,6 +800,14 @@ export const kitchenRelations = relations(kitchens, ({ many, one }) => ({
   partner: one(partners, {
     fields: [kitchens.partnerId],
     references: [partners.id],
+  }),
+  revenues: many(kitchenRevenues),
+}))
+
+export const kitchenRevenueRelations = relations(kitchenRevenues, ({ one }) => ({
+  kitchen: one(kitchens, {
+    fields: [kitchenRevenues.kitchenId],
+    references: [kitchens.id],
   }),
 }))
 

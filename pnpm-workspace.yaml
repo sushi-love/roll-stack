@@ -47,6 +47,7 @@ catalog:
   libphonenumber-js: ^1.12.10
   lint-staged: ^16.1.2
   nitropack: latest
+  node-xlsx: ^0.24.0
   nuxt: ^4.0.0
   nuxt-auth-utils: ^0.5.20
   nuxt-tiptap-editor: ^2.3.1

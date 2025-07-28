@@ -1,5 +1,15 @@
 <template>
-  <Header :title="t('app.menu.kitchens')" />
+  <Header :title="t('app.menu.kitchens')">
+    <UButton
+      size="lg"
+      variant="solid"
+      color="secondary"
+      class="w-full md:w-fit"
+      icon="i-lucide-upload"
+      label="Добавить выручку"
+      @click="modalUploadKitchenRevenue.open()"
+    />
+  </Header>
 
   <Content>
     <div class="flex flex-wrap items-center justify-between gap-1.5">
@@ -96,8 +106,8 @@
           {{ row.getValue('address') }}, {{ row.getValue('city') }}
         </div>
       </template>
-      <template #no-cell="">
-        <div>??? руб</div>
+      <template #revenueForThisWeek-cell="{ row }">
+        <div>{{ row.getValue('revenueForThisWeek') }} руб</div>
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-end" data-action="true">
@@ -140,6 +150,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { Kitchen } from '@roll-stack/database'
+import { ModalUploadKitchenRevenue } from '#components'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 
@@ -222,8 +233,20 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
   accessorKey: 'city',
   header: 'Населенный пункт',
 }, {
-  accessorKey: 'no',
-  header: 'Выручка',
+  accessorKey: 'revenueForThisWeek',
+  header: ({ column }) => {
+    const isSorted = column.getIsSorted()
+    const icon = isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow'
+
+    return h(UButton, {
+      color: 'neutral',
+      variant: 'ghost',
+      label: 'Выручка за неделю',
+      icon: isSorted ? icon : 'i-lucide-arrow-up-down',
+      class: '-mx-2.5',
+      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    })
+  },
 }, {
   id: 'action',
   enableSorting: false,
@@ -248,6 +271,9 @@ function getDropdownActions(_: Kitchen): DropdownMenuItem[][] {
 }
 
 const table = useTemplateRef('table')
+
+const overlay = useOverlay()
+const modalUploadKitchenRevenue = overlay.create(ModalUploadKitchenRevenue)
 
 useHead({
   title: t('app.menu.kitchens'),

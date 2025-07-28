@@ -19,10 +19,10 @@ function _useActionToast() {
     return id
   }
 
-  function success(id: string, title: string) {
+  function success(id: string, title: string, description?: string) {
     toast.update(id, {
       title,
-      description: t('toast.success'),
+      description: description || t('toast.success'),
       icon: 'i-lucide-check',
       color: 'success',
       duration: 3000,
