@@ -42,6 +42,18 @@ export class Kitchen {
     })
   }
 
+  static async listRevenuesByKitchenForPeriod(kitchenId: string, start: Date, end: Date) {
+    return useDatabase().query.kitchenRevenues.findMany({
+      where: (revenues, { eq, and }) => and(
+        eq(revenues.kitchenId, kitchenId),
+        sql`date(${revenues.date}) >= date(${start})`,
+        sql`date(${revenues.date}) <= date(${end})`,
+      ),
+      orderBy: (revenues, { desc }) => desc(revenues.date),
+      limit: 1000,
+    })
+  }
+
   static async create(data: KitchenDraft) {
     const [kitchen] = await useDatabase().insert(kitchens).values(data).returning()
     return kitchen
