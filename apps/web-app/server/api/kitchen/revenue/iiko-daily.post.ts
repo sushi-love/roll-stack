@@ -50,6 +50,23 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const dictionary = data[3]
+    if (!dictionary) {
+      throw createError({
+        statusCode: 400,
+        message: 'Invalid dictionary',
+      })
+    }
+
+    const indexOfName = dictionary.indexOf('Группа')
+    const indexOfTotal = dictionary.indexOf('Сумма со скидкой, р. Всего')
+    if (!dictionary || indexOfName < 0 || indexOfTotal < 0) {
+      throw createError({
+        statusCode: 400,
+        message: 'Invalid dictionary',
+      })
+    }
+
     const dateMatch = dateRow[0].match(/Дата:\s*(\d{1,2})\.(\d{1,2})\.(\d{4})/)
     if (!dateMatch) {
       throw createError({
@@ -81,8 +98,8 @@ export default defineEventHandler(async (event) => {
     const parsedKitchens: { name: string, total: number }[] = []
 
     for (const row of dataRows) {
-      const name = row[2] // 3rd column
-      const total = row[4] // 5th column
+      const name = row[indexOfName]
+      const total = row[indexOfTotal]
 
       if (typeof name !== 'string' || typeof total !== 'number') {
         continue
