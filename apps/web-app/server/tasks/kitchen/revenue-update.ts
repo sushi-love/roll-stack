@@ -14,9 +14,10 @@ export default defineTask({
 
       // From this monday to sunday (use UTC+0 time zone)
       const now = new Date()
+      const utcNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000)
 
-      const thisMonday = startOfWeek(now, { weekStartsOn: 1 })
-      const thisSunday = endOfWeek(now, { weekStartsOn: 1 })
+      const thisMonday = startOfWeek(utcNow, { weekStartsOn: 1 })
+      const thisSunday = endOfWeek(utcNow, { weekStartsOn: 1 })
 
       logger.log(thisMonday, thisSunday)
 
