@@ -1,12 +1,27 @@
-import type { KitchenDraft } from '../types'
-import { eq } from 'drizzle-orm'
+import type { KitchenDraft, KitchenRevenueDraft } from '../types'
+import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { kitchens } from '../tables'
+import { kitchenRevenues, kitchens } from '../tables'
 
 export class Kitchen {
   static async find(id: string) {
     return useDatabase().query.kitchens.findFirst({
       where: (kitchens, { eq }) => eq(kitchens.id, id),
+    })
+  }
+
+  static async findRevenue(id: string) {
+    return useDatabase().query.kitchenRevenues.findFirst({
+      where: (revenues, { eq }) => eq(revenues.id, id),
+    })
+  }
+
+  static async findRevenueByKitchenAndDate(kitchenId: string, date: Date) {
+    return useDatabase().query.kitchenRevenues.findFirst({
+      where: (revenues, { eq, and }) => and(
+        eq(revenues.kitchenId, kitchenId),
+        sql`date(${revenues.date}) = date(${date})`, // Same date
+      ),
     })
   }
 
@@ -19,18 +34,46 @@ export class Kitchen {
     })
   }
 
+  static async listRevenuesByKitchen(kitchenId: string) {
+    return useDatabase().query.kitchenRevenues.findMany({
+      where: (revenues, { eq }) => eq(revenues.kitchenId, kitchenId),
+      orderBy: (revenues, { desc }) => desc(revenues.date),
+      limit: 1000,
+    })
+  }
+
   static async create(data: KitchenDraft) {
     const [kitchen] = await useDatabase().insert(kitchens).values(data).returning()
     return kitchen
   }
 
+  static async createRevenue(data: KitchenRevenueDraft) {
+    const [revenue] = await useDatabase().insert(kitchenRevenues).values(data).returning()
+    return revenue
+  }
+
   static async update(id: string, data: Partial<KitchenDraft>) {
     const [kitchen] = await useDatabase()
       .update(kitchens)
-      .set(data)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
       .where(eq(kitchens.id, id))
       .returning()
     return kitchen
+  }
+
+  static async updateRevenue(id: string, data: Partial<KitchenRevenueDraft>) {
+    const [revenue] = await useDatabase()
+      .update(kitchenRevenues)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
+      .where(eq(kitchenRevenues.id, id))
+      .returning()
+    return revenue
   }
 
   static async delete(id: string) {

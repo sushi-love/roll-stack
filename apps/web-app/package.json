@@ -25,6 +25,7 @@
     "date-fns": "catalog:",
     "ioredis": "catalog:",
     "libphonenumber-js": "catalog:",
+    "node-xlsx": "catalog:",
     "nuxt-tiptap-editor": "catalog:",
     "openai": "catalog:",
     "pinia": "catalog:",
