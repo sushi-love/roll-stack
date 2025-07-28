@@ -96,12 +96,12 @@ async function onSubmit(event: FormSubmitEvent<UploadFile>) {
 
     await postStore.update()
 
-    const errors = data.result.errors.length ? `Ошибки: ${data.result.errors}` : ''
+    const errorMessage = data.result.errors.length > 0 ? `Ошибки: ${data.result.errors.join(', ')}` : ''
 
     actionToast.success(
       toastId,
       t('toast.file-loaded'),
-      `Было добавлено ${data.result.rowsUpdated} ${pluralizationRu(data.result.rowsUpdated, ['запись', 'записи', 'записей'])}. ${errors}`)
+      `Было добавлено ${data.result.rowsUpdated} ${pluralizationRu(data.result.rowsUpdated, ['запись', 'записи', 'записей'])}. ${errorMessage}`)
     emit('success')
   } catch (error) {
     console.error(error)
