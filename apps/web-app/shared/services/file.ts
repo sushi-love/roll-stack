@@ -11,6 +11,6 @@ const FileSchema = type('File')
   .describe('error.file-size-or-type')
 
 export const uploadFileSchema = type({
-  file: FileSchema,
+  files: FileSchema.array(),
 })
 export type UploadFile = typeof uploadFileSchema.infer
