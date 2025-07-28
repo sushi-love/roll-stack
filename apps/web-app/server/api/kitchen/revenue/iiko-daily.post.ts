@@ -14,6 +14,25 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const maxFileSize = 20 * 1024 * 1024 // 20MB
+    if (file.data.length > maxFileSize) {
+      throw createError({
+        statusCode: 413,
+        message: 'File too large',
+      })
+    }
+
+    const allowedMimeTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+    ]
+    if (file.type && !allowedMimeTypes.includes(file.type)) {
+      throw createError({
+        statusCode: 400,
+        message: 'Invalid file type',
+      })
+    }
+
     const workSheetsFromFile = xlsx.parse(file.data.buffer)
     if (!workSheetsFromFile[0]) {
       throw createError({
@@ -31,24 +50,24 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const rawDate = dateRow[0].split('Дата: ')[1]
-    if (!rawDate) {
+    const dateMatch = dateRow[0].match(/Дата:\s*(\d{1,2})\.(\d{1,2})\.(\d{4})/)
+    if (!dateMatch) {
       throw createError({
         statusCode: 400,
-        message: 'Invalid date',
+        message: 'Invalid date format. Expected "Дата: DD.MM.YYYY"',
       })
     }
 
-    const [day, month, year, other] = rawDate.split('.')
-    if (other) {
-      throw createError({
-        statusCode: 400,
-        message: 'Invalid date',
-      })
-    }
-
-    const dateOnly = `${year}-${month}-${day}`
+    const [, day, month, year] = dateMatch
+    const dateOnly = `${year}-${month?.padStart(2, '0')}-${day?.padStart(2, '0')}`
     const date = new Date(`${dateOnly}T12:00:00.000Z`)
+
+    if (Number.isNaN(date.getTime())) {
+      throw createError({
+        statusCode: 400,
+        message: 'Invalid date values',
+      })
+    }
 
     // Remove first 4 rows and last row
     const dataRows = data.slice(4, data.length - 1)
