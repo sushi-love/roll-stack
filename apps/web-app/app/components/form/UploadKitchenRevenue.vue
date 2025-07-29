@@ -20,16 +20,17 @@
     </UFormField>
 
     <UFormField
-      label="Файл"
-      name="file"
+      label="Файлы"
+      name="files"
       description="Не более 20 МБ"
       required
     >
       <UFileUpload
-        v-model="state.file"
+        v-model="state.files"
         color="neutral"
         highlight
-        label="Перетащите свой файл сюда"
+        multiple
+        label="Перетащите свои файлы сюда"
         description="XLSX"
         class="min-h-28"
       />
@@ -73,7 +74,7 @@ const actionToast = useActionToast()
 const postStore = usePostStore()
 
 const state = ref<Partial<UploadFile>>({
-  file: undefined,
+  files: [],
 })
 
 const availableTypes = [
@@ -87,7 +88,9 @@ async function onSubmit(event: FormSubmitEvent<UploadFile>) {
 
   try {
     const formData = new FormData()
-    formData.append('file', event.data.file)
+    for (const file of event.data.files) {
+      formData.append('files', file)
+    }
 
     const data = await $fetch(`/api/kitchen/revenue/${selectedType.value?.value}`, {
       method: 'POST',
@@ -97,11 +100,9 @@ async function onSubmit(event: FormSubmitEvent<UploadFile>) {
     await postStore.update()
 
     const errorMessage = data.result.errors.length > 0 ? `Ошибки: ${data.result.errors.join(', ')}` : ''
+    const description = `Было обновлено ${data.result.rowsUpdated} ${pluralizationRu(data.result.rowsUpdated, ['запись', 'записи', 'записей'])}. ${errorMessage}`
 
-    actionToast.success(
-      toastId,
-      t('toast.file-loaded'),
-      `Было добавлено ${data.result.rowsUpdated} ${pluralizationRu(data.result.rowsUpdated, ['запись', 'записи', 'записей'])}. ${errorMessage}`)
+    actionToast.success(toastId, t('toast.files-handled'), description)
     emit('success')
   } catch (error) {
     console.error(error)
