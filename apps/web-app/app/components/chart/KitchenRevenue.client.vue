@@ -77,12 +77,13 @@ watch([() => period, () => range, () => values], () => {
   } as Record<Period, typeof eachDayOfInterval>)[period](range)
 
   data.value = dates.map((date) => {
-    const value = values.find((d) => new Date(d.date).getFullYear() === date.getFullYear() && new Date(d.date).getMonth() === date.getMonth() && new Date(d.date).getDate() === date.getDate())
+    const dateStr = format(date, 'yyyy-MM-dd')
+    const value = values.find((d) => d.date.startsWith(dateStr))
 
     return {
       date,
-      total: value?.total ? value.total : 0,
-      checks: value?.checks ? value.checks : 0,
+      total: value?.total ?? 0,
+      checks: value?.checks ?? 0,
     }
   })
 }, { immediate: true })
