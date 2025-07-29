@@ -29,7 +29,8 @@
     "nuxt-tiptap-editor": "catalog:",
     "openai": "catalog:",
     "pinia": "catalog:",
-    "sharp": "catalog:"
+    "sharp": "catalog:",
+    "uqr": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
