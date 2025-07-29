@@ -44,3 +44,10 @@ export type PrintWithData = Print & {
 export type KitchenWithData = Kitchen & {
   feedbackPoints: FeedbackPoint[]
 }
+
+export type Period = 'daily' | 'weekly' | 'monthly'
+
+export interface Range {
+  start: Date
+  end: Date
+}
