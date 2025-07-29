@@ -84,7 +84,7 @@ async function parseFileAndUpdateData(file: MultiPartData) {
   }
 
   const indexOfName = dictionary.indexOf('Группа')
-  const indexOfTotal = dictionary.indexOf('Сумма со скидкой, р. Всего')
+  const indexOfTotal = dictionary.indexOf('Сумма со скидкой, р.')
   const indexOfChecks = dictionary.indexOf('Чеков')
   if (!dictionary || indexOfName < 0 || indexOfTotal < 0 || indexOfChecks < 0) {
     throw createError({
