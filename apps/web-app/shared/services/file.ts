@@ -1,7 +1,7 @@
 import { type } from 'arktype'
 
-const MAX_FILE_SIZE = 20000000
-const ACCEPTED_FILE_TYPES = [
+export const MAX_FILE_SIZE = 20 * 1024 * 1024 // 20MB
+export const ACCEPTED_FILE_TYPES = [
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   'application/vnd.ms-excel',
 ]

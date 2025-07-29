@@ -21,7 +21,7 @@
 
     <UFormField
       label="Файлы"
-      name="file"
+      name="files"
       description="Не более 20 МБ"
       required
     >

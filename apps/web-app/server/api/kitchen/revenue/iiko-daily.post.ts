@@ -1,4 +1,5 @@
 import type { Buffer } from 'node:buffer'
+import { ACCEPTED_FILE_TYPES, MAX_FILE_SIZE } from '#shared/services/file'
 import { repository } from '@roll-stack/database'
 import xlsx from 'node-xlsx'
 
@@ -8,12 +9,6 @@ interface MultiPartData {
   filename?: string
   type?: string
 }
-
-const MAX_FILE_SIZE = 20 * 1024 * 1024 // 20MB
-const ACCEPTED_FILE_TYPES = [
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'application/vnd.ms-excel',
-]
 
 export default defineEventHandler(async (event) => {
   try {
