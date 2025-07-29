@@ -10,6 +10,13 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    if (text.length > 1000) {
+      throw createError({
+        statusCode: 400,
+        message: 'Text too long',
+      })
+    }
+
     setHeader(event, 'Content-Type', 'image/svg+xml')
 
     return renderSVG(decodeURIComponent(text))
