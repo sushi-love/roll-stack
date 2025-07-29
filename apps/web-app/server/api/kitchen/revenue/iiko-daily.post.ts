@@ -75,7 +75,7 @@ async function parseFileAndUpdateData(file: MultiPartData) {
     })
   }
 
-  const dictionary = data[3]
+  const dictionary = data[4] // 4th row - empty, 5th - column names
   if (!dictionary) {
     throw createError({
       statusCode: 400,
@@ -85,7 +85,8 @@ async function parseFileAndUpdateData(file: MultiPartData) {
 
   const indexOfName = dictionary.indexOf('Группа')
   const indexOfTotal = dictionary.indexOf('Сумма со скидкой, р. Всего')
-  if (!dictionary || indexOfName < 0 || indexOfTotal < 0) {
+  const indexOfChecks = dictionary.indexOf('Чеков')
+  if (!dictionary || indexOfName < 0 || indexOfTotal < 0 || indexOfChecks < 0) {
     throw createError({
       statusCode: 400,
       message: 'Invalid dictionary',
@@ -111,8 +112,8 @@ async function parseFileAndUpdateData(file: MultiPartData) {
     })
   }
 
-  // Remove first 4 rows and last row
-  const dataRows = data.slice(4, data.length - 1)
+  // Remove first 5 rows and last row
+  const dataRows = data.slice(5, data.length - 1)
   if (!dataRows) {
     throw createError({
       statusCode: 400,
@@ -120,19 +121,21 @@ async function parseFileAndUpdateData(file: MultiPartData) {
     })
   }
 
-  const parsedKitchens: { name: string, total: number }[] = []
+  const parsedKitchens: { name: string, total: number, checks: number }[] = []
 
   for (const row of dataRows) {
     const name = row[indexOfName]
     const total = row[indexOfTotal]
+    const checks = row[indexOfChecks]
 
-    if (typeof name !== 'string' || typeof total !== 'number') {
+    if (typeof name !== 'string' || typeof total !== 'number' || typeof checks !== 'number') {
       continue
     }
 
     parsedKitchens.push({
       name,
       total,
+      checks,
     })
   }
 
@@ -151,10 +154,12 @@ async function parseFileAndUpdateData(file: MultiPartData) {
           kitchenId: found.id,
           date: dateOnly,
           total: kitchen.total,
+          checks: kitchen.checks,
         })
       } else {
         await repository.kitchen.updateRevenue(revenue.id, {
           total: kitchen.total,
+          checks: kitchen.checks,
         })
       }
 
