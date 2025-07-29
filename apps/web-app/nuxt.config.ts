@@ -37,7 +37,7 @@ export default defineNuxtConfig({
       tasks: true,
     },
     scheduledTasks: {
-      '* * * * *': ['task:auto-create'], // Every minute
+      '* * * * *': ['task:auto-create', 'kitchen:average-update'], // Every minute
       '0 * * * *': ['kitchen:revenue-update'], // Every hour
       '0 0 * * *': ['kitchen:rating-update'], // Every day
     },

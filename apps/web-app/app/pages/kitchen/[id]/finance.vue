@@ -5,6 +5,12 @@
       :range="range"
       :values="data ?? []"
     />
+
+    <ChartKitchenChecks
+      :period="period"
+      :range="range"
+      :values="data ?? []"
+    />
   </Content>
 </template>
 
@@ -17,7 +23,7 @@ const { params } = useRoute('kitchen-id')
 const { data } = useFetch(`/api/kitchen/id/${params.id}/revenue`)
 
 const range = shallowRef<Range>({
-  start: sub(new Date(), { days: 14 }),
+  start: sub(new Date(), { days: 89 }),
   end: new Date(),
 })
 const period = ref<Period>('daily')

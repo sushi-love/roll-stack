@@ -3,7 +3,7 @@
     <template #header>
       <div>
         <p class="text-xs text-muted uppercase mb-1.5">
-          Выручка за {{ data.length }} {{ pluralizationRu(data.length, ['день', 'дня', 'дней']) }}
+          Средний чек за {{ data.length }} {{ pluralizationRu(data.length, ['день', 'дня', 'дней']) }}
         </p>
         <p class="text-3xl text-highlighted font-semibold">
           {{ formatNumber(total) }}
@@ -20,12 +20,12 @@
       <VisLine
         :x="x"
         :y="y"
-        color="var(--ui-secondary)"
+        color="var(--ui-info)"
       />
       <VisArea
         :x="x"
         :y="y"
-        color="var(--ui-secondary)"
+        color="var(--ui-info)"
         :opacity="0.1"
       />
 
@@ -36,7 +36,7 @@
       />
 
       <VisCrosshair
-        color="var(--ui-secondary)"
+        color="var(--ui-info)"
         :template="template"
       />
 
@@ -53,14 +53,15 @@ import { ru } from 'date-fns/locale'
 
 type DataRecord = {
   date: Date
-  total: number
   checks: number
+  averageCheck: number
+  commonAverageCheck: number
 }
 
 const { period, range, values } = defineProps<{
   period: Period
   range: Range
-  values: { date: string, total: number, checks: number }[]
+  values: { date: string, checks: number, averageCheck: number, commonAverageCheck: number }[]
 }>()
 
 const cardRef = useTemplateRef<HTMLElement | null>('cardRef')
@@ -82,16 +83,20 @@ watch([() => period, () => range, () => values], () => {
 
     return {
       date,
-      total: value?.total ?? 0,
       checks: value?.checks ?? 0,
+      averageCheck: value?.averageCheck ?? 0,
+      commonAverageCheck: value?.commonAverageCheck ?? 0,
     }
   })
 }, { immediate: true })
 
 const x = (_: DataRecord, i: number) => i
-const y = (d: DataRecord) => d.total
+const y = (d: DataRecord) => d.averageCheck
 
-const total = computed(() => data.value.reduce((acc: number, { total }) => acc + total, 0))
+const total = computed(() => {
+  const count = data.value.filter((d) => d.averageCheck).length
+  return Math.floor(data.value.reduce((acc: number, { averageCheck }) => acc + averageCheck, 0) / count)
+})
 
 const formatNumber = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format
 
@@ -111,12 +116,12 @@ function xTicks(i: number) {
   return formatDate(data.value[i].date)
 }
 
-const template = (d: DataRecord) => `${formatDate(d.date)}: ${formatNumber(d.total)}, ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}`
+const template = (d: DataRecord) => `${formatDate(d.date)}: ${formatNumber(d.averageCheck)}`
 </script>
 
 <style scoped>
 .unovis-xy-container {
-  --vis-crosshair-line-stroke-color: var(--ui-secondary);
+  --vis-crosshair-line-stroke-color: var(--ui-info);
   --vis-crosshair-circle-stroke-color: var(--ui-bg);
 
   --vis-axis-grid-color: var(--ui-border);

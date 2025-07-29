@@ -54,6 +54,25 @@ export class Kitchen {
     })
   }
 
+  static async listRevenuesForDate(date: string) {
+    return useDatabase().query.kitchenRevenues.findMany({
+      where: (revenues, { and }) => and(
+        sql`date(${revenues.date}) >= date(${date})`,
+        sql`date(${revenues.date}) <= date(${date})`,
+      ),
+    })
+  }
+
+  static async listRevenuesToUpdate() {
+    return useDatabase().query.kitchenRevenues.findMany({
+      where: (revenues, { eq, or }) => or(
+        eq(revenues.averageCheck, 0),
+        eq(revenues.commonTotal, 0),
+      ),
+      limit: 50,
+    })
+  }
+
   static async create(data: KitchenDraft) {
     const [kitchen] = await useDatabase().insert(kitchens).values(data).returning()
     return kitchen

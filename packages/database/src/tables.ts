@@ -420,7 +420,10 @@ export const kitchenRevenues = pgTable('kitchen_revenues', {
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   date: date('date', { mode: 'string' }).notNull(),
   total: numeric('total', { mode: 'number' }).notNull().default(0),
+  commonTotal: numeric('common_total', { mode: 'number' }).notNull().default(0),
   checks: integer('checks').notNull().default(0),
+  averageCheck: numeric('average_check', { mode: 'number' }).notNull().default(0),
+  commonAverageCheck: numeric('common_average_check', { mode: 'number' }).notNull().default(0),
   kitchenId: cuid2('kitchen_id').notNull().references(() => kitchens.id),
 })
 
