@@ -15,7 +15,7 @@
       :data="data"
       :padding="{ top: 40 }"
       :width="width"
-      class="h-80"
+      class="h-72"
     >
       <VisLine
         :x="x"
@@ -103,7 +103,8 @@ const lineDashArray = (_: DataRecord, i: number) => [i === 0 ? undefined : 3]
 
 const total = computed(() => {
   const count = data.value.filter((d) => d.averageCheck).length
-  return Math.floor(data.value.reduce((acc: number, { averageCheck }) => acc + averageCheck, 0) / count)
+  const avg = data.value.reduce((acc: number, { averageCheck }) => acc + averageCheck, 0)
+  return avg > 0 && count > 0 ? Math.floor(avg / count) : 0
 })
 
 const formatNumber = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format
@@ -124,7 +125,7 @@ function xTicks(i: number) {
   return formatDate(data.value[i].date)
 }
 
-const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> Средний чек: ${formatNumber(d.averageCheck)}<br> Среднее по сети: ${formatNumber(d.commonAverageCheck)}`
+const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> Средний чек: ${formatNumber(d.averageCheck)}<br> Средний по сети: ${formatNumber(d.commonAverageCheck)}`
 </script>
 
 <style scoped>

@@ -1,5 +1,9 @@
 <template>
   <Content>
+    <div>
+      <DateRangePicker v-model="range" />
+    </div>
+
     <ChartKitchenRevenue
       :period="period"
       :range="range"
@@ -22,9 +26,10 @@ const { params } = useRoute('kitchen-id')
 
 const { data } = useFetch(`/api/kitchen/id/${params.id}/revenue`)
 
+const today = new Date()
 const range = shallowRef<Range>({
-  start: sub(new Date(), { days: 89 }),
-  end: new Date(),
+  start: sub(today, { days: 14 - 1 }),
+  end: today,
 })
 const period = ref<Period>('daily')
 </script>
