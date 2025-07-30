@@ -20,11 +20,12 @@
       <VisLine
         :x="x"
         :y="y"
-        color="var(--ui-info)"
+        :color="color"
+        :line-dash-array="lineDashArray"
       />
       <VisArea
         :x="x"
-        :y="y"
+        :y="yArea"
         color="var(--ui-info)"
         :opacity="0.1"
       />
@@ -91,7 +92,14 @@ watch([() => period, () => range, () => values], () => {
 }, { immediate: true })
 
 const x = (_: DataRecord, i: number) => i
-const y = (d: DataRecord) => d.averageCheck
+const y = [
+  (d: DataRecord) => d.averageCheck,
+  (d: DataRecord) => d.commonAverageCheck,
+]
+const yArea = (d: DataRecord) => d.averageCheck
+
+const color = (_: DataRecord, i: number) => ['var(--ui-info)', 'var(--ui-info)'][i]
+const lineDashArray = (_: DataRecord, i: number) => [i === 0 ? undefined : 3]
 
 const total = computed(() => {
   const count = data.value.filter((d) => d.averageCheck).length
@@ -116,7 +124,7 @@ function xTicks(i: number) {
   return formatDate(data.value[i].date)
 }
 
-const template = (d: DataRecord) => `${formatDate(d.date)}: ${formatNumber(d.averageCheck)}`
+const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> Средний чек: ${formatNumber(d.averageCheck)}<br> Среднее по сети: ${formatNumber(d.commonAverageCheck)}`
 </script>
 
 <style scoped>

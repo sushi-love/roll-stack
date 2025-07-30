@@ -99,7 +99,7 @@ const y = [
 const yArea = (d: DataRecord) => d.total
 
 const color = (_: DataRecord, i: number) => ['var(--ui-secondary)', 'var(--ui-secondary)'][i]
-const lineDashArray = (_: DataRecord, i: number) => [i === 0 ? undefined : 4]
+const lineDashArray = (_: DataRecord, i: number) => [i === 0 ? undefined : 3]
 
 const total = computed(() => data.value.reduce((acc: number, { total }) => acc + total, 0))
 
@@ -121,7 +121,7 @@ function xTicks(i: number) {
   return formatDate(data.value[i].date)
 }
 
-const template = (d: DataRecord) => `${formatDate(d.date)}, ${format(d.date, 'eeeeee', { locale: ru })}: ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}<br> Выручка: ${formatNumber(d.total)}<br> Средняя: ${formatNumber(d.commonTotal)}`
+const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}<br> Выручка: ${formatNumber(d.total)}<br> Среднее по сети: ${formatNumber(d.commonTotal)}`
 </script>
 
 <style scoped>
