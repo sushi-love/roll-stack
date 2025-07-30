@@ -20,11 +20,12 @@
       <VisLine
         :x="x"
         :y="y"
-        color="var(--ui-secondary)"
+        :color="color"
+        :line-dash-array="lineDashArray"
       />
       <VisArea
         :x="x"
-        :y="y"
+        :y="yArea"
         color="var(--ui-secondary)"
         :opacity="0.1"
       />
@@ -55,12 +56,13 @@ type DataRecord = {
   date: Date
   total: number
   checks: number
+  commonTotal: number
 }
 
 const { period, range, values } = defineProps<{
   period: Period
   range: Range
-  values: { date: string, total: number, checks: number }[]
+  values: { date: string, total: number, checks: number, commonTotal: number }[]
 }>()
 
 const cardRef = useTemplateRef<HTMLElement | null>('cardRef')
@@ -84,12 +86,20 @@ watch([() => period, () => range, () => values], () => {
       date,
       total: value?.total ?? 0,
       checks: value?.checks ?? 0,
+      commonTotal: value?.commonTotal ?? 0,
     }
   })
 }, { immediate: true })
 
 const x = (_: DataRecord, i: number) => i
-const y = (d: DataRecord) => d.total
+const y = [
+  (d: DataRecord) => d.total,
+  (d: DataRecord) => d.commonTotal,
+]
+const yArea = (d: DataRecord) => d.total
+
+const color = (_: DataRecord, i: number) => ['var(--ui-secondary)', 'var(--ui-secondary)'][i]
+const lineDashArray = (_: DataRecord, i: number) => [i === 0 ? undefined : 4]
 
 const total = computed(() => data.value.reduce((acc: number, { total }) => acc + total, 0))
 
@@ -111,7 +121,7 @@ function xTicks(i: number) {
   return formatDate(data.value[i].date)
 }
 
-const template = (d: DataRecord) => `${formatDate(d.date)}: ${formatNumber(d.total)}, ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}`
+const template = (d: DataRecord) => `${formatDate(d.date)}, ${format(d.date, 'eeeeee', { locale: ru })}: ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}<br> Выручка: ${formatNumber(d.total)}<br> Средняя: ${formatNumber(d.commonTotal)}`
 </script>
 
 <style scoped>

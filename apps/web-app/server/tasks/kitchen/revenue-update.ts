@@ -1,8 +1,6 @@
 import { repository } from '@roll-stack/database'
 import { endOfWeek, startOfWeek } from 'date-fns'
 
-const logger = useLogger('kitchen:revenue-update')
-
 export default defineTask({
   meta: {
     name: 'kitchen:revenue-update',
@@ -19,12 +17,13 @@ export default defineTask({
       const thisMonday = startOfWeek(utcNow, { weekStartsOn: 1 })
       const thisSunday = endOfWeek(utcNow, { weekStartsOn: 1 })
 
-      logger.log(thisMonday, thisSunday)
-
       for (const kitchen of kitchens) {
         const revenues = await repository.kitchen.listRevenuesByKitchenForPeriod(kitchen.id, thisMonday, thisSunday)
 
-        const revenueForThisWeek = revenues.reduce((acc, curr) => acc + curr.total, 0)
+        const revenueForThisWeek = Math.round(revenues.reduce((acc, curr) => acc + curr.total, 0))
+        if (revenueForThisWeek === kitchen.revenueForThisWeek) {
+          continue
+        }
 
         await repository.kitchen.update(kitchen.id, {
           revenueForThisWeek,

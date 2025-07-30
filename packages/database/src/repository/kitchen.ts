@@ -66,8 +66,7 @@ export class Kitchen {
   static async listRevenuesToUpdate() {
     return useDatabase().query.kitchenRevenues.findMany({
       where: (revenues, { eq, or }) => or(
-        eq(revenues.averageCheck, 0),
-        eq(revenues.commonTotal, 0),
+        eq(revenues.commonAverageCheck, 0),
       ),
       limit: 50,
     })
