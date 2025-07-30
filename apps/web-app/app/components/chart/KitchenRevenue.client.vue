@@ -15,7 +15,7 @@
       :data="data"
       :padding="{ top: 40 }"
       :width="width"
-      class="h-80"
+      class="h-72"
     >
       <VisLine
         :x="x"
@@ -56,13 +56,14 @@ type DataRecord = {
   date: Date
   total: number
   checks: number
+  averageCheck: number
   commonTotal: number
 }
 
 const { period, range, values } = defineProps<{
   period: Period
   range: Range
-  values: { date: string, total: number, checks: number, commonTotal: number }[]
+  values: { date: string, total: number, checks: number, averageCheck: number, commonTotal: number }[]
 }>()
 
 const cardRef = useTemplateRef<HTMLElement | null>('cardRef')
@@ -86,6 +87,7 @@ watch([() => period, () => range, () => values], () => {
       date,
       total: value?.total ?? 0,
       checks: value?.checks ?? 0,
+      averageCheck: value?.averageCheck ?? 0,
       commonTotal: value?.commonTotal ?? 0,
     }
   })
@@ -121,7 +123,7 @@ function xTicks(i: number) {
   return formatDate(data.value[i].date)
 }
 
-const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}<br> Выручка: ${formatNumber(d.total)}<br> Среднее по сети: ${formatNumber(d.commonTotal)}`
+const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}, средний ${formatNumber(d.averageCheck)}<br> Выручка: ${formatNumber(d.total)}<br> Средняя по сети: ${formatNumber(d.commonTotal)}`
 </script>
 
 <style scoped>
