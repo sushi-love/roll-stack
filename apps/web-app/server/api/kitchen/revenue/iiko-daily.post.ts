@@ -121,7 +121,7 @@ async function parseFileAndUpdateData(file: MultiPartData) {
     })
   }
 
-  const parsedKitchens: { name: string, total: number, checks: number }[] = []
+  const parsedKitchens: { name: string, total: number, checks: number, averageCheck: number, commonAverageCheck: number, commonTotal: number }[] = []
 
   for (const row of dataRows) {
     const name = row[indexOfName]
@@ -132,11 +132,25 @@ async function parseFileAndUpdateData(file: MultiPartData) {
       continue
     }
 
+    const averageCheck = Math.round(total / checks)
+
     parsedKitchens.push({
       name,
       total,
       checks,
+      averageCheck,
+      commonAverageCheck: 0,
+      commonTotal: 0,
     })
+  }
+
+  // Update common data
+  const commonAverageCheck = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.averageCheck, 0) / parsedKitchens.length)
+  const commonTotal = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.total, 0) / parsedKitchens.length)
+
+  for (const kitchen of parsedKitchens) {
+    kitchen.commonAverageCheck = commonAverageCheck
+    kitchen.commonTotal = commonTotal
   }
 
   // Every kitchen: find in DB and add amount for this day
@@ -155,11 +169,17 @@ async function parseFileAndUpdateData(file: MultiPartData) {
           date: dateOnly,
           total: kitchen.total,
           checks: kitchen.checks,
+          averageCheck: kitchen.averageCheck,
+          commonAverageCheck: kitchen.commonAverageCheck,
+          commonTotal: kitchen.commonTotal,
         })
       } else {
         await repository.kitchen.updateRevenue(revenue.id, {
           total: kitchen.total,
           checks: kitchen.checks,
+          averageCheck: kitchen.averageCheck,
+          commonAverageCheck: kitchen.commonAverageCheck,
+          commonTotal: kitchen.commonTotal,
         })
       }
 

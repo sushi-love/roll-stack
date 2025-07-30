@@ -9,18 +9,11 @@ export default defineTask({
     try {
       const revenuesToUpdate = await repository.kitchen.listRevenuesToUpdate()
       for (const revenue of revenuesToUpdate) {
-        // Average check
-        const averageCheck = Math.round(revenue.total / revenue.checks)
-
         // common
         const allRevenuesThisPeriod = await repository.kitchen.listRevenuesForDate(revenue.date)
         const commonAverageCheck = Math.round(allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.averageCheck, 0) / allRevenuesThisPeriod.length)
-        const commonTotal = Math.round(allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.total, 0) / allRevenuesThisPeriod.length)
-
         await repository.kitchen.updateRevenue(revenue.id, {
-          averageCheck,
           commonAverageCheck,
-          commonTotal,
         })
       }
     } catch (error) {
