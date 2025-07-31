@@ -83,7 +83,6 @@ export const partners = pgTable('partners', {
   surname: varchar('surname').notNull().default(''),
   avatarUrl: varchar('avatar_url'),
   city: varchar('city'),
-  legal: varchar('legal'),
   legalEntityId: cuid2('legal_entity_id').references(() => partnerLegalEntities.id),
 })
 
