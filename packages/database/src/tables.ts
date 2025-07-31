@@ -583,6 +583,8 @@ export const networkMetrics = pgTable('network_metrics', {
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   date: date('date', { mode: 'string' }).notNull(),
   total: numeric('total', { mode: 'number' }).notNull().default(0),
+  averageTotal: numeric('average_total', { mode: 'number' }).notNull().default(0),
+  checks: integer('checks').notNull().default(0),
   averageCheck: numeric('average_check', { mode: 'number' }).notNull().default(0),
 })
 

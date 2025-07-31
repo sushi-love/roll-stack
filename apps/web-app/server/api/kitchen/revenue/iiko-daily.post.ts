@@ -147,6 +147,8 @@ async function parseFileAndUpdateData(file: MultiPartData) {
   // Update common data
   const commonAverageCheck = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.averageCheck, 0) / parsedKitchens.length)
   const commonTotal = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.total, 0) / parsedKitchens.length)
+  const checks = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.checks, 0))
+  const total = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.total, 0))
 
   for (const kitchen of parsedKitchens) {
     kitchen.commonAverageCheck = commonAverageCheck
@@ -159,13 +161,17 @@ async function parseFileAndUpdateData(file: MultiPartData) {
   if (!existingMetrics) {
     await repository.network.createMetrics({
       date: dateOnly,
+      checks,
+      total,
       averageCheck: commonAverageCheck,
-      total: commonTotal,
+      averageTotal: commonTotal,
     })
   } else {
     await repository.network.updateMetrics(existingMetrics.id, {
+      checks,
+      total,
       averageCheck: commonAverageCheck,
-      total: commonTotal,
+      averageTotal: commonTotal,
     })
   }
 
