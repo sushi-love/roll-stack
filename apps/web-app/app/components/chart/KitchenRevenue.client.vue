@@ -60,10 +60,11 @@ type DataRecord = {
   commonTotal: number
 }
 
-const { period, range, values } = defineProps<{
+const { period, range, values, metrics } = defineProps<{
   period: Period
   range: Range
-  values: { date: string, total: number, checks: number, averageCheck: number, commonTotal: number }[]
+  values: { date: string, total: number, checks: number, averageCheck: number }[]
+  metrics: { date: string, checks: number, averageCheck: number, total: number, averageTotal: number }[]
 }>()
 
 const cardRef = useTemplateRef<HTMLElement | null>('cardRef')
@@ -82,13 +83,14 @@ watch([() => period, () => range, () => values], () => {
   data.value = dates.map((date) => {
     const dateStr = format(date, 'yyyy-MM-dd')
     const value = values.find((d) => d.date.startsWith(dateStr))
+    const metric = metrics.find((d) => d.date.startsWith(dateStr))
 
     return {
       date,
       total: value?.total ?? 0,
       checks: value?.checks ?? 0,
       averageCheck: value?.averageCheck ?? 0,
-      commonTotal: value?.commonTotal ?? 0,
+      commonTotal: metric?.averageTotal ?? 0,
     }
   })
 }, { immediate: true })
