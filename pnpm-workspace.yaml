@@ -3,7 +3,7 @@ packages:
   - packages/*
 
 catalog:
-  '@antfu/eslint-config': ^4.19.0
+  '@antfu/eslint-config': ^5.0.0
   '@commitlint/cli': ^19.8.1
   '@commitlint/config-conventional': ^19.8.1
   '@date-fns/tz': ^1.2.0
