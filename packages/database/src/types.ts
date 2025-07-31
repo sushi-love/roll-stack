@@ -125,3 +125,6 @@ export type FeedbackPointDraft = InferInsertModel<typeof tables.feedbackPoints>
 
 export type ClientReview = InferSelectModel<typeof tables.clientReviews>
 export type ClientReviewDraft = InferInsertModel<typeof tables.clientReviews>
+
+export type NetworkMetrics = InferSelectModel<typeof tables.networkMetrics>
+export type NetworkMetricsDraft = InferInsertModel<typeof tables.networkMetrics>

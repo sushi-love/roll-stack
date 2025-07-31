@@ -577,6 +577,15 @@ export const clientReviews = pgTable('client_reviews', {
   feedbackPointId: cuid2('feedback_point_id').references(() => feedbackPoints.id),
 })
 
+export const networkMetrics = pgTable('network_metrics', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  date: date('date', { mode: 'string' }).notNull(),
+  total: numeric('total', { mode: 'number' }).notNull().default(0),
+  averageCheck: numeric('average_check', { mode: 'number' }).notNull().default(0),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),

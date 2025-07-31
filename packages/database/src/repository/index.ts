@@ -9,6 +9,7 @@ import { File } from './file'
 import { Kitchen } from './kitchen'
 import { Media } from './media'
 import { Menu } from './menu'
+import { Network } from './network'
 import { Notification } from './notification'
 import { Partner } from './partner'
 import { Payment } from './payment'
@@ -30,6 +31,7 @@ class Repository {
   readonly kitchen = Kitchen
   readonly media = Media
   readonly menu = Menu
+  readonly network = Network
   readonly notification = Notification
   readonly partner = Partner
   readonly payment = Payment
