@@ -73,7 +73,7 @@ const { width } = useElementSize(cardRef)
 
 const data = ref<DataRecord[]>([])
 
-watch([() => period, () => range, () => values], () => {
+watch([() => period, () => range, () => values, () => metrics], () => {
   const dates = ({
     daily: eachDayOfInterval,
     weekly: eachWeekOfInterval,
