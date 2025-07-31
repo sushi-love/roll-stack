@@ -153,6 +153,22 @@ async function parseFileAndUpdateData(file: MultiPartData) {
     kitchen.commonTotal = commonTotal
   }
 
+  // Create or update metrics
+  const metrics = await repository.network.listMetrics()
+  const existingMetrics = metrics.find((metric) => metric.date === dateOnly)
+  if (!existingMetrics) {
+    await repository.network.createMetrics({
+      date: dateOnly,
+      averageCheck: commonAverageCheck,
+      total: commonTotal,
+    })
+  } else {
+    await repository.network.updateMetrics(existingMetrics.id, {
+      averageCheck: commonAverageCheck,
+      total: commonTotal,
+    })
+  }
+
   // Every kitchen: find in DB and add amount for this day
   const kitchens = await repository.kitchen.list()
   let rowsUpdated = 0
