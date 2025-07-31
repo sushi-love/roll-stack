@@ -109,8 +109,8 @@ catalogs:
       specifier: ^17.2.0
       version: 17.2.0
     dotenv-cli:
-      specifier: ^8.0.0
-      version: 8.0.0
+      specifier: ^10.0.0
+      version: 10.0.0
     drizzle-cuid2:
       specifier: ^2.1.0
       version: 2.1.0
@@ -229,7 +229,7 @@ importers:
         version: 0.5.0(magicast@0.3.5)(typescript@5.8.3)(vue-tsc@2.2.12(typescript@5.8.3))(vue@3.5.17(typescript@5.8.3))
       dotenv-cli:
         specifier: 'catalog:'
-        version: 8.0.0
+        version: 10.0.0
       eslint:
         specifier: 'catalog:'
         version: 9.31.0(jiti@2.5.0)
@@ -4894,12 +4894,12 @@ packages:
     resolution: {integrity: sha512-1gxPBJpI/pcjQhKgIU91II6Wkay+dLcN3M6rf2uwP8hRur3HtQXjVrdAK3sjC0piaEuxzMwjXChcETiJl47lAQ==}
     engines: {node: '>=18'}
 
-  dotenv-cli@8.0.0:
-    resolution: {integrity: sha512-aLqYbK7xKOiTMIRf1lDPbI+Y+Ip/wo5k3eyp6ePysVaSqbyxjyK3dK35BTxG+rmd7djf5q2UPs4noPNH+cj0Qw==}
+  dotenv-cli@10.0.0:
+    resolution: {integrity: sha512-lnOnttzfrzkRx2echxJHQRB6vOAMSCzzZg79IxpC00tU42wZPuZkQxNNrrwVAxaQZIIh001l4PxVlCrBxngBzA==}
     hasBin: true
 
-  dotenv-expand@10.0.0:
-    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+  dotenv-expand@11.0.7:
+    resolution: {integrity: sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA==}
     engines: {node: '>=12'}
 
   dotenv@16.6.1:
@@ -13771,14 +13771,16 @@ snapshots:
     dependencies:
       type-fest: 4.41.0
 
-  dotenv-cli@8.0.0:
+  dotenv-cli@10.0.0:
     dependencies:
       cross-spawn: 7.0.6
-      dotenv: 16.6.1
-      dotenv-expand: 10.0.0
+      dotenv: 17.2.0
+      dotenv-expand: 11.0.7
       minimist: 1.2.8
 
-  dotenv-expand@10.0.0: {}
+  dotenv-expand@11.0.7:
+    dependencies:
+      dotenv: 16.6.1
 
   dotenv@16.6.1: {}
 
