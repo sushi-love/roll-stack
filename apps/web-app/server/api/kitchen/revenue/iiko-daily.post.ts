@@ -121,7 +121,7 @@ async function parseFileAndUpdateData(file: MultiPartData) {
     })
   }
 
-  const parsedKitchens: { name: string, total: number, checks: number, averageCheck: number, commonAverageCheck: number, commonTotal: number }[] = []
+  const parsedKitchens: { name: string, total: number, checks: number, averageCheck: number }[] = []
 
   for (const row of dataRows) {
     const name = row[indexOfName]
@@ -139,21 +139,14 @@ async function parseFileAndUpdateData(file: MultiPartData) {
       total,
       checks,
       averageCheck,
-      commonAverageCheck: 0,
-      commonTotal: 0,
     })
   }
 
   // Update common data
-  const commonAverageCheck = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.averageCheck, 0) / parsedKitchens.length)
-  const commonTotal = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.total, 0) / parsedKitchens.length)
+  const averageCheck = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.averageCheck, 0) / parsedKitchens.length)
+  const averageTotal = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.total, 0) / parsedKitchens.length)
   const checks = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.checks, 0))
   const total = Math.round(parsedKitchens.reduce((acc, curr) => acc + curr.total, 0))
-
-  for (const kitchen of parsedKitchens) {
-    kitchen.commonAverageCheck = commonAverageCheck
-    kitchen.commonTotal = commonTotal
-  }
 
   // Create or update metrics
   const metrics = await repository.network.listMetrics()
@@ -163,15 +156,15 @@ async function parseFileAndUpdateData(file: MultiPartData) {
       date: dateOnly,
       checks,
       total,
-      averageCheck: commonAverageCheck,
-      averageTotal: commonTotal,
+      averageCheck,
+      averageTotal,
     })
   } else {
     await repository.network.updateMetrics(existingMetrics.id, {
       checks,
       total,
-      averageCheck: commonAverageCheck,
-      averageTotal: commonTotal,
+      averageCheck,
+      averageTotal,
     })
   }
 
@@ -192,16 +185,12 @@ async function parseFileAndUpdateData(file: MultiPartData) {
           total: kitchen.total,
           checks: kitchen.checks,
           averageCheck: kitchen.averageCheck,
-          commonAverageCheck: kitchen.commonAverageCheck,
-          commonTotal: kitchen.commonTotal,
         })
       } else {
         await repository.kitchen.updateRevenue(revenue.id, {
           total: kitchen.total,
           checks: kitchen.checks,
           averageCheck: kitchen.averageCheck,
-          commonAverageCheck: kitchen.commonAverageCheck,
-          commonTotal: kitchen.commonTotal,
         })
       }
 
