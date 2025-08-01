@@ -1,26 +1,13 @@
 {
   "name": "roll-stack",
-  "version": "0.0.0",
+  "version": "",
   "private": true,
   "packageManager": "pnpm@10.14.0",
-  "description": "The technological heart of a Sushi Love delivery network.",
-  "author": "Nick Kosarev <hmbanan666@hotmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/nextorders/roll-stack",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nextorders/roll-stack"
+    "url": "git+https://github.com/nextorders/roll-stack.git"
   },
-  "bugs": {
-    "url": "https://github.com/nextorders/roll-stack/issues"
-  },
-  "keywords": [
-    "ecommerce",
-    "ecommerce-platform",
-    "shop",
-    "self-hosted",
-    "website"
-  ],
   "engines": {
     "node": ">=22.18.0",
     "pnpm": ">=10.14.0"
