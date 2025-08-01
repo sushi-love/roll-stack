@@ -3,7 +3,7 @@ packages:
   - packages/*
 
 catalog:
-  '@antfu/eslint-config': ^4.19.0
+  '@antfu/eslint-config': ^5.0.0
   '@commitlint/cli': ^19.8.1
   '@commitlint/config-conventional': ^19.8.1
   '@date-fns/tz': ^1.2.0
@@ -68,7 +68,7 @@ catalog:
   vite-tsconfig-paths: ^5.1.4
   vitest: ^3.2.4
   vitest-browser-vue: ^1.0.0
-  vue-tsc: ^2.2.12
+  vue-tsc: ^3.0.4
   zod: 3.25.67
 
 ignoredBuiltDependencies:
