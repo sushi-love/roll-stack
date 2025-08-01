@@ -16,7 +16,6 @@ export default defineTask({
         }
 
         const checks = allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.checks, 0)
-        // const averageCheck = Math.round(allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.averageCheck, 0) / allRevenuesThisPeriod.length)
         const total = Math.round(allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.total, 0))
 
         await repository.network.updateMetrics(m.id, {

@@ -7,7 +7,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev --port 3502",
     "preview": "PORT=3502 nuxt preview",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf .output",
     "clean:modules": "rm -rf .nuxt node_modules",
     "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare"
