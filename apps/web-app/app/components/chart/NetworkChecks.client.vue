@@ -21,7 +21,6 @@
         :x="x"
         :y="y"
         :color="color"
-        :line-dash-array="lineDashArray"
       />
       <VisArea
         :x="x"
@@ -93,13 +92,12 @@ const x = (_: DataRecord, i: number) => i
 const y = (d: DataRecord) => d.averageCheck
 const yArea = (d: DataRecord) => d.averageCheck
 
-const color = (_: DataRecord, i: number) => ['var(--ui-info)', 'var(--ui-info)'][i]
-const lineDashArray = (_: DataRecord, i: number) => [i === 0 ? undefined : 3]
+const color = () => 'var(--ui-info)'
 
 const total = computed(() => {
-  const count = data.value.filter((d) => d.averageCheck).length
-  const avg = data.value.reduce((acc: number, { averageCheck }) => acc + averageCheck, 0)
-  return avg > 0 && count > 0 ? Math.floor(avg / count) : 0
+  const totalRevenue = data.value.reduce((acc, d) => acc + (d.averageCheck * d.checks), 0)
+  const totalChecks = data.value.reduce((acc, d) => acc + d.checks, 0)
+  return totalChecks > 0 ? Math.floor(totalRevenue / totalChecks) : 0
 })
 
 const formatNumber = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format
