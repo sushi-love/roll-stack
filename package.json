@@ -2,17 +2,17 @@
   "name": "roll-stack",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.14.0",
   "description": "The technological heart of a Sushi Love delivery network.",
   "author": "Nick Kosarev <hmbanan666@hotmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/sushi-love/roll-stack",
+  "homepage": "https://github.com/nextorders/roll-stack",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sushi-love/roll-stack"
+    "url": "git+https://github.com/nextorders/roll-stack"
   },
   "bugs": {
-    "url": "https://github.com/sushi-love/roll-stack/issues"
+    "url": "https://github.com/nextorders/roll-stack/issues"
   },
   "keywords": [
     "ecommerce",
@@ -22,8 +22,8 @@
     "website"
   ],
   "engines": {
-    "node": ">=22.17.1",
-    "pnpm": ">=10.13.1"
+    "node": ">=22.18.0",
+    "pnpm": ">=10.14.0"
   },
   "scripts": {
     "release": "changelogen-monorepo --release --push",
