@@ -69,7 +69,7 @@ catalog:
   vite-tsconfig-paths: ^5.1.4
   vitest: ^3.2.4
   vitest-browser-vue: ^1.0.0
-  vue-tsc: ^2.2.12
+  vue-tsc: ^3.0.4
   zod: 3.25.67
 
 ignoredBuiltDependencies:
