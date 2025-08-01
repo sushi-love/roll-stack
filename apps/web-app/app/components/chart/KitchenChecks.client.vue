@@ -127,7 +127,7 @@ function xTicks(i: number) {
   return formatDate(data.value[i].date)
 }
 
-const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> Средний чек: ${formatNumber(d.averageCheck)}<br> Средний по сети: ${formatNumber(d.commonAverageCheck)}`
+const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}, средний ${formatNumber(d.averageCheck)}<br> Средний по сети: ${formatNumber(d.commonAverageCheck)}`
 </script>
 
 <style scoped>
