@@ -7,15 +7,12 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "build": "unbuild",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "clean": "rm -rf dist",
     "clean:modules": "rm -rf node_modules",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "pnpm build"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "catalog:",
@@ -28,7 +25,6 @@
     "@types/pg": "catalog:",
     "dotenv": "catalog:",
     "drizzle-kit": "catalog:",
-    "typescript": "catalog:",
-    "unbuild": "catalog:"
+    "typescript": "catalog:"
   }
 }

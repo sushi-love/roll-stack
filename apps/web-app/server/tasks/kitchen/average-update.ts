@@ -7,27 +7,21 @@ export default defineTask({
   },
   async run() {
     try {
-      const revenues = await repository.kitchen.listRevenuesToUpdate()
-      let metrics = await repository.network.listMetrics()
+      const metrics = await repository.network.listMetrics()
 
-      for (const revenue of revenues) {
-        // If have metric for this date
-        if (metrics.find((metric) => metric.date === revenue.date)) {
+      for (const m of metrics) {
+        const allRevenuesThisPeriod = await repository.kitchen.listRevenuesForDate(m.date)
+        if (!allRevenuesThisPeriod.length) {
           continue
         }
 
-        const allRevenuesThisPeriod = await repository.kitchen.listRevenuesForDate(revenue.date)
-        const averageCheck = Math.round(allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.averageCheck, 0) / allRevenuesThisPeriod.length)
-        const total = Math.round(allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.total, 0) / allRevenuesThisPeriod.length)
+        const checks = allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.checks, 0)
+        const total = Math.round(allRevenuesThisPeriod.reduce((acc, curr) => acc + curr.total, 0))
 
-        await repository.network.createMetrics({
-          date: revenue.date,
-          averageCheck,
+        await repository.network.updateMetrics(m.id, {
+          checks,
           total,
         })
-
-        // Update
-        metrics = await repository.network.listMetrics()
       }
     } catch (error) {
       errorResolver(error)

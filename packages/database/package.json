@@ -4,27 +4,15 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
-    }
+    ".": "./src/index.ts"
   },
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "migrations"
-  ],
   "scripts": {
-    "build": "unbuild",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "clean": "rm -rf dist",
     "clean:modules": "rm -rf node_modules",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "pnpm build"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "catalog:",
@@ -37,7 +25,6 @@
     "@types/pg": "catalog:",
     "dotenv": "catalog:",
     "drizzle-kit": "catalog:",
-    "typescript": "catalog:",
-    "unbuild": "catalog:"
+    "typescript": "catalog:"
   }
 }
