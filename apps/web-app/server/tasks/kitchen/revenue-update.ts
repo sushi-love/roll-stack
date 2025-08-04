@@ -17,16 +17,25 @@ export default defineTask({
       const thisMonday = startOfWeek(utcNow, { weekStartsOn: 1 })
       const thisSunday = endOfWeek(utcNow, { weekStartsOn: 1 })
 
-      for (const kitchen of kitchens) {
-        const revenues = await repository.kitchen.listRevenuesByKitchenForPeriod(kitchen.id, thisMonday, thisSunday)
+      // Previous week
+      const utcWeekAgo = new Date(utcNow.getTime() - 7 * 24 * 60 * 60 * 1000)
+      const prevMonday = startOfWeek(utcWeekAgo, { weekStartsOn: 1 })
+      const prevSunday = endOfWeek(utcWeekAgo, { weekStartsOn: 1 })
 
-        const revenueForThisWeek = Math.round(revenues.reduce((acc, curr) => acc + curr.total, 0))
-        if (revenueForThisWeek === kitchen.revenueForThisWeek) {
+      for (const kitchen of kitchens) {
+        const revenuesThisWeek = await repository.kitchen.listRevenuesByKitchenForPeriod(kitchen.id, thisMonday, thisSunday)
+        const revenuesPrevWeek = await repository.kitchen.listRevenuesByKitchenForPeriod(kitchen.id, prevMonday, prevSunday)
+
+        const revenueForThisWeek = Math.round(revenuesThisWeek.reduce((acc, curr) => acc + curr.total, 0))
+        const revenueForPreviousWeek = Math.round(revenuesPrevWeek.reduce((acc, curr) => acc + curr.total, 0))
+
+        if (revenueForThisWeek === kitchen.revenueForThisWeek && revenueForPreviousWeek === kitchen.revenueForPreviousWeek) {
           continue
         }
 
         await repository.kitchen.update(kitchen.id, {
           revenueForThisWeek,
+          revenueForPreviousWeek,
         })
 
         // logger.log(`Kitchen ${kitchen.id}: Revenue updated from ${kitchen.revenueForThisWeek} to ${revenueForThisWeek}`)
