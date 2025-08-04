@@ -82,6 +82,12 @@ const menuItems = computed(() => [
     badge: partnerStore.partners.length,
   },
   {
+    label: 'Реестр договоров',
+    to: '/agreement',
+    icon: 'i-lucide-scroll',
+    active: route.path.startsWith('/agreement'),
+  },
+  {
     label: 'Отзывы клиентов',
     icon: 'i-lucide-star',
     onSelect: () => {

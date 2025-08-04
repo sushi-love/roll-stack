@@ -1,6 +1,6 @@
 import type { Kitchen, Partner, PartnerAgreement, PartnerAgreementFile, PartnerLegalEntity } from '@roll-stack/database'
 
-type PartnerAgreementWithData = PartnerAgreement & {
+export type PartnerAgreementWithData = PartnerAgreement & {
   files: PartnerAgreementFile[]
 }
 
@@ -15,6 +15,7 @@ type PartnerWithData = Partner & {
 
 export const usePartnerStore = defineStore('partner', () => {
   const partners = ref<PartnerWithData[]>([])
+  const agreements = ref<PartnerAgreementWithData[]>([])
 
   async function update() {
     try {
@@ -24,6 +25,25 @@ export const usePartnerStore = defineStore('partner', () => {
       }
 
       partners.value = data
+
+      await updateAgreements()
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('404')) {
+          // Not found
+        }
+      }
+    }
+  }
+
+  async function updateAgreements() {
+    try {
+      const data = await $fetch('/api/partner/agreement/list')
+      if (!data) {
+        return
+      }
+
+      agreements.value = data
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('404')) {
@@ -35,6 +55,7 @@ export const usePartnerStore = defineStore('partner', () => {
 
   return {
     partners,
+    agreements,
 
     update,
   }

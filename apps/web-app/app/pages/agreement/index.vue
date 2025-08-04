@@ -1,22 +1,12 @@
 <template>
-  <Header :title="t('app.menu.kitchens')">
-    <UButton
-      size="lg"
-      variant="solid"
-      color="secondary"
-      class="w-full md:w-fit"
-      icon="i-lucide-upload"
-      label="Добавить выручку"
-      @click="modalUploadKitchenRevenue.open()"
-    />
-  </Header>
+  <Header title="Договора" />
 
   <Content>
     <div class="flex flex-wrap items-center justify-between gap-1.5">
       <div class="flex flex-row gap-2.5">
         <UInput
           v-model="filterValue"
-          placeholder="По названию"
+          placeholder="По номеру"
           class="max-w-sm"
           icon="i-lucide-search"
         />
@@ -75,47 +65,44 @@
       <template #id-cell="{ row }">
         {{ row.getValue('id') }}
       </template>
-      <template #rating-cell="{ row }">
-        <UPopover
-          mode="hover"
-          :content="{
-            align: 'center',
-            side: 'bottom',
-            sideOffset: 8,
-          }"
-        >
-          <FeedbackRating :rating="row.getValue('rating')" />
-
-          <template #content>
-            <div class="h-auto w-58 p-4 flex flex-col gap-2">
-              <FeedbackPointsBlock :points="row.getValue('feedbackPoints')" />
-            </div>
-          </template>
-        </UPopover>
-      </template>
-      <template #feedbackPoints-cell="">
-        -
-      </template>
-      <template #name-cell="{ row }">
-        <ULink :to="`/kitchen/${row.getValue('id')}`" class="font-medium text-highlighted">
-          {{ row.getValue('name') }}
-        </ULink>
-      </template>
-      <template #address-cell="{ row }">
-        <div class="text-sm/4 whitespace-pre-wrap max-w-56">
-          {{ row.getValue('address') }}, {{ row.getValue('city') }}
+      <template #internalId-cell="{ row }">
+        <div class="flex flex-row gap-2 items-center">
+          <ULink :to="`/agreement/${row.getValue('id')}`" class="text-base font-medium text-highlighted">
+            {{ row.getValue('internalId') }}
+          </ULink>
+          <UIcon
+            v-if="row.getValue('isActive')"
+            name="i-lucide-check"
+            class="size-4 text-secondary"
+          />
         </div>
       </template>
-      <template #revenueForPreviousWeek-cell="{ row }">
-        <div>{{ formatNumber(row.getValue('revenueForPreviousWeek')) }}</div>
+      <template #files-cell="{ row }">
+        <div>
+          <AgreementFilesBlock :files="row.getValue('files') as File[]" />
+        </div>
       </template>
-      <template #revenueForThisWeek-cell="{ row }">
-        <div>{{ formatNumber(row.getValue('revenueForThisWeek')) }}</div>
+      <template #royalty-cell="{ row }">
+        {{ row.getValue('royalty') }}
+      </template>
+      <template #minRoyaltyPerMonth-cell="{ row }">
+        {{ formatNumber(row.getValue('minRoyaltyPerMonth')) }}
+      </template>
+      <template #marketingFee-cell="{ row }">
+        {{ row.getValue('marketingFee') }}
+      </template>
+      <template #minMarketingFeePerMonth-cell="{ row }">
+        {{ formatNumber(row.getValue('minMarketingFeePerMonth')) }}
+      </template>
+      <template #comment-cell="{ row }">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-56">
+          {{ row.getValue('comment') }}
+        </div>
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-end" data-action="true">
           <UDropdownMenu
-            :items="getDropdownActions(row.original as Kitchen)"
+            :items="getDropdownActions(row.original as PartnerAgreement)"
             :content="{ align: 'end' }"
             class="ml-auto"
           >
@@ -152,8 +139,8 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { Kitchen } from '@roll-stack/database'
-import { ModalUploadKitchenRevenue } from '#components'
+import type { File, PartnerAgreement } from '@roll-stack/database'
+import type { PartnerAgreementWithData } from '~/stores/partner'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 
@@ -161,42 +148,37 @@ const UButton = resolveComponent('UButton')
 
 const { t } = useI18n()
 
-const kitchenStore = useKitchenStore()
-
 const filterValue = ref('')
 
-const data = computed<KitchenWithData[]>(() => {
-  const finalRows = kitchenStore.kitchens.filter((k) => k.name.toLowerCase().includes(filterValue.value.toLowerCase()))
+const partnerStore = usePartnerStore()
 
-  // if (filterByTagValue.value) {
-  //   finalRows = finalRows.filter((product) => product.tags.some((tag) => tag.name.toLowerCase().includes(filterByTagValue.value.toLowerCase())))
-  // }
+const data = computed<PartnerAgreementWithData[]>(() => {
+  const finalRows = partnerStore.agreements.filter((k) => k.internalId.toLowerCase().includes(filterValue.value.toLowerCase()))
 
   return finalRows
 })
 
 const columnVisibility = ref({
   id: false,
-  feedbackPoints: false,
-  city: false,
+  isActive: false,
 })
 const rowSelection = ref()
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 50,
+  pageSize: 100,
 })
 const sorting = ref([
   {
-    id: 'rating',
+    id: 'internalId',
     desc: true,
   },
 ])
 
-const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
+const columns: Ref<TableColumn<PartnerAgreementWithData>[]> = ref([{
   accessorKey: 'id',
   header: 'Id',
 }, {
-  accessorKey: 'rating',
+  accessorKey: 'internalId',
   enableSorting: true,
   header: ({ column }) => {
     const isSorted = column.getIsSorted()
@@ -205,73 +187,40 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
     return h(UButton, {
       color: 'neutral',
       variant: 'ghost',
-      label: 'Рейтинг',
+      label: '№ договора',
       icon: isSorted ? icon : 'i-lucide-arrow-up-down',
       class: '-mx-2.5',
       onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
     })
   },
 }, {
-  accessorKey: 'feedbackPoints',
-  header: 'Отзывы',
+  accessorKey: 'files',
+  header: 'Файлы / сканы',
 }, {
-  accessorKey: 'name',
-  header: ({ column }) => {
-    const isSorted = column.getIsSorted()
-    const icon = isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow'
-
-    return h(UButton, {
-      color: 'neutral',
-      variant: 'ghost',
-      label: 'Название',
-      icon: isSorted ? icon : 'i-lucide-arrow-up-down',
-      class: '-mx-2.5',
-      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-    })
-  },
+  accessorKey: 'royalty',
+  header: 'Роялти, %',
 }, {
-  accessorKey: 'address',
-  header: 'Адрес',
+  accessorKey: 'minRoyaltyPerMonth',
+  header: 'Мин. роялти',
 }, {
-  accessorKey: 'city',
-  header: 'Населенный пункт',
+  accessorKey: 'marketingFee',
+  header: 'Маркетинговый взнос, %',
 }, {
-  accessorKey: 'revenueForPreviousWeek',
-  header: ({ column }) => {
-    const isSorted = column.getIsSorted()
-    const icon = isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow'
-
-    return h(UButton, {
-      color: 'neutral',
-      variant: 'ghost',
-      label: 'Прошлая неделя',
-      icon: isSorted ? icon : 'i-lucide-arrow-up-down',
-      class: '-mx-2.5',
-      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-    })
-  },
+  accessorKey: 'minMarketingFeePerMonth',
+  header: 'Мин. маркетинговый взнос',
 }, {
-  accessorKey: 'revenueForThisWeek',
-  header: ({ column }) => {
-    const isSorted = column.getIsSorted()
-    const icon = isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow'
-
-    return h(UButton, {
-      color: 'neutral',
-      variant: 'ghost',
-      label: 'Эта неделя',
-      icon: isSorted ? icon : 'i-lucide-arrow-up-down',
-      class: '-mx-2.5',
-      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-    })
-  },
+  accessorKey: 'comment',
+  header: 'Комментарий',
+}, {
+  accessorKey: 'isActive',
+  header: 'Активен',
 }, {
   id: 'action',
   enableSorting: false,
   enableHiding: false,
 }])
 
-function getDropdownActions(_: Kitchen): DropdownMenuItem[][] {
+function getDropdownActions(_: PartnerAgreement): DropdownMenuItem[][] {
   return [
     [
       {
@@ -290,10 +239,7 @@ function getDropdownActions(_: Kitchen): DropdownMenuItem[][] {
 
 const table = useTemplateRef('table')
 
-const overlay = useOverlay()
-const modalUploadKitchenRevenue = overlay.create(ModalUploadKitchenRevenue)
-
 useHead({
-  title: t('app.menu.kitchens'),
+  title: 'Договора',
 })
 </script>

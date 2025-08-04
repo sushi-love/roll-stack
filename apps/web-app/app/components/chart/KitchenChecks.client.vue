@@ -160,8 +160,6 @@ const total = computed(() => {
   return avg > 0 && count > 0 ? Math.floor(avg / count) : 0
 })
 
-const formatNumber = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format
-
 function formatDate(date: Date): string {
   return ({
     daily: format(date, 'd MMMM', { locale: ru }),
