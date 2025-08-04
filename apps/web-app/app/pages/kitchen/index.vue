@@ -235,7 +235,7 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
 }, {
   accessorKey: 'city',
   header: 'Населенный пункт',
-},{
+}, {
   accessorKey: 'revenueForPreviousWeek',
   header: ({ column }) => {
     const isSorted = column.getIsSorted()
