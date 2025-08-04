@@ -1,7 +1,8 @@
 <template>
   <Content>
-    <div>
+    <div class="flex flex-row gap-3.5 items-center">
       <DateRangePicker v-model="range" />
+      <PeriodSelect v-model="period" :range="range" />
     </div>
 
     <ChartKitchenRevenue

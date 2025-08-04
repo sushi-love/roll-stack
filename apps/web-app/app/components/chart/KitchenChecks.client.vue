@@ -3,7 +3,7 @@
     <template #header>
       <div>
         <p class="text-xs text-muted uppercase mb-1.5">
-          Средний чек за {{ data.length }} {{ pluralizationRu(data.length, ['день', 'дня', 'дней']) }}
+          {{ formatTotalLabel('Средний чек', data.length) }}
         </p>
         <p class="text-3xl text-highlighted font-semibold">
           {{ formatNumber(total) }}
@@ -38,7 +38,7 @@
 
       <VisCrosshair
         color="var(--ui-info)"
-        :template="template"
+        :template="formatTemplate"
       />
 
       <VisTooltip />
@@ -49,11 +49,12 @@
 <script setup lang="ts">
 import type { Period, Range } from '#shared/types'
 import { VisArea, VisAxis, VisCrosshair, VisLine, VisTooltip, VisXYContainer } from '@unovis/vue'
-import { eachDayOfInterval, eachMonthOfInterval, eachWeekOfInterval, format } from 'date-fns'
+import { addDays, eachDayOfInterval, eachMonthOfInterval, eachWeekOfInterval, format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
 type DataRecord = {
-  date: Date
+  start: Date
+  end: Date
   checks: number
   averageCheck: number
   commonAverageCheck: number
@@ -75,22 +76,72 @@ const data = ref<DataRecord[]>([])
 watch([() => period, () => range, () => values, () => metrics], () => {
   const dates = ({
     daily: eachDayOfInterval,
-    weekly: eachWeekOfInterval,
+    weekly: () => eachWeekOfInterval(range, { weekStartsOn: 1 }),
     monthly: eachMonthOfInterval,
   } as Record<Period, typeof eachDayOfInterval>)[period](range)
 
-  data.value = dates.map((date) => {
-    const dateStr = format(date, 'yyyy-MM-dd')
-    const value = values.find((d) => d.date.startsWith(dateStr))
-    const metric = metrics.find((d) => d.date.startsWith(dateStr))
+  if (period === 'daily') {
+    data.value = dates.map((date) => {
+      const dateStr = format(date, 'yyyy-MM-dd')
+      const value = values.find((d) => d.date.startsWith(dateStr))
+      const metric = metrics.find((d) => d.date.startsWith(dateStr))
 
-    return {
-      date,
-      checks: value?.checks ?? 0,
-      averageCheck: value?.averageCheck ?? 0,
-      commonAverageCheck: metric?.averageCheck ?? 0,
+      return {
+        start: date,
+        end: date,
+        checks: value?.checks ?? 0,
+        averageCheck: value?.averageCheck ?? 0,
+        commonAverageCheck: metric?.averageCheck ?? 0,
+      }
+    })
+  }
+
+  if (period === 'weekly') {
+    const points = []
+
+    for (const date of dates) {
+      const dateTo = addDays(date, 6)
+      const allDates = eachDayOfInterval({
+        start: date,
+        end: dateTo,
+      })
+
+      let daysWithValues = 0
+      let daysWithMetrics = 0
+
+      let checks = 0
+      let averageCheck = 0
+      let commonAverageCheck = 0
+
+      for (const d of allDates) {
+        // All in one point
+        const dateStr = format(d, 'yyyy-MM-dd')
+        const value = values.find((d) => d.date.startsWith(dateStr))
+        const metric = metrics.find((d) => d.date.startsWith(dateStr))
+
+        checks += value?.checks ?? 0
+
+        if (value?.averageCheck) {
+          averageCheck += value.averageCheck
+          daysWithValues++
+        }
+        if (metric?.averageCheck) {
+          commonAverageCheck += metric.averageCheck
+          daysWithMetrics++
+        }
+      }
+
+      points.push({
+        start: date,
+        end: dateTo,
+        checks,
+        averageCheck: daysWithValues > 0 ? averageCheck / daysWithValues : 0,
+        commonAverageCheck: daysWithMetrics > 0 ? commonAverageCheck / daysWithMetrics : 0,
+      })
     }
-  })
+
+    data.value = points
+  }
 }, { immediate: true })
 
 const x = (_: DataRecord, i: number) => i
@@ -119,15 +170,31 @@ function formatDate(date: Date): string {
   })[period]
 }
 
+function formatTotalLabel(label: string, value: number): string {
+  return ({
+    daily: `${label} за ${value} ${pluralizationRu(value, ['день', 'дня', 'дней'])}`,
+    weekly: `${label} за ${value} ${pluralizationRu(value, ['неделю', 'недели', 'недель'])}`,
+    monthly: `${label} за ${value} ${pluralizationRu(value, ['месяц', 'месяца', 'месяцев'])}`,
+  })[period]
+}
+
 function xTicks(i: number) {
   if (i === 0 || i === data.value.length - 1 || !data.value[i]) {
     return ''
   }
 
-  return formatDate(data.value[i].date)
+  return formatDate(data.value[i].start)
 }
 
-const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}, средний ${formatNumber(d.averageCheck)}<br> Средний по сети: ${formatNumber(d.commonAverageCheck)}`
+function formatTemplate(d: DataRecord) {
+  const title = ({
+    daily: `${formatDate(d.start)}, ${format(d.start, 'eeee', { locale: ru })}`,
+    weekly: `${formatDate(d.start)} - ${formatDate(d.end)}`,
+    monthly: `${formatDate(d.start)} - ${formatDate(d.end)}`,
+  })[period]
+
+  return `<strong>${title}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}, средний ${formatNumber(d.averageCheck)}<br> Средний по сети: ${formatNumber(d.commonAverageCheck)}`
+}
 </script>
 
 <style scoped>
