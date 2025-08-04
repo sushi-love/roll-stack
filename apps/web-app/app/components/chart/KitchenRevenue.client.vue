@@ -157,8 +157,6 @@ const lineDashArray = (_: DataRecord, i: number) => [i === 0 ? undefined : 3]
 
 const total = computed(() => data.value.reduce((acc: number, { total }) => acc + total, 0))
 
-const formatNumber = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format
-
 function formatDate(date: Date): string {
   return ({
     daily: format(date, 'd MMMM', { locale: ru }),

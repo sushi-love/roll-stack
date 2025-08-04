@@ -143,8 +143,6 @@ const total = computed(() => {
   return totalChecks > 0 ? Math.floor(totalRevenue / totalChecks) : 0
 })
 
-const formatNumber = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format
-
 function formatDate(date: Date): string {
   return ({
     daily: format(date, 'd MMMM', { locale: ru }),
