@@ -130,7 +130,7 @@ const linkItems = computed(() => [
     active: route.path.startsWith('/head/task'),
   },
   {
-    label: 'Показатели сети',
+    label: t('app.network.metrics'),
     to: '/network',
     icon: 'i-lucide-square-kanban',
     active: route.path.startsWith('/network'),

@@ -3,7 +3,7 @@
     <template #header>
       <div>
         <p class="text-xs text-muted uppercase mb-1.5">
-          Выручка за {{ data.length }} {{ pluralizationRu(data.length, ['день', 'дня', 'дней']) }}
+          {{ formatTotalLabel('Выручка', data.length) }}
         </p>
         <p class="text-3xl text-highlighted font-semibold">
           {{ formatNumber(total) }}
@@ -38,7 +38,7 @@
 
       <VisCrosshair
         color="var(--ui-secondary)"
-        :template="template"
+        :template="formatTemplate"
       />
 
       <VisTooltip />
@@ -49,11 +49,12 @@
 <script setup lang="ts">
 import type { Period, Range } from '#shared/types'
 import { VisArea, VisAxis, VisCrosshair, VisLine, VisTooltip, VisXYContainer } from '@unovis/vue'
-import { eachDayOfInterval, eachMonthOfInterval, eachWeekOfInterval, format } from 'date-fns'
+import { addDays, eachDayOfInterval, eachMonthOfInterval, eachWeekOfInterval, format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
 type DataRecord = {
-  date: Date
+  start: Date
+  end: Date
   total: number
   checks: number
   averageCheck: number
@@ -76,23 +77,66 @@ const data = ref<DataRecord[]>([])
 watch([() => period, () => range, () => values, () => metrics], () => {
   const dates = ({
     daily: eachDayOfInterval,
-    weekly: eachWeekOfInterval,
+    weekly: () => eachWeekOfInterval(range, { weekStartsOn: 1 }),
     monthly: eachMonthOfInterval,
   } as Record<Period, typeof eachDayOfInterval>)[period](range)
 
-  data.value = dates.map((date) => {
-    const dateStr = format(date, 'yyyy-MM-dd')
-    const value = values.find((d) => d.date.startsWith(dateStr))
-    const metric = metrics.find((d) => d.date.startsWith(dateStr))
+  if (period === 'daily') {
+    data.value = dates.map((date) => {
+      const dateStr = format(date, 'yyyy-MM-dd')
+      const value = values.find((d) => d.date.startsWith(dateStr))
+      const metric = metrics.find((d) => d.date.startsWith(dateStr))
 
-    return {
-      date,
-      total: value?.total ?? 0,
-      checks: value?.checks ?? 0,
-      averageCheck: value?.averageCheck ?? 0,
-      commonTotal: metric?.averageTotal ?? 0,
+      return {
+        start: date,
+        end: date,
+        total: value?.total ?? 0,
+        checks: value?.checks ?? 0,
+        averageCheck: value?.averageCheck ?? 0,
+        commonTotal: metric?.averageTotal ?? 0,
+      }
+    })
+  }
+
+  if (period === 'weekly') {
+    const points = []
+
+    for (const date of dates) {
+      const dateTo = addDays(date, 6)
+      const allDates = eachDayOfInterval({
+        start: date,
+        end: dateTo,
+      })
+
+      let total = 0
+      let checks = 0
+      let averageCheck = 0
+      let commonTotal = 0
+
+      for (const d of allDates) {
+        // All in one point
+        const dateStr = format(d, 'yyyy-MM-dd')
+        const value = values.find((d) => d.date.startsWith(dateStr))
+        const metric = metrics.find((d) => d.date.startsWith(dateStr))
+
+        total += value?.total ?? 0
+        checks += value?.checks ?? 0
+        averageCheck += value?.averageCheck ?? 0
+        commonTotal += metric?.averageTotal ?? 0
+      }
+
+      points.push({
+        start: date,
+        end: dateTo,
+        total,
+        checks,
+        averageCheck: averageCheck / 7,
+        commonTotal,
+      })
     }
-  })
+
+    data.value = points
+  }
 }, { immediate: true })
 
 const x = (_: DataRecord, i: number) => i
@@ -117,15 +161,31 @@ function formatDate(date: Date): string {
   })[period]
 }
 
+function formatTotalLabel(label: string, value: number): string {
+  return ({
+    daily: `${label} за ${value} ${pluralizationRu(value, ['день', 'дня', 'дней'])}`,
+    weekly: `${label} за ${value} ${pluralizationRu(value, ['неделю', 'недели', 'недель'])}`,
+    monthly: `${label} за ${value} ${pluralizationRu(value, ['месяц', 'месяца', 'месяцев'])}`,
+  })[period]
+}
+
 function xTicks(i: number) {
   if (i === 0 || i === data.value.length - 1 || !data.value[i]) {
     return ''
   }
 
-  return formatDate(data.value[i].date)
+  return formatDate(data.value[i].start)
 }
 
-const template = (d: DataRecord) => `<strong>${formatDate(d.date)}, ${format(d.date, 'eeee', { locale: ru })}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}, средний ${formatNumber(d.averageCheck)}<br> Выручка: ${formatNumber(d.total)}<br> Средняя по сети: ${formatNumber(d.commonTotal)}`
+function formatTemplate(d: DataRecord) {
+  const title = ({
+    daily: `${formatDate(d.start)}, ${format(d.start, 'eeee', { locale: ru })}`,
+    weekly: `${formatDate(d.start)} - ${formatDate(d.end)}`,
+    monthly: `${formatDate(d.start)} - ${formatDate(d.end)}`,
+  })[period]
+
+  return `<strong>${title}</strong><br> ${d.checks} ${pluralizationRu(d.checks, ['чек', 'чека', 'чеков'])}, средний ${formatNumber(d.averageCheck)}<br> Выручка: ${formatNumber(d.total)}<br> Средняя по сети: ${formatNumber(d.commonTotal)}`
+}
 </script>
 
 <style scoped>
