@@ -409,6 +409,7 @@ export const kitchens = pgTable('kitchens', {
   isPickupAvailable: boolean('is_pickup_available').notNull().default(true),
   rating: numeric('rating', { mode: 'number' }).notNull().default(0),
   revenueForThisWeek: numeric('revenue_for_this_week', { mode: 'number' }).notNull().default(0),
+  revenueForPreviousWeek: numeric('revenue_for_previous_week', { mode: 'number' }).notNull().default(0),
   iikoAlias: varchar('iiko_alias').unique(),
   partnerId: cuid2('partner_id').references(() => partners.id),
 })

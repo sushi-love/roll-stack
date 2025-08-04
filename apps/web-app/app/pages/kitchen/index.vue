@@ -106,6 +106,9 @@
           {{ row.getValue('address') }}, {{ row.getValue('city') }}
         </div>
       </template>
+      <template #revenueForPreviousWeek-cell="{ row }">
+        <div>{{ row.getValue('revenueForPreviousWeek') }} руб</div>
+      </template>
       <template #revenueForThisWeek-cell="{ row }">
         <div>{{ row.getValue('revenueForThisWeek') }} руб</div>
       </template>
@@ -232,6 +235,21 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
 }, {
   accessorKey: 'city',
   header: 'Населенный пункт',
+}, {
+  accessorKey: 'revenueForPreviousWeek',
+  header: ({ column }) => {
+    const isSorted = column.getIsSorted()
+    const icon = isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow'
+
+    return h(UButton, {
+      color: 'neutral',
+      variant: 'ghost',
+      label: 'Выручка за прошлую неделю',
+      icon: isSorted ? icon : 'i-lucide-arrow-up-down',
+      class: '-mx-2.5',
+      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    })
+  },
 }, {
   accessorKey: 'revenueForThisWeek',
   header: ({ column }) => {
