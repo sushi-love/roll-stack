@@ -106,6 +106,9 @@ watch([() => period, () => range, () => values, () => metrics], () => {
         end: dateTo,
       })
 
+      let daysWithValues = 0
+      let daysWithMetrics = 0
+
       let checks = 0
       let averageCheck = 0
       let commonAverageCheck = 0
@@ -117,16 +120,23 @@ watch([() => period, () => range, () => values, () => metrics], () => {
         const metric = metrics.find((d) => d.date.startsWith(dateStr))
 
         checks += value?.checks ?? 0
-        averageCheck += value?.averageCheck ?? 0
-        commonAverageCheck += metric?.averageCheck ?? 0
+
+        if (value?.averageCheck) {
+          averageCheck += value.averageCheck
+          daysWithValues++
+        }
+        if (metric?.averageCheck) {
+          commonAverageCheck += metric.averageCheck
+          daysWithMetrics++
+        }
       }
 
       points.push({
         start: date,
         end: dateTo,
         checks,
-        averageCheck: averageCheck / 7,
-        commonAverageCheck: commonAverageCheck / 7,
+        averageCheck: daysWithValues > 0 ? averageCheck / daysWithValues : 0,
+        commonAverageCheck: daysWithMetrics > 0 ? commonAverageCheck / daysWithMetrics : 0,
       })
     }
 

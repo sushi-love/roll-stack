@@ -106,6 +106,8 @@ watch([() => period, () => range, () => values], () => {
         end: dateTo,
       })
 
+      let daysWithValues = 0
+
       let total = 0
       let checks = 0
       let averageCheck = 0
@@ -118,8 +120,12 @@ watch([() => period, () => range, () => values], () => {
 
         total += value?.total ?? 0
         checks += value?.checks ?? 0
-        averageCheck += value?.averageCheck ?? 0
         averageTotal += value?.averageTotal ?? 0
+
+        if (value?.averageCheck) {
+          averageCheck += value.averageCheck
+          daysWithValues++
+        }
       }
 
       points.push({
@@ -127,7 +133,7 @@ watch([() => period, () => range, () => values], () => {
         end: dateTo,
         total,
         checks,
-        averageCheck: averageCheck / 7,
+        averageCheck: daysWithValues > 0 ? averageCheck / daysWithValues : 0,
         averageTotal,
       })
     }
