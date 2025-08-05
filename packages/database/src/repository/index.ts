@@ -19,6 +19,7 @@ import { Print } from './print'
 import { Product } from './product'
 import { Task } from './task'
 import { User } from './user'
+import { WasabiVista } from './wasabi-vista'
 
 class Repository {
   readonly channel = Channel
@@ -41,6 +42,7 @@ class Repository {
   readonly product = Product
   readonly task = Task
   readonly user = User
+  readonly wasabiVista = WasabiVista
 
   async checkHealth(): Promise<boolean> {
     await useDatabase().query.users.findFirst()

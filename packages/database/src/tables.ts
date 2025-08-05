@@ -589,6 +589,21 @@ export const networkMetrics = pgTable('network_metrics', {
   averageCheck: numeric('average_check', { mode: 'number' }).notNull().default(0),
 })
 
+export const wasabiVistaUsers = pgTable('wasabi_vista_users', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  accessKey: varchar('access_key').notNull().unique(),
+  telegramId: varchar('telegram_id').notNull().unique(),
+  firstName: varchar('first_name'),
+  lastName: varchar('last_name'),
+  username: varchar('username'),
+  userId: cuid2('user_id').references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
@@ -601,6 +616,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
   }),
   postLikes: many(postLikes),
   postComments: many(postComments),
+  wasabiVistaUsers: many(wasabiVistaUsers),
 }))
 
 export const partnerRelations = relations(partners, ({ many, one }) => ({
@@ -941,5 +957,12 @@ export const clientReviewRelations = relations(clientReviews, ({ one }) => ({
   kitchen: one(kitchens, {
     fields: [clientReviews.kitchenId],
     references: [kitchens.id],
+  }),
+}))
+
+export const wasabiVistaUserRelations = relations(wasabiVistaUsers, ({ one }) => ({
+  user: one(users, {
+    fields: [wasabiVistaUsers.userId],
+    references: [users.id],
   }),
 }))
