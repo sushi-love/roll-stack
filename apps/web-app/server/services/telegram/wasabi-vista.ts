@@ -32,7 +32,7 @@ export async function useCreateWasabiVistaBot() {
           username: ctx.message.from.username,
         })
 
-        logger.log('new user', createdUser.id, ctx.message.from.id, ctx.message.text, accessKey)
+        logger.log('new user', createdUser.id, ctx.message.from.id, ctx.message.text)
 
         await ctx.reply(`Ключ доступа: ${accessKey}`)
 
