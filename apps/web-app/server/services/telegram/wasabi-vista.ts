@@ -5,7 +5,7 @@ const { telegram } = useRuntimeConfig()
 
 let bot: Bot | null = null
 
-export function useCreateWasabiVistaBot() {
+export async function useCreateWasabiVistaBot() {
   bot = new Bot(telegram.wasabiVistaToken)
 
   bot.on('message:text', async (ctx) => {
@@ -14,7 +14,7 @@ export function useCreateWasabiVistaBot() {
     if (ctx.hasCommand('start')) {
       // Welcome message with buttons
       await ctx.reply(
-        'Привет!',
+        `Ключ доступа: ${generateAccessCode()}`,
         // {
         //   reply_markup: {
         //     inline_keyboard: [
@@ -33,12 +33,18 @@ export function useCreateWasabiVistaBot() {
     ctx.reply('Я пока не умею отвечать на сообщения.')
   })
 
-  bot.start()
+  try {
+    await bot.start()
+    logger.info('Wasabi Vista bot started successfully')
+  } catch (error) {
+    logger.error('Failed to start Wasabi Vista bot:', error)
+    throw error
+  }
 }
 
 export function useWasabiVistaBot(): Bot {
   if (!bot) {
-    throw new Error('Bot is not created')
+    throw new Error('Wasabi Vista bot is not initialized. Call useCreateWasabiVistaBot() first.')
   }
 
   return bot
@@ -46,4 +52,8 @@ export function useWasabiVistaBot(): Bot {
 
 export async function notifyWasabiVistaAdmin(message: string) {
   return useWasabiVistaBot().api.sendMessage(telegram.adminId, message)
+}
+
+function generateAccessCode(): string {
+  return getRandInteger(100000, 999999).toString()
 }

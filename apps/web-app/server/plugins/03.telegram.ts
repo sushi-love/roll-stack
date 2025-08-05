@@ -2,11 +2,13 @@ import process from 'node:process'
 import { useCreateWasabiVistaBot } from '../services/telegram/wasabi-vista'
 
 export default defineNitroPlugin(() => {
+  const logger = useLogger('plugin:start-telegram')
+
   if (process.env.NODE_ENV !== 'production') {
+    logger.info('Skipping Telegram in non-production environment')
     return
   }
 
-  const logger = useLogger('plugin-start-telegram')
   const { telegram } = useRuntimeConfig()
 
   if (!telegram.wasabiVistaToken) {
