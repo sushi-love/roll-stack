@@ -18,6 +18,10 @@ export default defineNuxtConfig({
       apiKey: '',
       serviceToken: '',
     },
+    telegram: {
+      wasabiVistaToken: '',
+      adminId: '',
+    },
     public: {
       mediaUrl: '',
     },
