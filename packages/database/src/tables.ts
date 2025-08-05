@@ -594,7 +594,7 @@ export const wasabiVistaUsers = pgTable('wasabi_vista_users', {
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   accessKey: varchar('access_key').notNull().unique(),
-  telegramId: varchar('telegram_id').notNull(),
+  telegramId: varchar('telegram_id').notNull().unique(),
   firstName: varchar('first_name'),
   lastName: varchar('last_name'),
   username: varchar('username'),

@@ -41,6 +41,7 @@ export async function useCreateWasabiVistaBot() {
 
       if (!wasabiVistaUser.user) {
         await ctx.reply('Нет доступа. Используйте ранее полученный Ключ доступа. Или передайте его в службу поддержки.')
+        return
       }
 
       await ctx.reply('Вы уже авторизованы.')
