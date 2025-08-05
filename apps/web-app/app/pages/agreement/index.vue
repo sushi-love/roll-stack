@@ -83,16 +83,10 @@
         </div>
       </template>
       <template #royalty-cell="{ row }">
-        {{ row.getValue('royalty') }}
-      </template>
-      <template #minRoyaltyPerMonth-cell="{ row }">
-        {{ formatNumber(row.getValue('minRoyaltyPerMonth')) }}
+        {{ row.getValue('royalty') }}% / от {{ formatNumber(row.getValue('minRoyaltyPerMonth')) }}
       </template>
       <template #marketingFee-cell="{ row }">
-        {{ row.getValue('marketingFee') }}
-      </template>
-      <template #minMarketingFeePerMonth-cell="{ row }">
-        {{ formatNumber(row.getValue('minMarketingFeePerMonth')) }}
+        {{ row.getValue('marketingFee') }}% / от {{ formatNumber(row.getValue('minMarketingFeePerMonth')) }}
       </template>
       <template #comment-cell="{ row }">
         <div class="text-sm/4 whitespace-pre-wrap max-w-56">
@@ -161,6 +155,8 @@ const data = computed<PartnerAgreementWithData[]>(() => {
 const columnVisibility = ref({
   id: false,
   isActive: false,
+  minRoyaltyPerMonth: false,
+  minMarketingFeePerMonth: false,
 })
 const rowSelection = ref()
 const pagination = ref({
@@ -198,16 +194,16 @@ const columns: Ref<TableColumn<PartnerAgreementWithData>[]> = ref([{
   header: 'Файлы / сканы',
 }, {
   accessorKey: 'royalty',
-  header: 'Роялти, %',
+  header: 'Роялти',
 }, {
   accessorKey: 'minRoyaltyPerMonth',
   header: 'Мин. роялти',
 }, {
   accessorKey: 'marketingFee',
-  header: 'Маркетинговый взнос, %',
+  header: 'Маркетинговый сбор',
 }, {
   accessorKey: 'minMarketingFeePerMonth',
-  header: 'Мин. маркетинговый взнос',
+  header: 'Мин. маркетинговый сбор',
 }, {
   accessorKey: 'comment',
   header: 'Комментарий',
