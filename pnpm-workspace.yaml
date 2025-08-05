@@ -43,6 +43,7 @@ catalog:
   drizzle-kit: ^0.31.4
   drizzle-orm: ^0.44.4
   eslint: ^9.32.0
+  grammy: ^1.37.0
   husky: ^9.1.7
   ioredis: ^5.6.1
   libphonenumber-js: ^1.12.10
