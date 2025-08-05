@@ -412,6 +412,7 @@ export const kitchens = pgTable('kitchens', {
   revenueForPreviousWeek: numeric('revenue_for_previous_week', { mode: 'number' }).notNull().default(0),
   iikoAlias: varchar('iiko_alias').unique(),
   partnerId: cuid2('partner_id').references(() => partners.id),
+  agreementId: cuid2('agreement_id').references(() => partnerAgreements.id),
 })
 
 export const kitchenRevenues = pgTable('kitchen_revenues', {
@@ -621,6 +622,7 @@ export const partnerAgreementRelations = relations(partnerAgreements, ({ one, ma
     references: [partnerLegalEntities.id],
   }),
   partners: many(partners),
+  kitchens: many(kitchens),
   files: many(partnerAgreementFiles),
 }))
 
@@ -812,11 +814,15 @@ export const kitchenRelations = relations(kitchens, ({ many, one }) => ({
   paymentMethods: many(paymentMethodsOnKitchens),
   feedbackPoints: many(feedbackPoints),
   reviews: many(clientReviews),
+  revenues: many(kitchenRevenues),
   partner: one(partners, {
     fields: [kitchens.partnerId],
     references: [partners.id],
   }),
-  revenues: many(kitchenRevenues),
+  agreement: one(partnerAgreements, {
+    fields: [kitchens.agreementId],
+    references: [partnerAgreements.id],
+  }),
 }))
 
 export const kitchenRevenueRelations = relations(kitchenRevenues, ({ one }) => ({
