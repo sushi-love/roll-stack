@@ -1,5 +1,10 @@
 import type { Kitchen, Partner, PartnerAgreement, PartnerAgreementFile, PartnerLegalEntity } from '@roll-stack/database'
 
+export type PartnerAgreementWithAllData = PartnerAgreement & {
+  files: PartnerAgreementFile[]
+  legalEntity: PartnerLegalEntity | null
+}
+
 export type PartnerAgreementWithData = PartnerAgreement & {
   files: PartnerAgreementFile[]
 }
@@ -15,7 +20,7 @@ type PartnerWithData = Partner & {
 
 export const usePartnerStore = defineStore('partner', () => {
   const partners = ref<PartnerWithData[]>([])
-  const agreements = ref<PartnerAgreementWithData[]>([])
+  const agreements = ref<PartnerAgreementWithAllData[]>([])
 
   async function update() {
     try {

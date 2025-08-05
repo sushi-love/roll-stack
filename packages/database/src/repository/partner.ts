@@ -47,6 +47,7 @@ export class Partner {
     return useDatabase().query.partnerAgreements.findMany({
       with: {
         files: true,
+        legalEntity: true,
       },
     })
   }

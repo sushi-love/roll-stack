@@ -77,10 +77,13 @@
           />
         </div>
       </template>
-      <template #files-cell="{ row }">
-        <div>
-          <AgreementFilesBlock :files="row.getValue('files') as File[]" />
+      <template #legalEntity-cell="{ row }">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-40">
+          {{ row.original.legalEntity?.name }}
         </div>
+      </template>
+      <template #files-cell="{ row }">
+        <AgreementFilesBlock :files="row.original.files" />
       </template>
       <template #royalty-cell="{ row }">
         {{ row.getValue('royalty') }}% / от {{ formatNumber(row.getValue('minRoyaltyPerMonth')) }}
@@ -133,8 +136,8 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { File, PartnerAgreement } from '@roll-stack/database'
-import type { PartnerAgreementWithData } from '~/stores/partner'
+import type { PartnerAgreement } from '@roll-stack/database'
+import type { PartnerAgreementWithAllData } from '~/stores/partner'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import { upperFirst } from 'scule'
 
@@ -146,10 +149,8 @@ const filterValue = ref('')
 
 const partnerStore = usePartnerStore()
 
-const data = computed<PartnerAgreementWithData[]>(() => {
-  const finalRows = partnerStore.agreements.filter((k) => k.internalId.toLowerCase().includes(filterValue.value.toLowerCase()))
-
-  return finalRows
+const data = computed<PartnerAgreementWithAllData[]>(() => {
+  return partnerStore.agreements.filter((k) => k.internalId.toLowerCase().includes(filterValue.value.toLowerCase()))
 })
 
 const columnVisibility = ref({
@@ -170,7 +171,7 @@ const sorting = ref([
   },
 ])
 
-const columns: Ref<TableColumn<PartnerAgreementWithData>[]> = ref([{
+const columns: Ref<TableColumn<PartnerAgreementWithAllData>[]> = ref([{
   accessorKey: 'id',
   header: 'Id',
 }, {
@@ -192,6 +193,9 @@ const columns: Ref<TableColumn<PartnerAgreementWithData>[]> = ref([{
 }, {
   accessorKey: 'files',
   header: 'Файлы / сканы',
+}, {
+  accessorKey: 'legalEntity',
+  header: 'Юр. лицо',
 }, {
   accessorKey: 'royalty',
   header: 'Роялти',
