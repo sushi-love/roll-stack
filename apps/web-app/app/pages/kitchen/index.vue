@@ -102,7 +102,7 @@
         </ULink>
       </template>
       <template #address-cell="{ row }">
-        <div class="text-sm/4 whitespace-pre-wrap max-w-56">
+        <div class="text-sm/4 whitespace-pre-wrap max-w-52">
           {{ row.getValue('address') }}, {{ row.getValue('city') }}
         </div>
       </template>
@@ -111,6 +111,18 @@
       </template>
       <template #revenueForThisWeek-cell="{ row }">
         <div>{{ formatNumber(row.getValue('revenueForThisWeek')) }}</div>
+      </template>
+      <template #agreement-cell="{ row }">
+        <div class="flex flex-row gap-2 items-center">
+          <p class="font-medium text-highlighted">
+            {{ row.original.agreement?.internalId }}
+          </p>
+          <UIcon
+            v-if="row.original.agreement?.isActive"
+            name="i-lucide-check"
+            class="size-4 text-secondary"
+          />
+        </div>
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-end" data-action="true">
@@ -166,13 +178,7 @@ const kitchenStore = useKitchenStore()
 const filterValue = ref('')
 
 const data = computed<KitchenWithData[]>(() => {
-  const finalRows = kitchenStore.kitchens.filter((k) => k.name.toLowerCase().includes(filterValue.value.toLowerCase()))
-
-  // if (filterByTagValue.value) {
-  //   finalRows = finalRows.filter((product) => product.tags.some((tag) => tag.name.toLowerCase().includes(filterByTagValue.value.toLowerCase())))
-  // }
-
-  return finalRows
+  return kitchenStore.kitchens.filter((k) => k.name.toLowerCase().includes(filterValue.value.toLowerCase()))
 })
 
 const columnVisibility = ref({
@@ -265,6 +271,9 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
       onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
     })
   },
+}, {
+  accessorKey: 'agreement',
+  header: '№ договора',
 }, {
   id: 'action',
   enableSorting: false,

@@ -30,6 +30,7 @@ export class Kitchen {
       orderBy: (kitchens, { asc }) => asc(kitchens.name),
       with: {
         feedbackPoints: true,
+        agreement: true,
       },
     })
   }

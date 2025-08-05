@@ -1,4 +1,4 @@
-import type { FeedbackPoint, File, Kitchen, Media, MediaItem, Menu, MenuCategory, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@roll-stack/database'
+import type { FeedbackPoint, File, Kitchen, Media, MediaItem, Menu, MenuCategory, PartnerAgreement, Print, Product, ProductsInMenuCategory, ProductTag, ProductVariant, ProductVariantTag } from '@roll-stack/database'
 
 export type ProductVariantWithData = ProductVariant & {
   tags: ProductVariantTag[]
@@ -43,6 +43,7 @@ export type PrintWithData = Print & {
 
 export type KitchenWithData = Kitchen & {
   feedbackPoints: FeedbackPoint[]
+  agreement: PartnerAgreement | null
 }
 
 export type Period = 'daily' | 'weekly' | 'monthly'
