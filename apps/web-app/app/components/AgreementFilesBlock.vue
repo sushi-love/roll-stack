@@ -26,7 +26,7 @@
         <div class="h-auto w-56 p-4 flex flex-col gap-2">
           <UIcon
             :name="getFileData(file).icon"
-            class="size-10 text-muted/25"
+            class="size-10 text-muted/50"
           />
 
           <div class="flex flex-col gap-2.5">
@@ -36,16 +36,15 @@
 
             <UButton
               size="sm"
-              variant="outline"
+              variant="subtle"
               color="neutral"
               :to="file.url"
               icon="i-lucide-external-link"
               external
               target="_blank"
               class="w-fit"
-            >
-              Открыть
-            </UButton>
+              label="Открыть"
+            />
           </div>
         </div>
       </template>
@@ -54,12 +53,11 @@
 </template>
 
 <script setup lang="ts">
-import type { File } from '@roll-stack/database'
-import { ULink } from '#components'
+import type { PartnerAgreementFile } from '@roll-stack/database'
 
-defineProps<{ files: File[] }>()
+defineProps<{ files: PartnerAgreementFile[] }>()
 
-function getFileData(file: File) {
+function getFileData(file: PartnerAgreementFile) {
   if (file.name.startsWith('Договор к')) {
     return {
       type: 'main',
