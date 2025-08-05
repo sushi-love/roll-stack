@@ -7,9 +7,9 @@ export default defineNitroPlugin(() => {
   }
 
   const logger = useLogger('plugin-start-telegram')
-  const { telegramWasabiVistaToken } = useRuntimeConfig()
+  const { telegram } = useRuntimeConfig()
 
-  if (!telegramWasabiVistaToken) {
+  if (!telegram.wasabiVistaToken) {
     // No config provided
     return
   }
