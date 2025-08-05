@@ -22,7 +22,7 @@ export async function useCreateWasabiVistaBot() {
       // Find user
       const wasabiVistaUser = await repository.wasabiVista.findUserByTelegramId(ctx.message.from.id.toString())
       if (!wasabiVistaUser) {
-        const accessKey = generateAccessCode()
+        const accessKey = await generateAccessCode()
 
         const createdUser = await repository.wasabiVista.createUser({
           telegramId: ctx.message.from.id.toString(),
@@ -77,6 +77,17 @@ export async function notifyWasabiVistaAdmin(message: string) {
   return useWasabiVistaBot().api.sendMessage(telegram.adminId, message)
 }
 
-function generateAccessCode(): string {
-  return getRandInteger(100000, 999999).toString()
+async function generateAccessCode(): Promise<string> {
+  let selectedCode
+
+  // Code should be unique
+  while (!selectedCode) {
+    const code = getRandInteger(100000, 999999).toString()
+    const wasabiVistaUser = await repository.wasabiVista.findUserByKey(code)
+    if (!wasabiVistaUser) {
+      selectedCode = code
+    }
+  }
+
+  return selectedCode
 }
