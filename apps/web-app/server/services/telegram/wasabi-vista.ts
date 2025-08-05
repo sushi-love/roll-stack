@@ -54,7 +54,12 @@ export async function useCreateWasabiVistaBot() {
 
   // Somebody invited bot to a group
   bot.on('my_chat_member', async (ctx) => {
-    logger.log(ctx.chat, ctx.from, ctx.senderChat, ctx.update)
+    logger.log('my_chat_member', ctx.chat, ctx.from, ctx.senderChat, ctx.update)
+  })
+
+  // New member
+  bot.on('chat_member', async (ctx) => {
+    logger.log('chat_member', ctx.chat, ctx.from, ctx.senderChat, ctx.update)
   })
 
   try {
