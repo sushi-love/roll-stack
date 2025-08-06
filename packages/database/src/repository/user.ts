@@ -63,6 +63,15 @@ export class User {
     })
   }
 
+  static async list() {
+    return useDatabase().query.users.findMany({
+      where: (users, { eq }) => eq(users.isActive, true),
+      with: {
+        focusedTask: true,
+      },
+    })
+  }
+
   static async create(data: UserDraft) {
     const [user] = await useDatabase().insert(users).values(data).returning()
     return user

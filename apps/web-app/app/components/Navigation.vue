@@ -62,10 +62,10 @@ const menuItems = computed(() => [
     active: route.path.startsWith('/staff'),
   },
   {
-    label: t('app.menu.chats'),
-    to: '/chat',
+    label: t('app.menu.tickets'),
+    to: '/ticket',
     icon: 'i-lucide-messages-square',
-    active: route.path.startsWith('/chat'),
+    active: route.path.startsWith('/ticket'),
   },
   {
     label: t('app.menu.kitchens'),
@@ -134,6 +134,12 @@ const linkItems = computed(() => [
     to: '/head/task',
     icon: 'i-lucide-list-checks',
     active: route.path.startsWith('/head/task'),
+  },
+  {
+    label: t('app.menu.chats'),
+    to: '/chat',
+    icon: 'i-lucide-messages-square',
+    active: route.path.startsWith('/chat'),
   },
   {
     label: t('app.network.metrics'),

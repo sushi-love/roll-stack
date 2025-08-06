@@ -124,7 +124,9 @@
       "product": "Продукт",
       "print": "Материал для печати",
       "prints": "Материалы для печати",
-      "kitchens": "Кухни"
+      "kitchens": "Кухни",
+      "ticket": "Тикет",
+      "tickets": "Тикеты"
     },
     "product": {
       "available-for-purchase": "Доступен для покупки",

@@ -20,6 +20,7 @@ export const useUserStore = defineStore('user', () => {
   })
 
   const staff = ref<UserWithData[]>([])
+  const users = ref<UserWithData[]>([])
 
   async function update() {
     try {
@@ -54,12 +55,13 @@ export const useUserStore = defineStore('user', () => {
 
   async function updateUsers() {
     try {
-      const data = await $fetch('/api/user/list/staff')
+      const data = await $fetch('/api/user/list')
       if (!data) {
         return
       }
 
-      staff.value = data
+      staff.value = data.filter((user) => user.type === 'staff')
+      users.value = data
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('404')) {
@@ -91,7 +93,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function find(userId: string): UserWithData | undefined {
-    return staff.value.find((user) => user.id === userId)
+    return users.value.find((user) => user.id === userId)
   }
 
   return {
@@ -106,6 +108,7 @@ export const useUserStore = defineStore('user', () => {
     fullName,
 
     staff,
+    users,
 
     update,
     updateOnline,
