@@ -30,6 +30,7 @@ export async function useCreateWasabiVistaBot() {
           firstName: ctx.message.from.first_name,
           lastName: ctx.message.from.last_name,
           username: ctx.message.from.username,
+          type: ctx.message.chat.type,
         })
 
         logger.log('new user', createdUser.id, ctx.message.from.id, ctx.message.text)
@@ -54,12 +55,7 @@ export async function useCreateWasabiVistaBot() {
 
   // Somebody invited bot to a group
   bot.on('my_chat_member', async (ctx) => {
-    logger.log('my_chat_member', ctx.chat, ctx.from, ctx.senderChat, ctx.update)
-  })
-
-  // New member
-  bot.on('chat_member', async (ctx) => {
-    logger.log('chat_member', ctx.chat, ctx.from, ctx.senderChat, ctx.update)
+    logger.log('my_chat_member', ctx.update)
   })
 
   try {

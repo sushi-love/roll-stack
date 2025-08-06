@@ -45,6 +45,8 @@ type PaymentMethodType = 'card' | 'cash' | 'online'
 
 type FeedbackPointType = 'yandex_map' | '2gis_map' | 'vk_group'
 
+type WasabiVistaUserType = 'private' | 'group' | 'supergroup' | 'channel'
+
 export const permissions = pgTable('permissions', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -598,6 +600,8 @@ export const wasabiVistaUsers = pgTable('wasabi_vista_users', {
   firstName: varchar('first_name'),
   lastName: varchar('last_name'),
   username: varchar('username'),
+  title: varchar('title'),
+  type: varchar('type').notNull().$type<WasabiVistaUserType>(),
   userId: cuid2('user_id').references(() => users.id, {
     onDelete: 'cascade',
     onUpdate: 'cascade',
