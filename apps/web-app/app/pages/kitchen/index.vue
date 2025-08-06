@@ -265,7 +265,7 @@ const columns: Ref<TableColumn<KitchenWithData>[]> = ref([{
     return h(UButton, {
       color: 'neutral',
       variant: 'ghost',
-      label: 'Эта неделя',
+      label: 'Текущая неделя',
       icon: isSorted ? icon : 'i-lucide-arrow-up-down',
       class: '-mx-2.5',
       onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),

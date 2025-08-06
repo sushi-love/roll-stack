@@ -18,6 +18,7 @@ import { Post } from './post'
 import { Print } from './print'
 import { Product } from './product'
 import { Task } from './task'
+import { Ticket } from './ticket'
 import { User } from './user'
 import { WasabiVista } from './wasabi-vista'
 
@@ -41,6 +42,7 @@ class Repository {
   readonly print = Print
   readonly product = Product
   readonly task = Task
+  readonly ticket = Ticket
   readonly user = User
   readonly wasabiVista = WasabiVista
 

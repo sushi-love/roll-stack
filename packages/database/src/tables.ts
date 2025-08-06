@@ -47,6 +47,8 @@ type FeedbackPointType = 'yandex_map' | '2gis_map' | 'vk_group'
 
 type WasabiVistaUserType = 'private' | 'group' | 'supergroup' | 'channel'
 
+type TicketStatus = 'opened' | 'closed'
+
 export const permissions = pgTable('permissions', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
@@ -71,6 +73,7 @@ export const users = pgTable('users', {
   avatarUrl: varchar('avatar_url'),
   focusedTaskId: cuid2('focused_task_id'),
   permissions: jsonb('permissions').notNull().default([]).$type<PermissionCode[]>(),
+  partnerId: cuid2('partner_id').references(() => partners.id),
 })
 
 export const partners = pgTable('partners', {
@@ -608,23 +611,52 @@ export const wasabiVistaUsers = pgTable('wasabi_vista_users', {
   }),
 })
 
+export const tickets = pgTable('tickets', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  title: varchar('title'),
+  description: varchar('description'),
+  status: varchar('status').notNull().default('opened').$type<TicketStatus>(),
+  userId: cuid2('user_id').notNull().references(() => users.id),
+})
+
+export const ticketMessages = pgTable('ticket_messages', {
+  id: cuid2('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  text: varchar('text').notNull(),
+  userId: cuid2('user_id').notNull().references(() => users.id),
+  ticketId: cuid2('ticket_id').notNull().references(() => tickets.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
+})
+
 export const userRelations = relations(users, ({ many, one }) => ({
   chatMessages: many(chatMessages),
   chatMembers: many(chatMembers),
   notifications: many(notifications),
   tasks: many(tasks),
   taskLists: many(taskLists),
+  postLikes: many(postLikes),
+  postComments: many(postComments),
+  wasabiVistaUsers: many(wasabiVistaUsers),
+  tickets: many(tickets),
+  ticketMessages: many(ticketMessages),
   focusedTask: one(tasks, {
     fields: [users.focusedTaskId],
     references: [tasks.id],
   }),
-  postLikes: many(postLikes),
-  postComments: many(postComments),
-  wasabiVistaUsers: many(wasabiVistaUsers),
+  partner: one(partners, {
+    fields: [users.partnerId],
+    references: [partners.id],
+  }),
 }))
 
 export const partnerRelations = relations(partners, ({ many, one }) => ({
   kitchens: many(kitchens),
+  users: many(users),
   legalEntity: one(partnerLegalEntities, {
     fields: [partners.legalEntityId],
     references: [partnerLegalEntities.id],
@@ -967,6 +999,25 @@ export const clientReviewRelations = relations(clientReviews, ({ one }) => ({
 export const wasabiVistaUserRelations = relations(wasabiVistaUsers, ({ one }) => ({
   user: one(users, {
     fields: [wasabiVistaUsers.userId],
+    references: [users.id],
+  }),
+}))
+
+export const ticketRelations = relations(tickets, ({ one, many }) => ({
+  messages: many(ticketMessages),
+  user: one(users, {
+    fields: [tickets.userId],
+    references: [users.id],
+  }),
+}))
+
+export const ticketMessageRelations = relations(ticketMessages, ({ one }) => ({
+  ticket: one(tickets, {
+    fields: [ticketMessages.ticketId],
+    references: [tickets.id],
+  }),
+  user: one(users, {
+    fields: [ticketMessages.userId],
     references: [users.id],
   }),
 }))
