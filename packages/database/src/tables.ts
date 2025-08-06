@@ -615,10 +615,13 @@ export const tickets = pgTable('tickets', {
   id: cuid2('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-  title: varchar('title'),
+  title: varchar('title').notNull(),
   description: varchar('description'),
   status: varchar('status').notNull().default('opened').$type<TicketStatus>(),
-  userId: cuid2('user_id').notNull().references(() => users.id),
+  userId: cuid2('user_id').notNull().references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
 })
 
 export const ticketMessages = pgTable('ticket_messages', {
@@ -626,7 +629,10 @@ export const ticketMessages = pgTable('ticket_messages', {
   createdAt: timestamp('created_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { precision: 3, withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   text: varchar('text').notNull(),
-  userId: cuid2('user_id').notNull().references(() => users.id),
+  userId: cuid2('user_id').notNull().references(() => users.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  }),
   ticketId: cuid2('ticket_id').notNull().references(() => tickets.id, {
     onDelete: 'cascade',
     onUpdate: 'cascade',

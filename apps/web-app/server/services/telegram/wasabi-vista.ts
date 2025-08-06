@@ -84,8 +84,8 @@ async function handleMessage(ctx: Context) {
 
   // Get last ticket
   const tickets = await repository.ticket.listOpenedByUser(wasabiVistaUser.user.id)
-  let ticket = tickets[0]
-  if (!tickets || !ticket) {
+  let ticket = tickets?.[0]
+  if (!tickets.length || !ticket) {
     // Create ticket
     ticket = await repository.ticket.create({
       title: `Сопровождение ${wasabiVistaUser.user.name} ${wasabiVistaUser.user.surname}`,
