@@ -57,7 +57,7 @@ async function handleStart(ctx: Context) {
       type: ctx.message.chat.type,
     })
 
-    logger.log('new user', createdUser.id, ctx.message.from.id, ctx.message.text)
+    logger.log('new user', createdUser?.id, ctx.message.from.id, ctx.message.text)
 
     await ctx.reply(`Ключ доступа: ${accessKey}`)
 
@@ -93,6 +93,9 @@ async function handleMessage(ctx: Context) {
       userId: wasabiVistaUser.user.id,
       status: 'opened',
     })
+  }
+  if (!ticket) {
+    return
   }
 
   await repository.ticket.createMessage({
