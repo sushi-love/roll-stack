@@ -131,3 +131,9 @@ export type NetworkMetricsDraft = InferInsertModel<typeof tables.networkMetrics>
 
 export type WasabiVistaUser = InferSelectModel<typeof tables.wasabiVistaUsers>
 export type WasabiVistaUserDraft = InferInsertModel<typeof tables.wasabiVistaUsers>
+
+export type Ticket = InferSelectModel<typeof tables.tickets>
+export type TicketDraft = InferInsertModel<typeof tables.tickets>
+
+export type TicketMessage = InferSelectModel<typeof tables.ticketMessages>
+export type TicketMessageDraft = InferInsertModel<typeof tables.ticketMessages>
