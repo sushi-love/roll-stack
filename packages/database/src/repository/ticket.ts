@@ -1,5 +1,5 @@
 import type { TicketDraft, TicketMessageDraft } from '../types'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { useDatabase } from '../database'
 import { ticketMessages, tickets } from '../tables'
 
@@ -12,6 +12,17 @@ export class Ticket {
 
   static async list() {
     return useDatabase().query.tickets.findMany()
+  }
+
+  static async listOpened() {
+    return useDatabase().query.tickets.findMany({
+      where: (tickets, { eq }) => eq(tickets.status, 'opened'),
+      with: {
+        messages: true,
+        lastMessage: true,
+        user: true,
+      },
+    })
   }
 
   static async listOpenedByUser(userId: string) {
@@ -37,13 +48,20 @@ export class Ticket {
 
   static async createMessage(data: TicketMessageDraft) {
     const [message] = await useDatabase().insert(ticketMessages).values(data).returning()
+
+    // Update last message
+    await Ticket.update(data.ticketId, { lastMessageId: message?.id })
+
     return message
   }
 
   static async update(id: string, data: Partial<TicketDraft>) {
     const [ticket] = await useDatabase()
       .update(tickets)
-      .set(data)
+      .set({
+        ...data,
+        updatedAt: sql`now()`,
+      })
       .where(eq(tickets.id, id))
       .returning()
     return ticket

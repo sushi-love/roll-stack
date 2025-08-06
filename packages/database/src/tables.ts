@@ -618,6 +618,7 @@ export const tickets = pgTable('tickets', {
   title: varchar('title').notNull(),
   description: varchar('description'),
   status: varchar('status').notNull().default('opened').$type<TicketStatus>(),
+  lastMessageId: cuid2('last_message_id'),
   userId: cuid2('user_id').notNull().references(() => users.id, {
     onDelete: 'cascade',
     onUpdate: 'cascade',
@@ -1011,6 +1012,10 @@ export const wasabiVistaUserRelations = relations(wasabiVistaUsers, ({ one }) =>
 
 export const ticketRelations = relations(tickets, ({ one, many }) => ({
   messages: many(ticketMessages),
+  lastMessage: one(ticketMessages, {
+    fields: [tickets.lastMessageId],
+    references: [ticketMessages.id],
+  }),
   user: one(users, {
     fields: [tickets.userId],
     references: [users.id],

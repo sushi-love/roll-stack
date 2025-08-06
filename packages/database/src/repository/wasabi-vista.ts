@@ -25,6 +25,12 @@ export class WasabiVista {
     })
   }
 
+  static async findUserById(userId: string) {
+    return useDatabase().query.wasabiVistaUsers.findFirst({
+      where: (users, { eq }) => eq(users.userId, userId),
+    })
+  }
+
   static async createUser(data: WasabiVistaUserDraft) {
     const [user] = await useDatabase().insert(wasabiVistaUsers).values(data).returning()
     return user

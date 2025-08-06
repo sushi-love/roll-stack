@@ -46,6 +46,7 @@ const menu = useMenuStore()
 const product = useProductStore()
 const chat = useChatStore()
 const task = useTaskStore()
+const ticket = useTicketStore()
 const notification = useNotificationStore()
 const post = usePostStore()
 const print = usePrintStore()
@@ -70,6 +71,7 @@ onMounted(async () => {
     user.updateOnline(),
     user.update(),
     task.update(),
+    ticket.update(),
   ])
 
   interval = setInterval(async () => {
@@ -77,6 +79,7 @@ onMounted(async () => {
       user.updateOnline(),
       user.update(),
       task.update(),
+      ticket.update(),
     ])
   }, 30000)
 })
