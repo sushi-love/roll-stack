@@ -39,6 +39,7 @@ export class Partner {
             },
           },
         },
+        users: true,
       },
     })
   }
