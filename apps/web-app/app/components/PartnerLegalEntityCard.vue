@@ -1,7 +1,10 @@
 <template>
-  <UCard v-if="entity" class="h-full">
+  <UCard
+    v-if="entity"
+    class="h-full"
+  >
     <div class="flex flex-col gap-2.5">
-      <UIcon name="i-lucide-scale" class="size-16 text-muted/25" />
+      <UIcon name="i-lucide-scale" class="size-14 text-primary" />
 
       <h3 class="text-xl md:text-xl/6 font-semibold">
         {{ entity.name }}

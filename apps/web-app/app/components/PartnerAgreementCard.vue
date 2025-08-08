@@ -6,18 +6,23 @@
     ]"
   >
     <div class="flex flex-col gap-3">
-      <div class="flex flex-row items-start gap-3.5">
+      <div class="flex flex-row items-start gap-2.5">
         <UIcon
           name="i-lucide-scroll-text"
-          class="shrink-0 size-16 text-secondary"
+          class="shrink-0 size-14 text-primary"
           @click="modalUpdatePartnerAgreement.open({ agreementId: agreement.id })"
         />
 
         <UProgress
           v-model="agreementProgress"
-          size="lg"
+          size="md"
           color="secondary"
-          status
+          orientation="vertical"
+          inverted
+          class="h-14 py-1"
+          :ui="{
+            indicator: agreementProgress <= 15 && '!bg-error',
+          }"
         />
       </div>
 

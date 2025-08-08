@@ -8,7 +8,7 @@
         :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
       >
 
-      <div class="absolute top-2 left-2 right-0 w-full">
+      <div class="absolute top-4 left-4">
         <UBadge
           color="neutral"
           variant="solid"
@@ -20,15 +20,15 @@
       </div>
 
       <div
-        class="absolute top-2 left-0 right-0 w-full opacity-0 group-hover:opacity-100 duration-200"
+        class="absolute top-4 left-0 right-0 w-full opacity-0 group-hover:opacity-100 duration-200"
         :class="[
           agreementProgress <= 15 && 'opacity-100',
         ]"
       >
-        <div class="mx-2 px-2 py-1 bg-default/97 rounded-lg flex flex-row items-center gap-1.5">
+        <div class="mx-4 px-2 py-1 bg-default rounded-lg flex flex-row items-center gap-1.5">
           <UIcon
             name="i-lucide-scroll-text"
-            class="shrink-0 size-5 text-secondary"
+            class="shrink-0 size-5 text-primary"
             :class="[
               agreementProgress <= 15 && '!text-error animate-pulse',
             ]"
@@ -45,26 +45,23 @@
         </div>
       </div>
 
-      <div class="absolute bottom-2 left-2 right-2 w-full">
-        <UAvatarGroup
-          :max="2"
-          size="sm"
-          :ui="{
-            base: '-me-3',
-          }"
-        >
-          <UAvatar
-            v-for="user in otherUsers"
-            :key="user.id"
-            :src="user?.avatarUrl ?? undefined"
-            alt=""
-            :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
-          />
-        </UAvatarGroup>
+      <div class="absolute bottom-4 right-4">
+        <div class="flex flex-row justify-end">
+          <UAvatarGroup :max="3" size="md">
+            <UAvatar
+              v-for="user in otherUsers"
+              :key="user.id"
+              :src="user?.avatarUrl ?? undefined"
+              alt=""
+              class="group-hover:scale-110 duration-200"
+              :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
+            />
+          </UAvatarGroup>
+        </div>
       </div>
     </div>
 
-    <div class="min-h-20 h-full px-2.5 pb-2 flex flex-col gap-2.5">
+    <div class="min-h-20 h-full px-4 pb-2 flex flex-col gap-2.5">
       <h3 class="text-sm/4 font-bold">
         {{ partner.legalEntity?.name }}
       </h3>

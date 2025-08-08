@@ -3,7 +3,7 @@
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-5 2xl:grid-cols-6">
       <UCard>
         <div class="shrink-0 w-full flex flex-col gap-2">
-          <UIcon name="i-lucide-handshake" class="size-16 text-muted/25" />
+          <UIcon name="i-lucide-handshake" class="size-14 text-primary" />
 
           <h3 class="text-xl md:text-xl/6 font-semibold">
             {{ partner?.priceLevel }} уровень цен

@@ -11,7 +11,7 @@
         :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
       >
 
-      <div class="absolute top-2 left-2">
+      <div class="absolute top-4 left-4">
         <UBadge
           color="neutral"
           variant="solid"
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="min-h-20 h-full px-2.5 pb-2 flex flex-col gap-2.5">
+    <div class="min-h-16 h-full px-4 flex flex-col gap-2.5">
       <div class="flex flex-col gap-1">
         <h3 class="text-base/5 font-bold">
           {{ user.name }} {{ user.surname }}

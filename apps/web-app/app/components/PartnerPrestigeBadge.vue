@@ -4,7 +4,7 @@
       :name="getIconByPrestige(prestige)"
       :class="getIconClass()"
     />
-    <h4 class="absolute bottom-1 left-0.5 font-bold tracking-tight text-white text-shadow-md" :class="getPrestigeClass()">
+    <h4 class="absolute bottom-1 left-0 right-0 font-bold tracking-tight text-center text-inverted" :class="getPrestigeClass()">
       {{ prestige }}
     </h4>
   </div>
@@ -23,9 +23,9 @@ function getSizeClass() {
     case 'md':
       return 'size-12'
     case 'lg':
-      return 'size-16'
+      return 'size-14'
     case 'xl':
-      return 'size-20'
+      return 'size-18'
     default:
       return 'size-12'
   }
@@ -34,15 +34,15 @@ function getSizeClass() {
 function getPrestigeClass() {
   switch (size) {
     case 'sm':
-      return 'pl-[0.1rem] text-[0.9rem]'
+      return 'text-[0.9rem]'
     case 'md':
-      return 'pl-[0.2rem] text-[1.4rem]'
+      return 'text-[1.4rem]'
     case 'lg':
-      return 'pl-[0.3rem] text-[1.9rem]'
+      return 'text-[1.7rem]'
     case 'xl':
-      return 'pl-[0.4rem] text-[2.4rem]'
+      return 'text-[2.4rem]'
     default:
-      return 'pl-[0.2rem] text-[1.4rem]'
+      return 'text-[1.4rem]'
   }
 }
 
@@ -62,15 +62,15 @@ function getIconByPrestige(prestige: number) {
 
 function getColorByPrestige(score: number) {
   if (score < 10) {
-    return 'text-rose-400'
+    return 'text-rose-500'
   } else if (score < 20) {
-    return 'text-orange-400'
+    return 'text-orange-500'
   } else if (score < 30) {
-    return 'text-yellow-400'
+    return 'text-yellow-500'
   } else if (score < 40) {
-    return 'text-lime-400'
+    return 'text-lime-500'
   } else {
-    return 'text-green-400'
+    return 'text-green-500'
   }
 }
 

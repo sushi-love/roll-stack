@@ -51,5 +51,10 @@ export default defineAppConfig({
         icon: 'shrink-0 size-7',
       },
     },
+    card: {
+      slots: {
+        body: 'p-4 sm:p-4',
+      },
+    },
   },
 })

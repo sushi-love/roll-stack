@@ -2,7 +2,6 @@
   <UCard
     variant="subtle"
     class="mt-auto bg-elevated/25"
-    :ui="{ body: '!p-4' }"
   >
     <div v-if="!userStore.id" class="text-center text-muted">
       <Loader />
