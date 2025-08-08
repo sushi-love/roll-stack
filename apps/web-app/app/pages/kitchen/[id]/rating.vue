@@ -11,12 +11,7 @@
           <FeedbackRating :rating="kitchen?.rating ?? 0" class="w-fit scale-150" />
         </div>
       </UCard>
-      <UCard
-        variant="subtle"
-        :ui="{
-          body: '!p-4',
-        }"
-      >
+      <UCard variant="subtle">
         <div class="text-sm/4">
           Важно: Рейтинг на данный момент расчитывается на основе внешних отзывов. В будущем это будет динамичная система с внутренними фидбеками.
         </div>
@@ -27,9 +22,6 @@
       <UCard
         v-for="point in kitchen?.feedbackPoints"
         :key="point.id"
-        :ui="{
-          body: '!p-4',
-        }"
       >
         <div class="w-full flex flex-col gap-2">
           <div class="w-full flex flex-row justify-between items-center">

@@ -1,11 +1,7 @@
 <template>
   <Content>
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-5 2xl:grid-cols-6">
-      <UCard
-        :ui="{
-          body: '!p-4',
-        }"
-      >
+      <UCard>
         <div class="shrink-0 w-full flex flex-col gap-2">
           <UIcon name="i-lucide-handshake" class="size-14 text-primary" />
 
@@ -19,11 +15,7 @@
         </div>
       </UCard>
 
-      <UCard
-        :ui="{
-          body: '!p-4',
-        }"
-      >
+      <UCard>
         <div class="flex flex-col gap-2.5">
           <div class="flex flex-row items-center gap-1.5">
             <PartnerPrestigeBadge

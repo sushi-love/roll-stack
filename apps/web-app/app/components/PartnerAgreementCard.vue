@@ -4,9 +4,6 @@
     :class="[
       !agreement.isActive && 'opacity-75 grayscale-100',
     ]"
-    :ui="{
-      body: '!p-4',
-    }"
   >
     <div class="flex flex-col gap-3">
       <div class="flex flex-row items-start gap-2.5">

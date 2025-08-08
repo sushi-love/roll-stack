@@ -1,12 +1,7 @@
 <template>
   <Content>
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-      <UCard
-        class="col-span-2"
-        :ui="{
-          body: '!p-4',
-        }"
-      >
+      <UCard class="col-span-2">
         <div class="shrink-0 w-full flex flex-col gap-2">
           <UIcon name="i-lucide-store" class="size-14 text-primary" />
 

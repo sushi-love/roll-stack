@@ -2,9 +2,6 @@
   <UCard
     v-if="entity"
     class="h-full"
-    :ui="{
-      body: '!p-4',
-    }"
   >
     <div class="flex flex-col gap-2.5">
       <UIcon name="i-lucide-scale" class="size-14 text-primary" />
