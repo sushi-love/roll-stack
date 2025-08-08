@@ -37,7 +37,7 @@
           <UProgress
             v-model="agreementProgress"
             size="md"
-            color="primary"
+            color="secondary"
             :ui="{
               indicator: agreementProgress <= 15 && '!bg-error',
             }"
@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div class="absolute bottom-4 right-4 w-full">
+      <div class="absolute bottom-4 right-4">
         <div class="flex flex-row justify-end">
           <UAvatarGroup :max="3" size="md">
             <UAvatar
