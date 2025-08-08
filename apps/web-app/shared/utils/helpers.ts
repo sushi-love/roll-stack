@@ -1,3 +1,4 @@
+import type { User } from '@roll-stack/database'
 import type { Resolution } from '../services/task'
 
 export function getResolutionForSelect(): { value: Resolution, label: string, icon: string }[] {
@@ -27,6 +28,17 @@ export function getResolutionIcon(resolution: Resolution) {
       return 'i-lucide-circle-x'
     case 'unknown':
       return 'i-lucide-circle-help'
+  }
+}
+
+export function getUserTypeLabel(type: User['type']): string {
+  switch (type) {
+    case 'partner':
+      return 'Партнер'
+    case 'staff':
+      return 'Сотрудник сети'
+    default:
+      return ''
   }
 }
 

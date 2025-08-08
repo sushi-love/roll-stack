@@ -9,7 +9,9 @@
 
       <div>
         <p>ИНН {{ entity.inn }}</p>
-        <p>ОГРНИП {{ entity.ogrnip }}</p>
+        <p v-if="entity.ogrnip">
+          ОГРНИП {{ entity.ogrnip }}
+        </p>
       </div>
 
       <p class="text-muted">

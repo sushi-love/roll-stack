@@ -45,11 +45,11 @@
         <p>Паушальный взнос: {{ agreement.lumpSumPayment }} ₽</p>
       </div>
 
-      <p class="text-muted">
+      <p v-if="agreement.comment" class="text-muted">
         {{ agreement.comment }}
       </p>
 
-      <div class="flex flex-col gap-1.5">
+      <div v-if="agreement.files.length" class="flex flex-col gap-1.5">
         <UButton
           v-for="file in agreement.files"
           :key="file.id"
