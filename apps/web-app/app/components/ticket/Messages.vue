@@ -40,6 +40,9 @@ function recalculate() {
     return
   }
 
+  targetMessageId.value = targetId as string ?? ticket.value.messages[ticket.value?.messages.length - 1]?.id
+  scrollToMessage()
+
   messagesWithIsFirstMessageOfDay.value = []
 
   for (const message of ticket.value.messages) {
@@ -56,15 +59,12 @@ const block = useTemplateRef<HTMLDivElement>('block')
 
 const { arrivedState } = useScroll(block, { behavior: 'smooth' })
 
-onMounted(() => {
-  if (!ticket.value?.messages.length) {
-    return
-  }
+onMounted(() => recalculate())
 
-  targetMessageId.value = targetId as string ?? ticket.value.messages[ticket.value?.messages.length - 1]?.id
-  scrollToMessage()
-  recalculate()
-})
+watch(
+  () => ticket.value,
+  () => recalculate(),
+)
 
 function scrollToMessage() {
   const message = window.document.getElementById(targetMessageId.value ?? 'none')
