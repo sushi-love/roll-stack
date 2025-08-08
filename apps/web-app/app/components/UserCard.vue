@@ -11,7 +11,7 @@
         :class="{ 'opacity-75 grayscale group-hover:grayscale-0 group-hover:opacity-100': imagesMode === 'grayscale' }"
       >
 
-      <div class="absolute top-2 left-2 right-0 w-full">
+      <div class="absolute top-2 left-2">
         <UBadge
           color="neutral"
           variant="solid"

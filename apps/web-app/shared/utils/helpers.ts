@@ -42,6 +42,23 @@ export function getUserTypeLabel(type: User['type']): string {
   }
 }
 
+export function getAgreementProgressPercentage(concludedAt?: string | null, willEndAt?: string | null): number {
+  if (!concludedAt || !willEndAt) {
+    return 0
+  }
+
+  const now = new Date()
+  const concludedAtDate = new Date(concludedAt)
+  const willEndAtDate = new Date(willEndAt)
+
+  const total = willEndAtDate.getTime() - concludedAtDate.getTime()
+  const elapsed = now.getTime() - concludedAtDate.getTime()
+  const percentage = 100 - (elapsed / total) * 100
+  const res = Math.floor(percentage)
+
+  return Math.min(100, Math.max(0, res))
+}
+
 export function pluralizationRu(int: number, array: [string, string, string]): string {
   const n = Math.abs(int)
 

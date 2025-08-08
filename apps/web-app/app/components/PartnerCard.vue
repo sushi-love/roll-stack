@@ -90,17 +90,5 @@ const otherUsers = computed(() => partner.users.filter((user) => user.type !== '
 
 const minimalAgreement = computed(() => partner.legalEntity?.agreements.filter((agreement) => agreement.isActive).toSorted((a, b) => new Date(a.willEndAt ?? '').getTime() - new Date(b.willEndAt ?? '').getTime())[0])
 
-const agreementProgress = computed(() => {
-  if (!minimalAgreement.value?.willEndAt || !minimalAgreement.value?.concludedAt) {
-    return 0
-  }
-
-  const now = new Date()
-  const concludedAt = new Date(minimalAgreement.value.concludedAt)
-  const willEndAt = new Date(minimalAgreement.value.willEndAt)
-
-  const res = Math.floor(100 - ((now.getTime() - concludedAt.getTime()) / (willEndAt.getTime() - concludedAt.getTime())) * 100)
-
-  return res > 0 ? res : 0
-})
+const agreementProgress = computed(() => getAgreementProgressPercentage(minimalAgreement.value?.concludedAt, minimalAgreement.value?.willEndAt))
 </script>

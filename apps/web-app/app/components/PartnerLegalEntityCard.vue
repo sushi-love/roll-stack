@@ -14,7 +14,7 @@
         </p>
       </div>
 
-      <p class="text-muted">
+      <p v-if="entity.comment" class="text-muted">
         {{ entity.comment }}
       </p>
     </div>

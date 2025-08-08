@@ -26,7 +26,7 @@
           </div>
 
           <h3 class="text-xl md:text-xl/6 font-semibold">
-            Престиж
+            {{ t('app.menu.prestige') }}
           </h3>
 
           <p class="text-base/5">
