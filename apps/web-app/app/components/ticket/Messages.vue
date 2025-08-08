@@ -62,7 +62,7 @@ const { arrivedState } = useScroll(block, { behavior: 'smooth' })
 onMounted(() => recalculate())
 
 watch(
-  () => ticket.value,
+  () => ticket.value?.messages.length,
   () => recalculate(),
 )
 
