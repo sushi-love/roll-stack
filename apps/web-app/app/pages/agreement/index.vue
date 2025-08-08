@@ -1,5 +1,5 @@
 <template>
-  <Header title="Договора" />
+  <Header :title="t('app.menu.agreements')" />
 
   <Content>
     <div class="flex flex-wrap items-center justify-between gap-1.5">
@@ -240,6 +240,6 @@ function getDropdownActions(_: PartnerAgreement): DropdownMenuItem[][] {
 const table = useTemplateRef('table')
 
 useHead({
-  title: 'Договора',
+  title: t('app.menu.agreements'),
 })
 </script>

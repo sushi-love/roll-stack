@@ -35,6 +35,16 @@ export function getUserTypeLabel(type: User['type']): string {
   switch (type) {
     case 'partner':
       return 'Партнер'
+    case 'partner_head':
+      return 'Директор'
+    case 'partner_admin':
+      return 'Администратор'
+    case 'partner_cook':
+      return 'Повар'
+    case 'partner_courier':
+      return 'Курьер'
+    case 'head':
+      return 'Руководитель'
     case 'staff':
       return 'Сотрудник сети'
     default:

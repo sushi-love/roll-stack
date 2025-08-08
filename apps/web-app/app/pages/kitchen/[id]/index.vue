@@ -1,15 +1,20 @@
 <template>
   <Content>
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-      <UCard class="col-span-2">
-        <UIcon name="i-lucide-store" class="size-32 text-muted/25" />
+      <UCard
+        class="col-span-2"
+        :ui="{
+          body: '!p-4',
+        }"
+      >
+        <div class="shrink-0 w-full flex flex-col gap-2">
+          <UIcon name="i-lucide-store" class="size-14 text-primary" />
 
-        <div class="flex flex-col items-start gap-2">
-          <h2 class="text-xl md:text-2xl font-bold">
+          <h2 class="text-xl md:text-xl/6 font-semibold">
             {{ kitchen?.address }}
           </h2>
 
-          <p class="text-lg">
+          <p class="text-base/5">
             {{ kitchen?.city }}
           </p>
         </div>
