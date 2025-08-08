@@ -37,21 +37,27 @@ const submenuItems = computed(() => [
     exact: true,
   },
   {
-    label: 'Кухни',
+    label: t('app.menu.kitchens'),
     to: `/partner/${partner.value?.id}/kitchens`,
     icon: 'i-lucide-map-pinned',
     badge: partner.value?.kitchens.length,
   },
   {
-    label: 'Договора',
+    label: t('app.menu.agreements'),
     to: `/partner/${partner.value?.id}/agreement`,
     icon: 'i-lucide-scroll-text',
     badge: partner.value?.legalEntity?.agreements.length,
   },
   {
-    label: 'Юр. лицо',
+    label: t('app.partner-legal-entity.title'),
     to: `/partner/${partner.value?.id}/legal`,
     icon: 'i-lucide-scale',
+  },
+  {
+    label: t('app.menu.staff'),
+    to: `/partner/${partner.value?.id}/staff`,
+    icon: 'i-lucide-contact-round',
+    badge: partner.value?.users.length,
   },
 ])
 

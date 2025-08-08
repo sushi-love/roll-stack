@@ -1,3 +1,4 @@
+import type { User } from '@roll-stack/database'
 import type { Resolution } from '../services/task'
 
 export function getResolutionForSelect(): { value: Resolution, label: string, icon: string }[] {
@@ -28,6 +29,40 @@ export function getResolutionIcon(resolution: Resolution) {
     case 'unknown':
       return 'i-lucide-circle-help'
   }
+}
+
+export function getUserTypeLabel(type: User['type']): string {
+  switch (type) {
+    case 'partner':
+      return 'Партнер'
+    case 'staff':
+      return 'Сотрудник сети'
+    default:
+      return ''
+  }
+}
+
+export function getAgreementProgressPercentLeft(concludedAt?: string | null, willEndAt?: string | null): number {
+  if (!concludedAt || !willEndAt) {
+    return 0
+  }
+
+  const nowMs = Date.now()
+  const concludedAtMs = new Date(concludedAt).getTime()
+  const willEndAtMs = new Date(willEndAt).getTime()
+  if (Number.isNaN(concludedAtMs) || Number.isNaN(willEndAtMs)) {
+    return 0
+  }
+  if (willEndAtMs <= concludedAtMs) {
+    return 0
+  }
+
+  const total = willEndAtMs - concludedAtMs
+  const remaining = willEndAtMs - nowMs
+  const remainingPct = (remaining / total) * 100
+  const res = Math.floor(remainingPct)
+
+  return Math.min(100, Math.max(0, res))
 }
 
 export function pluralizationRu(int: number, array: [string, string, string]): string {

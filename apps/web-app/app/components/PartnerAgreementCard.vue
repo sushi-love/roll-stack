@@ -45,11 +45,11 @@
         <p>Паушальный взнос: {{ agreement.lumpSumPayment }} ₽</p>
       </div>
 
-      <p class="text-muted">
+      <p v-if="agreement.comment" class="text-muted">
         {{ agreement.comment }}
       </p>
 
-      <div class="flex flex-col gap-1.5">
+      <div v-if="agreement.files.length" class="flex flex-col gap-1.5">
         <UButton
           v-for="file in agreement.files"
           :key="file.id"
@@ -60,9 +60,8 @@
           variant="subtle"
           color="neutral"
           icon="i-lucide-file-symlink"
-        >
-          {{ file.name }}
-        </UButton>
+          :label="file.name"
+        />
       </div>
     </div>
   </UCard>
@@ -79,17 +78,5 @@ const { agreement } = defineProps<{ agreement: PartnerAgreement & { files: Partn
 const overlay = useOverlay()
 const modalUpdatePartnerAgreement = overlay.create(ModalUpdatePartnerAgreement)
 
-const agreementProgress = computed(() => {
-  if (!agreement?.willEndAt || !agreement?.concludedAt) {
-    return 0
-  }
-
-  const now = new Date()
-  const concludedAt = new Date(agreement.concludedAt)
-  const willEndAt = new Date(agreement.willEndAt)
-
-  const res = Math.floor(100 - ((now.getTime() - concludedAt.getTime()) / (willEndAt.getTime() - concludedAt.getTime())) * 100)
-
-  return res > 0 ? res : 0
-})
+const agreementProgress = computed(() => getAgreementProgressPercentLeft(agreement.concludedAt, agreement.willEndAt))
 </script>
