@@ -78,5 +78,5 @@ const { agreement } = defineProps<{ agreement: PartnerAgreement & { files: Partn
 const overlay = useOverlay()
 const modalUpdatePartnerAgreement = overlay.create(ModalUpdatePartnerAgreement)
 
-const agreementProgress = computed(() => getAgreementProgressPercentage(agreement.concludedAt, agreement.willEndAt))
+const agreementProgress = computed(() => getAgreementProgressPercentLeft(agreement.concludedAt, agreement.willEndAt))
 </script>

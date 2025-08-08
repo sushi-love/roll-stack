@@ -90,5 +90,5 @@ const otherUsers = computed(() => partner.users.filter((user) => user.type !== '
 
 const minimalAgreement = computed(() => partner.legalEntity?.agreements.filter((agreement) => agreement.isActive).toSorted((a, b) => new Date(a.willEndAt ?? '').getTime() - new Date(b.willEndAt ?? '').getTime())[0])
 
-const agreementProgress = computed(() => getAgreementProgressPercentage(minimalAgreement.value?.concludedAt, minimalAgreement.value?.willEndAt))
+const agreementProgress = computed(() => getAgreementProgressPercentLeft(minimalAgreement.value?.concludedAt, minimalAgreement.value?.willEndAt))
 </script>
